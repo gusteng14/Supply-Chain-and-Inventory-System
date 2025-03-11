@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Admin Dashboard</title>
+
+        <!-- FONT -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
+        900&display=swap" rel="stylesheet">
+
+        <!-- MATERIAL ICON -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+
+
+        <!-- CSS -->
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+    </head>
+    <body>
+        <div class="grid-container">
+            <header class="header" th:replace="~{fragments :: header}"></header>
+            <aside id="sidebar" th:insert="~{fragments :: sidebar}"></aside>
+
+
+            <main class="main-container">
+<!--                <div class="main-title">-->
+<!--                    <h5>DASHBOARD</h5>-->
+<!--                </div>-->
+                <div class="main-cards">
+                    <div class="card">
+                        <div class="card-inner">
+                            <h3>PRODUCTS</h3>
+                            <span class="material-icons-outlined">inventory_2</span>
+                        </div>
+                        <h1>---</h1>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-inner">
+                            <h3>CATEGORIES</h3>
+                            <span class="material-icons-outlined">category</span>
+                        </div>
+                        <h1>---</h1>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-inner">
+                            <h3>CUSTOMERS</h3>
+                            <span class="material-icons-outlined">groups</span>
+                        </div>
+                        <h1>---</h1>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-inner">
+                            <h3>ALERTS</h3>
+                            <span class="material-icons-outlined">priority_high</span>
+                        </div>
+                        <h1>---</h1>
+                    </div>
+                </div>
+
+                <div class="charts">
+                    <div class="charts-card">
+                        <h2 class="chart-title">Top 5 Products</h2>
+                        <div id="bar-chart"></div>
+                    </div>
+
+                    <div class="charts-card">
+                        <h2 class="chart-title">Purchase and Sales Orders</h2>
+                        <div id="candlestick-chart"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- SCRIPTS -->
+        <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+    </body>
+</html>

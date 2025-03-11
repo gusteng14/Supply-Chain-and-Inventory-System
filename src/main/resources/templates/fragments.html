@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
+        900&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+</head>
+<body>
+
+        <header th:fragment="header" class="header">
+<!--            <div class="menu-icon" onclick="openSidebar()">-->
+<!--                <span class="material-icons-outlined">menu</span>-->
+<!--            </div>-->
+<!--            <div class="header-left">-->
+<!--                <span class="material-icons-outlined">search</span>-->
+<!--            </div>-->
+<!--            <div class="header-right">-->
+<!--                <span class="material-icons-outlined">notifications</span>-->
+<!--                <span class="material-icons-outlined">mail</span>-->
+<!--                <span class="material-icons-outlined">account_circle</span>-->
+<!--            </div>-->
+        </header>
+
+        <aside id="sidebar" th:fragment="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <span class="material-icons-outlined">shopping_cart</span>
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item">
+                    <a th:href="@{/index}"> <span class="material-icons-outlined">dashboard</span> Dashboard </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a th:href="@{/employee}"><span class="material-icons-outlined">dashboard</span> Staff </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a th:href="@{/product}"><span class="material-icons-outlined">inventory_2</span> Products </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">category</span> Categories
+                </li>
+                <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">groups</span> Suppliers
+                </li>
+                <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">fact_check</span> Inventory
+                </li>
+                <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">poll</span> Reports
+                </li>
+                <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">settings</span> Settings
+                </li>
+            </ul>
+            <form th:action="@{/logout}" method="post">
+                <button class="logout" type="submit" >Logout</button>
+            </form>
+        </aside>
+
+</body>
+</html>

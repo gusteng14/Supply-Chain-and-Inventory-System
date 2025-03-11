@@ -1,0 +1,13 @@
+package com.example.Barkstore.Barkstore;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BarkstoreApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BarkstoreApplication.class, args);
+	}
+
+}
