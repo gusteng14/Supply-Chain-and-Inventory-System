@@ -1,15 +1,13 @@
 package com.barkstore.Barkstore.products;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Product {
     @Id
@@ -30,16 +28,17 @@ public class Product {
     private Integer cost;
     private Integer stock;
 
-    public Product(Long id, Integer itemNo, String name, String description, Integer cost, Integer stock) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.stock = stock;
-    }
+//    public Product(Long id, Integer itemNo, String name, String description, Integer cost, Integer stock) {
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.cost = cost;
+//        this.stock = stock;
+//    }
 
     public Integer getStock() {
         return stock;
+
     }
 
     public void setStock() {
