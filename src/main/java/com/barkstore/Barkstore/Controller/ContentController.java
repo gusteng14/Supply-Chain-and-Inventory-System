@@ -70,6 +70,7 @@ public class ContentController {
         product.setDescription(productRequest.getDescription());
         product.setStock(productRequest.getStock());
         product.setCost(productRequest.getCost());
+
         productRepo.save(product);
 
         return "redirect:/product";

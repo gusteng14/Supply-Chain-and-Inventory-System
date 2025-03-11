@@ -6,12 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
+
 public class ProductService {
     @Autowired
     private ProductRepo repo;
+    @Autowired
     private final EmailSender emailSender;
 
+    public ProductService(ProductRepo repo, EmailSender emailSender) {
+        this.repo = repo;
+        this.emailSender = emailSender;
+    }
 
     public String lowInventoryNotif (Product product) {
         int stock = product.getStock();
