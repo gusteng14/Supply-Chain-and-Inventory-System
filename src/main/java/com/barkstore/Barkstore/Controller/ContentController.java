@@ -2,15 +2,14 @@ package com.barkstore.Barkstore.Controller;
 
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
-import com.barkstore.Barkstore.products.Product;
-import com.barkstore.Barkstore.products.ProductRepo;
-import com.barkstore.Barkstore.products.ProductRequest;
-import com.barkstore.Barkstore.products.ProductService;
+import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
 import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@Setter
 @Controller
 public class ContentController {
     @Autowired
@@ -34,6 +35,8 @@ public class ContentController {
     private ProductRepo productRepo;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryRepo categoryRepo;
 
     @GetMapping("/login")
     public String login() {
@@ -118,6 +121,72 @@ public class ContentController {
 
 
         return "redirect:/product";
+    }
+
+    @GetMapping("/category")
+    public String viewCategory(Model model) {
+        model.addAttribute("categoryRequest", new CategoryRequest());
+        List<Category> category = categoryRepo.findAll();
+        model.addAttribute("category", category);
+        return "category";
+    }
+
+    @PostMapping("/category/create")
+    public String createCategory(Model model, @ModelAttribute CategoryRequest categoryRequest) {
+        Category category = new Category();
+        model.addAttribute("category", category);
+
+        category.setName(categoryRequest.getName());
+        category.setDescription(categoryRequest.getDescription());
+//        category.setStock(productRequest.getStock());
+//        product.setCost(productRequest.getCost());
+
+        categoryRepo.save(category);
+
+        return "redirect:/category";
+    }
+
+    @GetMapping("/category/edit")
+    public String editCategory(Model model, @RequestParam Long id) {
+        Category category = categoryRepo.findById(id).get();
+        model.addAttribute("category", category);
+
+        CategoryRequest categoryRequest = new CategoryRequest();
+        categoryRequest.setName(category.getName());
+        categoryRequest.setDescription(category.getDescription());
+//        categoryRequest.setStock(product.getStock());
+//        categoryRequest.setCost(product.getCost());
+
+
+        model.addAttribute("categoryRequest", categoryRequest);
+        return "editCategory";
+    }
+
+    @PostMapping("/category/edit")
+    public String updateCategory(Model model, @RequestParam Long id, @ModelAttribute CategoryRequest categoryRequest) {
+        Category category = categoryRepo.findById(id).get();
+        model.addAttribute("category", category);
+
+        category.setName(categoryRequest.getName());
+        category.setDescription(categoryRequest.getDescription());
+//        category.setStock(productRequest.getStock());
+//        category.setCost(productRequest.getCost());
+
+
+        categoryRepo.save(category);
+//        productService.lowInventoryNotif(product);
+
+        return "redirect:/category";
+    }
+
+    @GetMapping("/category/delete/{id}")
+    public String deleteCategoryById(@PathVariable(name="id") Long id) {
+        System.out.println("C ID IS: " + id);
+        categoryRepo.deleteById(id);
+
+
+
+        return "redirect:/category";
     }
 
 }

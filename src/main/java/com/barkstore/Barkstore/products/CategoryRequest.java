@@ -1,8 +1,5 @@
 package com.barkstore.Barkstore.products;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,10 +8,9 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 @EqualsAndHashCode
 @ToString
-public class ProductRequest {
+public class CategoryRequest {
     private Long id;
+    //private String categoryCode;
     private String name;
     private String description;
-    private Integer cost;
-    private Integer stock;
 }

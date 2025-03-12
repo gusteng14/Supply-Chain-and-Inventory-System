@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
+        900&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header}"></header>
+    <aside id="sidebar" th:insert="~{fragments :: sidebar}"></aside>
+    <div class="main-container">
+        <div class="content">
+            <div class="form-block">
+                <div class="employee-form">
+                    <h3 style="color:black;">Employee Details Setup</h3>
+                    <form class="col s12" id="registerForm" action="#" th:action="@{/category/edit}" method="post" th:object="${categoryRequest}">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input readonly style="color: black;" th:value="${category.id}" id="id" name="id">
+                                <label for="id">ID</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{name}" id="name" type="text" class="validate" required>
+                                <label for="name">Category Name</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{description}" id="description" type="text" class="validate" required>
+                                <label for="description">Category Description</label>
+                            </div>
+                        </div>
+<!--                        <div class="row">-->
+<!--                            <div class="input-field col s6">-->
+<!--                                <input style="color: black;" th:field="*{stock}" id="stock" type="number" class="validate" required>-->
+<!--                                <label for="stock">Item Stock</label>-->
+<!--                            </div>-->
+<!--                            <div class="input-field col s6">-->
+<!--                                <input style="color: black;" th:field="*{cost}" id="cost" type="number" class="validate" required>-->
+<!--                                <label for="cost">Item Cost</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
