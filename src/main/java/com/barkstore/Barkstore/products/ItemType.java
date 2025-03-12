@@ -29,7 +29,7 @@ public class ItemType implements Serializable {
     )
     private Long id;
     private String name;
-    private String description;
+    //private String description;
     //    @AUDITING
 //    private MyUser createdBy;
 //    @AUDITING

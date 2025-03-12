@@ -37,6 +37,8 @@ public class ContentController {
     private ProductService productService;
     @Autowired
     private CategoryRepo categoryRepo;
+    @Autowired
+    private ItemTypeRepo itemTypeRepo;
 
     @GetMapping("/login")
     public String login() {
@@ -183,10 +185,67 @@ public class ContentController {
     public String deleteCategoryById(@PathVariable(name="id") Long id) {
         System.out.println("C ID IS: " + id);
         categoryRepo.deleteById(id);
-
-
-
         return "redirect:/category";
+    }
+
+    @GetMapping("/itemType")
+    public String viewItemType(Model model) {
+        model.addAttribute("itemTypeRequest", new ItemTypeRequest());
+        List<ItemType> itemType = itemTypeRepo.findAll();
+        model.addAttribute("itemType", itemType);
+        return "itemType";
+    }
+
+    @PostMapping("/itemType/create")
+    public String createItemType(Model model, @ModelAttribute ItemTypeRequest itemTypeRequest) {
+        ItemType itemType = new ItemType();
+        model.addAttribute("itemType", itemType);
+
+        itemType.setName(itemTypeRequest.getName());
+//        itemType.setDescription(itemTypeRequest.getDescription());
+//        itemType.setStock(itemTypeRequest.getStock());
+//        itemType.setCost(itemTypeRequest.getCost());
+
+        itemTypeRepo.save(itemType);
+
+        return "redirect:/itemType";
+    }
+
+    @GetMapping("/itemType/edit")
+    public String editItemType(Model model, @RequestParam Long id) {
+        ItemType itemType = itemTypeRepo.findById(id).get();
+        model.addAttribute("itemType", itemType);
+
+        ItemTypeRequest itemTypeRequest = new ItemTypeRequest();
+        itemTypeRequest.setName(itemType.getName());
+//        productRequest.setDescription(product.getDescription());
+//        productRequest.setStock(product.getStock());
+//        productRequest.setCost(product.getCost());
+
+
+        model.addAttribute("itemTypeRequest", itemTypeRequest);
+        return "editItemType";
+    }
+
+    @PostMapping("/itemType/edit")
+    public String updateItemType(Model model, @RequestParam Long id, @ModelAttribute ItemTypeRequest itemTypeRequest) {
+        ItemType itemType = itemTypeRepo.findById(id).get();
+        model.addAttribute("itemType", itemType);
+
+        itemType.setName(itemTypeRequest.getName());
+
+        itemTypeRepo.save(itemType);
+
+        return "redirect:/itemType";
+    }
+
+    @GetMapping("/itemType/delete/{id}")
+    public String deleteItemTypeById(@PathVariable(name="id") Long id) {
+        System.out.println("C ID IS: " + id);
+        itemTypeRepo.deleteById(id);
+
+
+        return "redirect:/itemType";
     }
 
 }
