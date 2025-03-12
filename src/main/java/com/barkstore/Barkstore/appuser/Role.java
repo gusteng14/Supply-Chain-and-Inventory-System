@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ import java.util.Set;
 //@EqualsAndHashCode (nagpapa-error)
 @NoArgsConstructor
 @Entity
-public class Role {
+public class Role implements Serializable {
     @Id
     @SequenceGenerator(
             name = "role_sequence",

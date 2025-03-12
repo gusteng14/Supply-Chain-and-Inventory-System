@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 
-public class MyUser /*implements UserDetails*/ {
+public class MyUser implements Serializable {
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -39,11 +40,9 @@ public class MyUser /*implements UserDetails*/ {
     )
     private Long id;
 
+    // NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(nullable = false, unique = true)
-//    private Integer empNo;
-
+    //private String empNo;
     private String firstName;
     private String lastName;
     private String middleName;
@@ -60,11 +59,6 @@ public class MyUser /*implements UserDetails*/ {
 
     @UpdateTimestamp
     private Instant lastUpdatedOn;
-
-//    @Enumerated(EnumType.STRING)
-//    private MyUserRole myUserRole;
-//    private Boolean locked = false;
-//    private Boolean enabled = false;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -16,7 +17,7 @@ import java.time.Instant;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-public class Category {
+public class Category implements Serializable {
     @Id
     @SequenceGenerator(
             name = "category_sequence",
@@ -31,8 +32,12 @@ public class Category {
     private String categoryCode;
     private String name;
     private String description;
+//    @AUDITING
 //    private MyUser createdBy;
+//    @AUDITING
 //    private MyUser lastUpdatedBy;
+
+    // NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
     @CreationTimestamp
     private Instant createdOn;

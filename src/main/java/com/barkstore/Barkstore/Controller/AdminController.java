@@ -79,7 +79,7 @@ public class AdminController {
     @GetMapping("/employee/delete/{id}")
     public String deleteUserById(@PathVariable(name="id") Long id) {
         System.out.println("C ID IS: " + id);
-        tokenService.deleteByUserId(id);
+        //tokenService.deleteByUserId(id);
         repository.deleteById(id);
         System.out.println("are u here hello " );
 

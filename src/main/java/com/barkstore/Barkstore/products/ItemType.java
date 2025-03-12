@@ -1,9 +1,14 @@
 package com.barkstore.Barkstore.products;
 
+import com.barkstore.Barkstore.appuser.MyUser;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -11,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product implements Serializable {
+public class ItemType implements Serializable {
     @Id
     @SequenceGenerator(
             name = "product_sequence",
@@ -23,31 +28,18 @@ public class Product implements Serializable {
             generator = "product_sequence"
     )
     private Long id;
-
-    private Integer itemNo;
-    private String name;
-    private String description;
-
-
+    private String itemTypeName;
+    private String itemTypeDescription;
     //    @AUDITING
 //    private MyUser createdBy;
 //    @AUDITING
 //    private MyUser lastUpdatedBy;
-    // private ItemType itemType;
+
     // NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
-    private Integer cost;
-    private Integer stock;
+    @CreationTimestamp
+    private Instant createdOn;
 
-    @ManyToOne
-    private ItemType itemType;
-
-    @ManyToOne
-    private Category category;
-
-
-
-
-
-
+    @UpdateTimestamp
+    private Instant lastUpdatedOn;
 }
