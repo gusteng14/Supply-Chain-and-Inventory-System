@@ -28,8 +28,8 @@ public class ItemType implements Serializable {
             generator = "product_sequence"
     )
     private Long id;
-    private String itemTypeName;
-    private String itemTypeDescription;
+    private String name;
+    private String description;
     //    @AUDITING
 //    private MyUser createdBy;
 //    @AUDITING
