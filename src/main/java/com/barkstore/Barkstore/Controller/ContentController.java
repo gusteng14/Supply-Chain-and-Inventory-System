@@ -15,8 +15,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,17 +70,20 @@ public class ContentController {
     }
 
     @PostMapping("/product/create")
-    public String createProduct(Model model, @ModelAttribute ProductRequest productRequest) {
+    public String createProduct(Model model, @ModelAttribute ProductRequest productRequest, @RequestParam("image") MultipartFile file) throws IOException {
         Product product = new Product();
         model.addAttribute("product", product);
+        System.out.println(file.getOriginalFilename());
 
-        product.setName(productRequest.getName());
-        product.setDescription(productRequest.getDescription());
-        product.setStock(productRequest.getStock());
-        product.setCost(productRequest.getCost());
+        if(!file.isEmpty()) {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            productRequest.setPhoto(fileName);
+            Product savedProduct = productService.createProduct(productRequest);
 
-        productRepo.save(product);
-
+            String uploadDir = "product-photos/" + savedProduct.getId();
+            System.out.println(uploadDir);
+            productService.uploadFile(uploadDir, fileName, file);
+        }
         return "redirect:/product";
     }
 
@@ -99,7 +105,6 @@ public class ContentController {
 
     @PostMapping("/product/edit")
     public String updateProduct(Model model, @RequestParam Long id, @ModelAttribute ProductRequest productRequest) {
-        System.out.println("are u here hello " );
         Product product = productRepo.findById(id).get();
         model.addAttribute("product", product);
 
@@ -117,9 +122,8 @@ public class ContentController {
 
     @GetMapping("/product/delete/{id}")
     public String deleteProductById(@PathVariable(name="id") Long id) {
-        System.out.println("C ID IS: " + id);
+
         productRepo.deleteById(id);
-        System.out.println("are u here hello " );
 
 
         return "redirect:/product";

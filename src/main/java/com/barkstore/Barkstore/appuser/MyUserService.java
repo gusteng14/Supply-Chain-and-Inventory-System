@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class MyUserService implements UserDetailsService {
     @Autowired
     private final MyUserRepository userRepository;
@@ -132,14 +132,6 @@ public class MyUserService implements UserDetailsService {
         user.setPassword(registrationRequest.getPassword());
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-
-//        Set<Role> roles = registrationRequest.getRoles().stream().map(roleRequest -> {
-//            Role role = getOrCreateRole(roleRequest);
-//            Set<Authority> authorities = getAuthoritiesFromRequest(roleRequest);
-//            role.setAuthorities(authorities);
-//            return role;
-//        }).collect(Collectors.toSet());
-//        user.setRoles(roles);
 
         Role roles = roleRepository.findByName(registrationRequest.getRoleRequest()).get();
         user.setRoles(Collections.singleton(roles));

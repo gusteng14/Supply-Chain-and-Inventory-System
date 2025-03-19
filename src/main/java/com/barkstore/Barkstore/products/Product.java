@@ -39,11 +39,29 @@ public class Product implements Serializable {
     private Integer cost;
     private Integer stock;
 
+//    @Lob
+//    private byte[] imageData;
+//    private String imageName;
+//    private String imageType;
+
+    private String photo;
+
+    @Transient
+    private String photosPath;
+
+
     @ManyToOne
     private ItemType itemType;
 
     @ManyToOne
     private Category category;
+
+    public String getPhotosPath() {
+        if(id == null || photo == null) {
+            return "images/default-thumbnail.jpg";
+        }
+        return "product-photos/"+this.id+"/"+this.photo;
+    }
 
 
 

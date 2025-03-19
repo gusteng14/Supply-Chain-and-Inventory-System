@@ -4,6 +4,15 @@ import com.barkstore.Barkstore.Email.EmailSender;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 @Service
 //@AllArgsConstructor
@@ -18,6 +27,57 @@ public class ProductService {
         this.repo = repo;
         this.emailSender = emailSender;
     }
+
+    public void uploadFile(String uploadDir, String fileName, MultipartFile file) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public Product createProduct(ProductRequest productRequest) {
+        Product product = new Product();
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
+        product.setStock(productRequest.getStock());
+        product.setCost(productRequest.getCost());
+        System.out.println("prodReq photo: " + productRequest.getPhoto());
+        product.setPhoto(productRequest.getPhoto());
+        repo.save(product);
+        return product;
+    }
+
+//    public String createProduct(MultipartFile file, ProductRequest productRequest) throws IOException {
+//        Product product = new Product();
+//        product.setName(productRequest.getName());
+//        product.setDescription(productRequest.getDescription());
+//        product.setStock(productRequest.getStock());
+//        product.setCost(productRequest.getCost());
+//        product.setImageData(ImageUtil.compressImage(file.getBytes()));
+//        product.setImageName(file.getOriginalFilename());
+//        product.setImageType(file.getContentType());
+//        repo.save(product);
+//        return null;
+//    }
+//
+//    public byte[] getImageByProductId(Long id) {
+//        Optional<Product> product = repo.findById(id);
+//        byte[] image = ImageUtil.decompressImage(product.get().getImageData());
+//        return image;
+//    }
+
+
+
+
 
     public String lowInventoryNotif (Product product) {
         int stock = product.getStock();

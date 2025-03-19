@@ -41,13 +41,12 @@
         </div>
         <div class="content_box">
             <div class="content active">
-                <div class="form-block">
-                    <div class="employee-form">
                         <h4>List of Products</h4>
-                        <table class="striped">
-                            <thead>
+                        <table style="border: 1px solid #00000029; border-radius: 2px;" class="responsive-table highlight">
+                            <thead style="background-color: rgba(218,218,218,0.5);">
                             <tr>
-                                <th>Item No</th>
+<!--                                <th>Item No</th>-->
+                                <th>Item Photo</th>
                                 <th>Item Name</th>
                                 <th>Description</th>
                                 <th>Stock</th>
@@ -57,7 +56,10 @@
                             </thead>
                             <tbody>
                                 <tr th:each="product : ${product}">
-                                    <td th:text="${product.id}">z</td>
+<!--                                    <td th:text="${product.id}">z</td>-->
+                                    <td>
+                                        <img class="productImg" th:src="@{${product.photosPath}}">
+                                    </td>
                                     <td th:text="${product.name}">z</td>
                                     <td th:text="${product.description}">z</td>
                                     <td th:text="${product.stock}">z</td>
@@ -71,14 +73,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
             </div>
             <div class="content">
                 <div class="form-block">
                     <div class="employee-form">
                         <h3>Item Setup</h3>
-                        <form class="col s12" id="registerForm" action="#" th:action="@{/product/create}" method="post" th:object="${productRequest}">
+                        <form class="col s12" id="registerForm" action="#" th:action="@{/product/create}" method="post" enctype="multipart/form-data" th:object="${productRequest}">
                             <div class="row">
                                 <div class="input-field col s6">
                                     <input style="color: black;" th:field="*{name}" id="name" type="text" required>
@@ -98,7 +98,32 @@
                                     <input style="color: black;" th:field="*{cost}" id="cost" type="number" required>
                                     <label for="cost">Item Cost</label>
                                 </div>
+<!--                                <div class="input-field col s6">-->
+<!--                                    <input style="color: black;"  id="image" name="image" accept="image/*" type="file" required>-->
+<!--                                    <label for="cost">Image</label>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <img class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">-->
+<!--                                </div>-->
                             </div>
+                            <div class="row">
+                                <div class="file-field input-field col s6">
+                                    <div class="btn">
+                                        <span>File</span>
+                                        <input type="file" id="image" name="image" accept="image/*" required>
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div>
+                                    <img class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">
+                                </div>
+                            </div>
+
+
                             <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
@@ -128,7 +153,24 @@
     })
     // ---------- ---------- ----------
 
+    $(document).ready(function() {
+        $('#image').on('change', function() {
 
+            //console.log(this.files);
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        })
+    });
+
+    function showThumbnail(fileInput) {
+
+
+
+    }
 
 //    $(document).ready(function() {
 //        $("#registerForm").submit(function(event) {
