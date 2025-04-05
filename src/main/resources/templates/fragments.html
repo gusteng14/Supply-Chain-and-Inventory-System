@@ -19,11 +19,11 @@
 </head>
 <body>
 
-        <header th:fragment="header">
+        <header th:fragment="header-main">
             <div class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
-                        <a href="#" class="brand-logo">Barkstore</a>
+                        <a th:href="@{/index}" class="brand-logo">Barkstore</a>
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
                             <li><a href="sass.html">---</a></li>
                             <li><a href="badges.html">---</a></li>
@@ -34,9 +34,19 @@
             </div>
         </header>
 
+        <header th:fragment="header-homepage">
+            <div class="navbar-fixed">
+                <nav>
+                    <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
+                        <a th:href="@{/index}" class="brand-logo">Barkstore</a>
+                        <ul id="nav-mobile-homepage" class="right hide-on-med-and-down">
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
         <aside th:fragment="sidebar">
-
-
             <ul id="slide-out" class="sidenav sidenav-fixed">
                 <li>
                     <div class="user-view">
@@ -50,7 +60,7 @@
                 </li>
                 <li><a class="subheader">Inventory</a></li>
                 <li>
-                    <a style="color: white;" th:href="@{/index}"> <i style="color: white;" class="material-icons-round">dashboard</i> Dashboard </a>
+                    <a style="color: white;" th:href="@{/dashboard}"> <i style="color: white;" class="material-icons-round">dashboard</i> Dashboard </a>
                 </li>
                 <li>
                     <a style="color: white;" th:href="@{/product}"><i style="color: white;" class="material-icons-round">inventory_2</i> Products </a>
@@ -83,47 +93,5 @@
             </ul>
             <a href="#" data-target="slide-out" class="sidenav-trigger"><span style="color:black;" class="material-icons-round">menu</span></a>
         </aside>
-<!--        <aside id="sidebar" th:fragment="sidebar">-->
-<!--            <div class="sidebar-title">-->
-<!--                <div class="sidebar-brand">-->
-<!--                    <span class="material-icons-outlined">shopping_cart</span>-->
-<!--                </div>-->
-<!--                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>-->
-<!--            </div>-->
-
-<!--            <ul class="sidebar-list">-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <a th:href="@{/index}"> <span class="material-icons-outlined">dashboard</span> Dashboard </a>-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <a th:href="@{/employee}"><span class="material-icons-outlined">dashboard</span> Staff </a>-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <a th:href="@{/product}"><span class="material-icons-outlined">inventory_2</span> Products </a>-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <a th:href="@{/category}"><span class="material-icons-outlined">category</span> Categories </a>-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <a th:href="@{/itemType}"><span class="material-icons-outlined">category</span> Item Type </a>-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <span class="material-icons-outlined">groups</span> Suppliers-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <span class="material-icons-outlined">fact_check</span> Inventory-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <span class="material-icons-outlined">poll</span> Reports-->
-<!--                </li>-->
-<!--                <li class="sidebar-list-item">-->
-<!--                    <span class="material-icons-outlined">settings</span> Settings-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--            <form th:action="@{/logout}" method="post">-->
-<!--                <button class="logout" type="submit" >Logout</button>-->
-<!--            </form>-->
-<!--        </aside>-->
-
 </body>
 </html>

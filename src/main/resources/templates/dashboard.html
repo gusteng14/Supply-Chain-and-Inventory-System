@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Admin Dashboard</title>
+
+        <!-- FONT -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
+        900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+        <!-- MATERIAL ICON -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+        <!-- CSS -->
+
+        <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+    </head>
+    <body>
+        <div class="grid-container">
+            <header class="header" th:replace="~{fragments :: header-main}"></header>
+            <aside th:replace="~{fragments :: sidebar}"></aside>
+
+
+
+            <main class="main-container">
+                <div class="row">
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title">Products</span>
+                                <span class="material-icons-outlined">inventory_2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title">Products</span>
+                                <span class="material-icons-outlined">inventory_2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title">Products</span>
+                                <span class="material-icons-outlined">inventory_2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title">Products</span>
+                                <span class="material-icons-outlined">inventory_2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col l6">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Top 5 Products</span>
+                                <div id="bar-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col l6">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Purchase and Sales Orders</span>
+                                <div id="candlestick-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+            </main>
+        </div>
+
+        <!-- SCRIPTS -->
+        <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+        <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+        });
+
+        $('.sidenav').sidenav();
+
+    </script>
+    </body>
+</html>

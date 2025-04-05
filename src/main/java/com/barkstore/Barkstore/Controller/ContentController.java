@@ -58,6 +58,10 @@ public class ContentController {
         return "index";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
+    }
 
 
 //    @PreAuthorize("hasRole('ADMIN')")

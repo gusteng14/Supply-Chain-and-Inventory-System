@@ -1,104 +1,170 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title>Admin Dashboard</title>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Home Page</title>
 
-        <!-- FONT -->
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
-        900&display=swap" rel="stylesheet">
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+  <link rel="stylesheet" th:href="@{/css/homePage.css}" type="text/css" media="screen,projection"/>
+</head>
+<body>
 
-        <!-- MATERIAL ICON -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
-
-        <!-- CSS -->
-
-        <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
-        <link rel="stylesheet" th:href="@{/css/styles.css}">
-
-
-    </head>
-    <body>
-        <div class="grid-container">
-            <header class="header" th:replace="~{fragments :: header}"></header>
-            <aside th:replace="~{fragments :: sidebar}"></aside>
+  <header class="header" th:replace="~{fragments :: header-homepage}"></header>
 
 
-
-            <main class="main-container">
-                <div class="row">
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col l6">
-                        <div class="card">
-                            <div class="card-content">
-                                <span class="card-title">Top 5 Products</span>
-                                <div id="bar-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col l6">
-                        <div class="card">
-                            <div class="card-content">
-                                <span class="card-title">Purchase and Sales Orders</span>
-                                <div id="candlestick-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center white-text modak-regular">Welcome to Barkstore!</h1>
+        <div class="row center">
+          <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
         </div>
-            </main>
+        <div class="row center">
+          <a style="border-radius: 50px;" th:href="@{/dashboard}" id="download-button" class="btn-large pulse waves-effect waves-light teal lighten-1">Get Started</a>
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax">
+        <div class="carousel carousel-slider">
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax1.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax2.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+                <img th:src="@{images/parallax3.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax5.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax6.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax7.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax8.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+          <div class="parallax">
+            <a href="" class="carousel-item">
+              <img th:src="@{images/parallax9.jpg}" alt="Unsplashed background img 1">
+            </a>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">flash_on</i></h2>
+            <h5 class="center">Speeds up development</h5>
+
+            <p class="light">We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components. Additionally, we refined animations and transitions to provide a smoother experience for developers.</p>
+          </div>
         </div>
 
-        <!-- SCRIPTS -->
-        <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
-        <script th:src="@{/js/scripts.js}"></script>
-        <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.sidenav');
-            var instances = M.Sidenav.init(elems);
-        });
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">group</i></h2>
+            <h5 class="center">User Experience Focused</h5>
 
-        $('.sidenav').sidenav();
+            <p class="light">By utilizing elements and principles of Material Design, we were able to create a framework that incorporates components and animations that provide more feedback to users. Additionally, a single underlying responsive system across all platforms allow for a more unified user experience.</p>
+          </div>
+        </div>
 
-    </script>
-    </body>
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Easy to work with</h5>
+            <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Company Bio</h5>
+          <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Settings</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="#!">Link 3</a></li>
+            <li><a class="white-text" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Connect</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!">Link 2</a></li>
+            <li><a class="white-text" href="#!">Link 3</a></li>
+            <li><a class="white-text" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container center-align">
+        &copy; Polytechnic University of the Philippines - Taguig
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+  <script type="text/javascript" th:src="@{js/homePage.js}"></script>
+  <script>
+    $(document).ready(function(){
+      $('.carousel.carousel-slider').carousel();
+        fullWidth: true;
+        duration: 10000;
+      autoplay();
+      function autoplay() {
+        $('.carousel').carousel('next');
+        setTimeout(autoplay, 10000);
+      }
+    });
+  </script>
+
+  </body>
 </html>
