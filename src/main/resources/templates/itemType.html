@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Employee Page</title>
@@ -9,6 +10,9 @@
     <!-- FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
         900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
 
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
@@ -26,23 +30,26 @@
 </head>
 <body>
 <div class="grid-container">
-    <header class="header" th:replace="~{fragments :: header-main}"></header>
-    <aside id="sidebar" th:insert="~{fragments :: sidebar}"></aside>
+    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
+    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
+
+    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
+    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
+
+    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
+    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+
     <main class="main-container">
-        <div class="tab_box">
-            <button class="tab_btn active">View Item Type</button>
-            <button class="tab_btn">Create Item Type</button>
-            <!--                    <button class="tab_btn">Update Employee</button>-->
-            <!--                    <button class="tab_btn">Delete Employee</button>-->
-            <div class="line"></div>
-        </div>
-        <div class="content_box">
-            <div class="content active">
-                <div class="form-block">
-                    <div class="employee-form">
-                        <h4>Item Types</h4>
-                        <table class="striped">
-                            <thead>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3 l6"><a href="#view-itemType-tab">View Products</a></li>
+                    <li class="tab col s3 l6"><a href="#create-itemType-tab">Create Products</a></li>
+                </ul>
+                <div id="view-itemType-tab">
+                    <h4>Item Types</h4>
+                    <table class="striped">
+                        <thead>
                             <tr>
                                 <th>Item Type Id</th>
                                 <th>Item Type Name</th>
@@ -51,12 +58,12 @@
                                 <!--                                <th>Cost</th>-->
                                 <th></th>
                             </tr>
-                            </thead>
-                            <tbody>
+                        </thead>
+                        <tbody>
                             <tr th:each="itemType : ${itemType}">
                                 <td th:text="${itemType.id}">z</td>
                                 <td th:text="${itemType.name}">z</td>
-<!--                                <td th:text="${category.description}">z</td>-->
+    <!--                                <td th:text="${category.description}">z</td>-->
                                 <!--                                <td th:text="${product.stock}">z</td>-->
                                 <!--                                <td th:text="${product.cost}">z</td>-->
                                 <td th:value="${itemType.id}">
@@ -66,39 +73,34 @@
                                     </a>
                                 </td>
                             </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="content">
-                <div class="form-block">
-                    <div class="employee-form">
-                        <h3>Item Setup</h3>
-                        <form class="col s12" id="registerForm" action="#" th:action="@{/itemType/create}" method="post" th:object="${itemTypeRequest}">
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{name}" id="name" type="text" required>
-                                    <label for="name">Category Name</label>
-                                </div>
+                <div id="create-itemType-tab">
+                    <h3>Item Setup</h3>
+                    <form class="col s12" id="registerForm" action="#" th:action="@{/itemType/create}" method="post" th:object="${itemTypeRequest}">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                <label for="name">Category Name</label>
+                            </div>
 <!--                                <div class="input-field col s6">-->
 <!--                                    <input style="color: black;" th:field="*{description}" id="description" type="text" required>-->
 <!--                                    <label for="description">Category Description</label>-->
 <!--                                </div>-->
-                            </div>
-                            <!--                            <div class="row">-->
-                            <!--                                <div class="input-field col s6">-->
-                            <!--                                    <input style="color: black;" th:field="*{stock}" id="stock" type="number" required>-->
-                            <!--                                    <label for="stock">Item Stock</label>-->
-                            <!--                                </div>-->
-                            <!--                                <div class="input-field col s6">-->
-                            <!--                                    <input style="color: black;" th:field="*{cost}" id="cost" type="number" required>-->
-                            <!--                                    <label for="cost">Item Cost</label>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
+                        </div>
+                        <!--                            <div class="row">-->
+                        <!--                                <div class="input-field col s6">-->
+                        <!--                                    <input style="color: black;" th:field="*{stock}" id="stock" type="number" required>-->
+                        <!--                                    <label for="stock">Item Stock</label>-->
+                        <!--                                </div>-->
+                        <!--                                <div class="input-field col s6">-->
+                        <!--                                    <input style="color: black;" th:field="*{cost}" id="cost" type="number" required>-->
+                        <!--                                    <label for="cost">Item Cost</label>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -130,6 +132,10 @@
             all_content[index].classList.add('active');
         })
     })
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+    });
     // ---------- ---------- ----------
 
 

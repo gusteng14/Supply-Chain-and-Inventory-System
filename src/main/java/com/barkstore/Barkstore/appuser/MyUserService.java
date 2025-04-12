@@ -41,16 +41,6 @@ public class MyUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//       return userRepository.findByUsername(username)
-//               .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username)));
-
-//        MyUser user = userRepository.findByUsername(username); //.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-//        System.out.println("Role: " + user.getRoles());
-//        if(user == null) {
-//            throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
-//       }
-//        return new MyUserDetails(user);
-
         MyUser user = userRepository.findByUsername(username);
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .flatMap(role -> role.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getName())))
@@ -61,7 +51,7 @@ public class MyUserService implements UserDetailsService {
         authorities.addAll(user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList()));
 
-        System.out.print("Role:: " + authorities);
+        System.out.print("Role:: " + user.getRoles());
 
         return new AuthenticatedUser(user, authorities);
 

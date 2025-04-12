@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Employee Page</title>
@@ -23,115 +24,126 @@
 </head>
 <body>
         <div class="grid-container">
-            <header class="header" th:replace="~{fragments :: header-main}"></header>
-            <aside id="sidebar" th:insert="~{fragments :: sidebar}"></aside>
+            <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
+            <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
+
+            <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
+            <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
+
+            <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
+            <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+
             <main class="main-container">
-                <div class="tab_box">
-                    <button class="tab_btn active">View Employee List</button>
-                    <button class="tab_btn">Create Employee</button>
-<!--                    <button class="tab_btn">Update Employee</button>-->
-<!--                    <button class="tab_btn">Delete Employee</button>-->
-                    <div class="line"></div>
-                </div>
-                <div class="content_box">
-                    <div class="content active">
-                        <div class="form-block">
-                            <div class="employee-form">
-                                <h4 style="color: black;">List of Employee</h4>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>First Name</th>
-                                            <th>Middle Name</th>
-                                            <th>Last Name</th>
-                                            <th>Contact No.</th>
-                                            <th>Email</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="user : ${user}"> <!--th:if="${user.enabled}">-->
-                                            <td th:text="${user.firstName}">z</td>
-                                            <td th:text="${user.middleName}">z</td>
-                                            <td th:text="${user.lastName}">z</td>
-                                            <td th:text="${user.contactNo}">z</td>
-                                            <td th:text="${user.email}">z</td>
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs">
+                            <li class="tab col s3 l6"><a href="#view-staff-tab">View Staff</a></li>
+                            <li class="tab col s3 l6"><a href="#create-staff-tab">Create Staff Account</a></li>
+                        </ul>
+                        <div id="view-staff-tab">
+                            <h4 style="color: black;">List of Employee</h4>
+                            <table class="responsive-table highlight">
+                                <thead style="background-color: rgba(234,233,233,0.5);">
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Middle Name</th>
+                                        <th>Last Name</th>
+                                        <th>Contact No.</th>
+                                        <th>Email</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user : ${user}"> <!--th:if="${user.enabled}">-->
+                                        <td th:text="${user.firstName}">z</td>
+                                        <td th:text="${user.middleName}">z</td>
+                                        <td th:text="${user.lastName}">z</td>
+                                        <td th:text="${user.contactNo}">z</td>
+                                        <td th:text="${user.email}">z</td>
 <!--                                            <td th:text="${user.roles}">z</td>-->
-                                            <td th:value="${user.id}">
-                                                <a th:href="@{/employee/edit(id=${user.id})}"><span style="color: gray;" class="material-icons-outlined">update</span></a>
-                                                <a th:href="@{'/employee/delete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                                    <span style="color: red;" class="material-icons-outlined">close</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <td th:value="${user.id}">
+                                            <a th:href="@{/employee/edit(id=${user.id})}"><span style="color: gray;" class="material-icons-outlined">update</span></a>
+                                            <a th:href="@{'/employee/delete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                                <span style="color: red;" class="material-icons-outlined">close</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div class="content">
-                        <div class="form-block">
-                            <div class="employee-form">
-                                <h3>Employee Details Setup</h3>
-                                <form class="col s12" id="registerForm" action="#" th:action="@{/api/v1/registration/test}" method="post" th:object="${registrationRequest}">
-                                    <div class="row">
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" class="validate" required>
-                                            <label for="first_name">First Name</label>
-                                        </div>
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" class="validate" required>
-                                            <label for="middle_name">Middle Name</label>
-                                        </div>
+                        <div class="row"></div>
+                        <div id="create-staff-tab">
+                            <div class="col l2"></div>
+                            <div class="col l8">
+                            <h3>Employee Details Setup</h3>
+                            <form  id="registerForm" action="#" th:action="@{/api/v1/registration/test}" method="post" th:object="${registrationRequest}">
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">badge</i>
+                                        <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" class="validate" required>
+                                        <label for="first_name">First Name</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" class="validate" required>
-                                            <label for="last_name">Last Name</label>
-                                        </div>
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" class="validate" required>
-                                            <label for="contact_no">Contact No</label>
-                                        </div>
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">badge</i>
+                                        <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" class="validate" required>
+                                        <label for="middle_name">Middle Name</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{username}" id="username" type="text" class="validate" required>
-                                            <label for="username">Username</label>
-                                        </div>
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
-                                            <label for="email">Email</label>
-                                            <span class="helper-text" data-error="wrong" data-success="right"></span>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">badge</i>
+                                        <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" class="validate" required>
+                                        <label for="last_name">Last Name</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="input-field col s6">
-                                            <input style="color: black;" th:field="*{password}" id="password" type="password" class="validate" required>
-                                            <label for="password">Password</label>
-                                        </div>
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">phone</i>
+                                        <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" class="validate" required>
+                                        <label for="contact_no">Contact No</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">account_circle</i>
+                                        <input style="color: black;" th:field="*{username}" id="username" type="text" class="validate" required>
+                                        <label for="username">Username</label>
+                                    </div>
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">alternate_email</i>
+                                        <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
+                                        <label for="email">Email</label>
+                                        <span class="helper-text" data-error="wrong" data-success="right"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">lock</i>
+                                        <input style="color: black;" th:field="*{password}" id="password" type="password" class="validate" required>
+                                        <label for="password">Password</label>
+                                    </div>
 
-                                        <div class="input-field col s6">
-                                            <select th:field="*{roleRequest}" id="role" name="role" required>
-                                                <option value="" disabled selected>Choose your option</option>
-                                                <option value="ADMIN">Admin</option>
-                                                <option value="USER">User</option>
-                                            </select>
-                                            <label>Role</label>
-                                        </div>
-                                        
+                                    <div sec:authorize="hasRole('ADMIN')" class="input-field col s6">
+                                        <i class="material-icons-round prefix">manage_accounts</i>
+                                        <select th:field="*{roleRequest}" id="role-admin" name="role" required>
+                                            <option value="" disabled selected>Choose your option</option>
+                                            <option value="USER">User</option>
+                                        </select>
+                                        <label>Role</label>
                                     </div>
-                                    <button id="submit" type="submit"  class="btn btn-primary">Submit</button>
-                                </form>
+                                    <div sec:authorize="hasRole('SUPERADMIN')" class="input-field col s6">
+                                        <i class="material-icons-round prefix">manage_accounts</i>
+                                        <select th:field="*{roleRequest}" id="role-superadmin" name="role" required>
+                                            <option value="" disabled selected>Choose your option</option>
+                                            <option value="ADMIN">Admin</option>
+                                            <option value="USER">User</option>
+                                        </select>
+                                        <label>Role</label>
+                                    </div>
+                                </div>
+                                <button id="submit" type="submit"  class="btn btn-primary">Submit</button>
+                            </form>
                             </div>
+                            <div class="col l2"></div>
                         </div>
-                    </div>
-
-                    <div class="content">
-                        <h2>Update Emp</h2>
-                    </div>
-                    <div class="content">
-                        <h2>Delete Emp</h2>
                     </div>
                 </div>
             </main>
@@ -164,6 +176,7 @@
             })
 
             $(document).ready(function() {
+                $('.tabs').tabs();
 
                 $('select').formSelect();
 

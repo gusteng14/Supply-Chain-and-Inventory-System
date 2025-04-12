@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -61,6 +62,8 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{

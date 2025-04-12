@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -25,17 +27,40 @@
     </head>
     <body>
         <div class="grid-container">
-            <header class="header" th:replace="~{fragments :: header-main}"></header>
-            <aside th:replace="~{fragments :: sidebar}"></aside>
 
+            <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
+            <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
 
+            <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
+            <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
+
+            <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
+            <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
 
             <main class="main-container">
+
+
                 <div class="row">
                     <div class="col l3">
                         <div class="card vs">
                             <div class="card-content">
-                                <span class="card-title">Products</span>
+                                <span class="card-title">Today's Sales</span>
+                                <span class="material-icons-outlined">attach_money</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title">Suppliers</span>
+                                <span class="material-icons-outlined">groups_3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3">
+                        <div class="card vs">
+                            <div class="card-content">
+                                <span class="card-title"> Total Products</span>
                                 <span class="material-icons-outlined">inventory_2</span>
                             </div>
                         </div>
@@ -43,24 +68,8 @@
                     <div class="col l3">
                         <div class="card vs">
                             <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l3">
-                        <div class="card vs">
-                            <div class="card-content">
-                                <span class="card-title">Products</span>
-                                <span class="material-icons-outlined">inventory_2</span>
+                                <span class="card-title">Low Stock Products</span>
+                                <span class="material-icons-outlined">production_quantity_limits</span>
                             </div>
                         </div>
                     </div>
@@ -84,11 +93,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-        </div>
+                 </div>
             </main>
         </div>
+
 
         <!-- SCRIPTS -->
         <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
@@ -100,7 +108,10 @@
             var instances = M.Sidenav.init(elems);
         });
 
-        $('.sidenav').sidenav();
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+            $('.modal').modal();
+        });
 
     </script>
     </body>

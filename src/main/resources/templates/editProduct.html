@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Edit Employee</title>
@@ -26,8 +27,15 @@
 </head>
 <body>
 <div class="grid-container">
-    <header class="header" th:replace="~{fragments :: header-main}"></header>
-    <aside id="sidebar" th:insert="~{fragments :: sidebar}"></aside>
+    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
+    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
+
+    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
+    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
+
+    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
+    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+
     <div class="main-container">
         <div class="content">
             <div class="form-block">

@@ -31,4 +31,22 @@ public class AuthenticatedUser implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    public String getFirstName() {
+        return user.getFirstName();
+    }
+
+    public String getMiddleName() {
+        return user.getFirstName();
+    }
+
+    public String getLastName() {
+        return user.getFirstName();
+    }
+
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
+    }
+
+
 }

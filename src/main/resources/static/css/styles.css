@@ -1,20 +1,56 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #f3f3f3;
+    background-color: #ffffff;
     color: black;
     font-family: "Poppins", sans-serif;
 }
 
 .aside {
-    background-color: #f3f3f3;
+    background-color: #ffffff;
 }
 
-/*.links {*/
-/*    color: white;*/
-/*}*/
+.tabs {
+    background-color: #ffffff;
+}
 
+.tabs .indicator {
+    background-color: #4db6ac;
+}
 
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: rgba(178, 246, 230, 0.2);
+    outline: none;
+}
+
+.tabs .tab a {
+    color: rgba(45, 106, 95, 0.7);
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+    background-color: transparent;
+    color: rgba(45, 106, 95, 1);
+}
+
+#product-table {
+    border-radius: 30px;
+}
+
+.product-tr:first-child .product-th:first-child {
+    border-top-left-radius: 30px;
+}
+
+.product-tr:first-child .product-th:last-child {
+    border-top-right-radius: 30px;
+}
+
+.product-tr:last-child .product-td:first-child {
+    border-bottom-left-radius: 30px;
+}
+
+.product-tr:last-child .product-td:first-child {
+    border-bottom-left-radius: 30px;
+}
 
 header, main, footer {
     padding-left: 270px;
@@ -29,26 +65,6 @@ nav .brand-logo {
 
 a {
     text-decoration: none;
-    color: white;
-}
-
-.logout {
-    background-color: rgba(41, 185, 163, 0.81);
-    border: rgba(41, 185, 163, 1);
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px 4px 23px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-
-}
-
-.logout:hover {
-    background-color: #d35555; /* Green */
     color: white;
 }
 
@@ -87,59 +103,93 @@ a {
 
 /*----------SIDEBAR----------*/
 
-.sidenav {
+/*.sidenav {*/
+/*    height: 100%;*/
+/*}*/
+
+
+.sidenav ul {
+    position: relative;
+    height: 100%;
+}
+
+.sidenav ul li.logout {
+    position: relative;
+    height: 100%;
+}
+
+.sidenav.user {
     width: 270px;
     background-color: #26a69a;
 }
 
-
-.sidebar-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30px;
-    margin-bottom: 30px;
-}
-
-.sidebar-title > span {
-    display: none;
-}
-
-.sidebar-brand {
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight: 700;
+.sidenav.admin {
+    width: 270px;
+    background-color: #4db6ac;
 
 }
 
-.sidebar-list {
-    padding: 0;
-    margin-top: 15px;
-    list-style-type: none;
+.sidenav.superadmin {
+    width: 270px;
+    background-color: #80cbc4;
 }
 
-.sidebar-list-item {
-    padding: 20px;
-    font-size: 18px;
-}
-
-.sidebar-list-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-}
-
-.sideebar-responsive {
-    display: inline !important;
+.logout {
     position: absolute;
-    z-index: 12 !important;
+    bottom: 100px;
+}
+
+#logout-user {
+    margin-left: 30px;
+    width: 120px;
+    height: 45px;
+    padding-left: 20px;
+    padding-right: 7px;
+    text-transform: none;
+}
+
+#logout-user i {
+    color: white;
+    padding-left: 0px;
+    margin: 0px;
+}
+
+#logout-admin {
+    margin-left: 30px;
+    width: 120px;
+    height: 45px;
+    padding-left: 20px;
+    padding-right: 7px;
+    text-transform: none;
+}
+
+#logout-admin i {
+    color: white;
+    padding-left: 0px;
+    margin: 0px;
+}
+
+#logout-superadmin {
+    margin-left: 30px;
+    width: 120px;
+    height: 45px;
+    padding-left: 20px;
+    padding-right: 7px;
+    text-transform: none;
+}
+
+#logout-superadmin i {
+    color: white;
+    padding-left: 0px;
+    margin: 0px;
 }
 
 /*----------MAIN----------*/
 
 .main-container {
-    padding-left: 290px;
-    padding-right: 20px;
-    background-color: #f3f3f3;
+    padding-left: 330px;
+    padding-right: 60px;
+    background-color: #ffffff;
 /*    overflow-y: auto;*/
 /*    color: black;*/
 }
@@ -287,14 +337,22 @@ input[type=password] {
 }
 
 .productImg {
-    height: 100px;
-    width: auto;
-    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    border-radius: 25%;
 }
 
 .productThumbnail {
     height: 200px;
     width: auto;
+}
+
+td {
+    padding: 15px 30px;
+}
+
+th {
+    padding: 15px 30px
 }
 
 
