@@ -121,19 +121,11 @@
                                         <label for="password">Password</label>
                                     </div>
 
-                                    <div sec:authorize="hasRole('ADMIN')" class="input-field col s6">
+                                    <div class="input-field col s6">
                                         <i class="material-icons-round prefix">manage_accounts</i>
-                                        <select th:field="*{roleRequest}" id="role-admin" name="role" required>
+                                        <select th:field="*{roleRequest}" id="role" name="role" required>
                                             <option value="" disabled selected>Choose your option</option>
-                                            <option value="USER">User</option>
-                                        </select>
-                                        <label>Role</label>
-                                    </div>
-                                    <div sec:authorize="hasRole('SUPERADMIN')" class="input-field col s6">
-                                        <i class="material-icons-round prefix">manage_accounts</i>
-                                        <select th:field="*{roleRequest}" id="role-superadmin" name="role" required>
-                                            <option value="" disabled selected>Choose your option</option>
-                                            <option value="ADMIN">Admin</option>
+                                            <option sec:authorize="hasRole('SUPERADMIN')" value="ADMIN">Admin</option>
                                             <option value="USER">User</option>
                                         </select>
                                         <label>Role</label>
