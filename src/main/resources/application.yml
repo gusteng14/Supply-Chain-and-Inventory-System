@@ -14,6 +14,9 @@ server:
 
 spring:
   datasource:
+#    password: barkstorewebsike
+#    url: jdbc:mysql://barkstoresystem.cpq4qsyguy1e.ap-southeast-1.rds.amazonaws.com:3306/barkstore_inv
+#    username: websike
     password: root
     url: jdbc:mysql://localhost:3306/barkstore_inv
     username: root
