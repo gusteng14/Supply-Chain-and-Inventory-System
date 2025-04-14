@@ -29,15 +29,7 @@ import java.util.*;
 
 public class MyUser implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     // NEED TO IMPLEMENT SOFT DELETE FUNCTION
@@ -59,6 +51,9 @@ public class MyUser implements Serializable {
 
     @UpdateTimestamp
     private Instant lastUpdatedOn;
+
+//    @Lob
+//    private String imageData;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -115,6 +110,10 @@ public class MyUser implements Serializable {
 //        return Collections.singletonList(authority);
 //    }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -165,6 +164,7 @@ public class MyUser implements Serializable {
 
     public boolean isAccountNonExpired() {
         return true;
+
     }
 
 //    @Override

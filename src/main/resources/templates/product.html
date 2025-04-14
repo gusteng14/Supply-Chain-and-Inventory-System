@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Page</title>
+    <title>Product Page</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -17,7 +17,6 @@
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
-
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
@@ -62,9 +61,15 @@
                         <tbody>
                             <tr class="product-tr" th:each="product : ${product}">
                                 <!--                                    <td th:text="${product.id}">z</td>-->
+<!--                                <td class="product-td">-->
+<!--                                    <img class="productImg" th:src="@{${product.photosPath}}">-->
+<!--                                </td>-->
                                 <td class="product-td">
-                                    <img class="productImg" th:src="@{${product.photosPath}}">
+                                    <img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}">
                                 </td>
+<!--                                <td class="product-td">-->
+<!--                                    <img class="productImg" th:src="*{'data:image/jpeg;base64,'+{product.image}}">-->
+<!--                                </td>-->
                                 <td class="product-td" th:text="${product.name}">z</td>
                                 <td class="product-td" th:text="${product.description}">z</td>
                                 <td class="product-td" th:text="${product.stock}">z</td>
@@ -132,10 +137,10 @@
         </div>
     </main>
 </div>
+
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 <script>
 
-    // ---------- TABS DESIGN ----------
     const tabs = document.querySelectorAll('.tab_btn');
     const all_content = document.querySelectorAll('.content');
 
@@ -143,21 +148,6 @@
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
     });
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', (e)=> {
-            tabs.forEach(tab=>{tab.classList.remove('active')})
-            tab.classList.add('active');
-
-            var line = document.querySelector('.line');
-            line.style.width = e.target.offsetWidth + "px";
-            line.style.left = e.target.offsetLeft + "px";
-
-            all_content.forEach(content=>{content.classList.remove('active')})
-            all_content[index].classList.add('active');
-        })
-    })
-    // ---------- ---------- ----------
 
     $(document).ready(function() {
         $('.tabs').tabs();

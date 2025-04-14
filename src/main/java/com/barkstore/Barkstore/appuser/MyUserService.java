@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,56 +56,9 @@ public class MyUserService implements UserDetailsService {
         System.out.print("Role:: " + user.getRoles());
 
         return new AuthenticatedUser(user, authorities);
-
-
-
-            //List<GrantedAuthority> authorities = user.getRoles()
-
-
-//        MyUser user = userRepository.findByUsername(username);
-//        if(user != null) {
-//            return new MyUserDetails(user);
-//        }
-//
-//        throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, username));
-
     }
 
-//    private Collection<GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
-//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-//    }
-
-
-//    public String signUpUser(MyUser user) {
-//        boolean userExist = userRepository.findByEmail(user.getEmail()).isPresent();
-//
-//        if(userExist) {
-//            throw new IllegalStateException("email already taken");
-//        }
-//
-//        System.out.println(user.getRoleRequest());
-//
-//        Role roles = roleRepository.findByName(user.getRoleRequest()).get();
-//        user.setRoles(Collections.singleton(roles));
-//        String encodedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encodedPassword);
-//
-//        System.out.println("Role is: " + user.getRoles());
-//        userRepository.save(user);
-//
-//        String token = UUID.randomUUID().toString();
-//        ConfirmationToken confirmationToken = new ConfirmationToken(
-//                token,
-//                LocalDateTime.now(),
-//                LocalDateTime.now().plusMinutes(15),
-//                user
-//        );
-//
-//        confirmationTokenService.saveConfirmationToken(confirmationToken);
-//        return token;
-//    }
-
-    public MyUser signUpUser(RegistrationRequest registrationRequest) {
+    public MyUser signUpUser(RegistrationRequest registrationRequest) throws IOException {
         System.out.println("First Name: "  + registrationRequest.getFirstName());
         System.out.println("Last Name: "  + registrationRequest.getLastName());
         System.out.println("Middle Name: "  + registrationRequest.getMiddleName());
@@ -122,6 +77,9 @@ public class MyUserService implements UserDetailsService {
         user.setPassword(registrationRequest.getPassword());
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+//        user.setImageData(Base64.getEncoder().encodeToString(file.getBytes()));
+
+
 
         Role roles = roleRepository.findByName(registrationRequest.getRoleRequest()).get();
         user.setRoles(Collections.singleton(roles));

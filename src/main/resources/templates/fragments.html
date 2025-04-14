@@ -106,9 +106,9 @@
                 <li>
                     <div class="user-view">
                         <div class="background">
-                            <img style="filter: blur(3px);" th:src="@{images/login-bg.jpg}">
+                            <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
-                            <a href="#user"><img class="circle" th:src="@{images/barkstorelogo.png}"></a>
+                            <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
                             <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
                             <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
                    </div>
@@ -146,9 +146,9 @@
                 <li>
                     <div class="user-view">
                         <div class="background">
-                            <img style="filter: blur(3px);" th:src="@{images/login-bg.jpg}">
+                            <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
-                        <a href="#user"><img class="circle" th:src="@{images/barkstorelogo.png}"></a>
+                        <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
                         <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
                         <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
                     </div>
@@ -167,7 +167,7 @@
                 <li><a class="subheader"><i>Menu</i></a></li>
                 <!--                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
                 <li>
-                    <a style="color: white;" th:href="@{/employee}"> Staff </a>
+                    <a style="color: white;" th:href="@{/employee}"> User Management </a>
                 </li>
                 <li >
                     <a style="color: white;" th:href="@{/category}"> Categories </a>
@@ -203,9 +203,9 @@
                 <li>
                     <div class="user-view">
                         <div class="background">
-                            <img style="filter: blur(3px);" th:src="@{images/login-bg.jpg}">
+                            <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
-                        <a href="#user"><img class="circle" th:src="@{images/barkstorelogo.png}"></a>
+                        <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
                         <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
                         <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
                     </div>
@@ -227,7 +227,7 @@
                 <li><a class="subheader"><i>Menu</i></a></li>
                 <!--                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
                 <li>
-                    <a style="color: white;" th:href="@{/employee}"> Staff </a>
+                    <a style="color: white;" th:href="@{/employee}"> User Management </a>
                 </li>
                 <li >
                     <a style="color: white;" th:href="@{/category}"> Categories </a>

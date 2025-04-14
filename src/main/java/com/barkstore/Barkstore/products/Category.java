@@ -19,15 +19,7 @@ import java.time.Instant;
 @Entity
 public class Category implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "category_sequence",
-            sequenceName = "category_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "category_sequence"
-    )
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String categoryCode;
     private String name;

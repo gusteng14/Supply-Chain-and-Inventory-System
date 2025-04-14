@@ -18,15 +18,7 @@ import java.time.Instant;
 @Entity
 public class ItemType implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "product_sequence",
-            sequenceName = "product_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "product_sequence"
-    )
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
     //private String description;

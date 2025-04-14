@@ -74,40 +74,6 @@ a {
     font-size: 35px;
 }
 
-/*.grid-container {*/
-/*    display: grid;*/
-/*    grid-template-columns: 260px 1fr 1fr 1fr;*/
-/*    grid-template-rows: 0.2fr 3fr;*/
-/*    grid-template-areas:*/
-/*            "sidebar header header header"*/
-/*            "sidebar main main main";*/
-/*    height: 100vh;*/
-/*}*/
-/*----------HEADER----------*/
-
-/*.header {*/
-/*    grid-area: header;*/
-/*    height: 70px;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: space-between;*/
-/*    padding: 0 30px 0 30px;*/
-/*    background-color: rgba(36, 164, 145, 1);*/
-/*    box-shadow: 0 6px 7px -3px rgba(0, 0, 0, 0.35);*/
-/*}*/
-
-/*.menu-icon {*/
-/*    display: none;*/
-/*}*/
-
-
-/*----------SIDEBAR----------*/
-
-/*.sidenav {*/
-/*    height: 100%;*/
-/*}*/
-
-
 .sidenav ul {
     position: relative;
     height: 100%;
@@ -193,6 +159,8 @@ a {
 /*    overflow-y: auto;*/
 /*    color: black;*/
 }
+
+
 
 .card.vs {
     height: 175px;
@@ -353,6 +321,26 @@ td {
 
 th {
     padding: 15px 30px
+}
+
+.profile {
+    height: 250px;
+}
+
+.profile-pic {
+    border-radius: 50%;
+    height: 250px;
+    width : 250px;
+}
+
+.profile-pic-container {
+    position: absolute;
+    top: 130px;
+    left: 370px;
+}
+
+.test {
+    padding-left: 500px;
 }
 
 

@@ -15,15 +15,7 @@ import java.util.Set;
 @Entity
 public class Authority {
     @Id
-    @SequenceGenerator(
-            name = "authority_sequence",
-            sequenceName = "authority_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "authority_sequence"
-    )
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
 

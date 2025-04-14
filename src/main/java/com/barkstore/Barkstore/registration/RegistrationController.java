@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.attribute.standard.Media;
 import java.io.IOException;
@@ -47,11 +48,12 @@ public class RegistrationController {
 
     // REGISTRATION THRU FORMS
     @PostMapping(path = "test", value="test", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String test(@Valid /*ModelAttribute*/ @RequestBody RegistrationRequest registrationRequest/*HttpServletResponse response*/) /*throws IOException*/ {
+    public @ResponseBody String test(@Valid @RequestBody RegistrationRequest registrationRequest) throws IOException {
        //return registrationService.register(registrationRequest);
 //        response.sendRedirect("/register");
         System.out.println(registrationRequest.getRoleRequest());
         System.out.println(registrationRequest.getFirstName());
+//        System.out.println("File: " + file.getOriginalFilename());
 
         userService.signUpUser(registrationRequest);
         return null;

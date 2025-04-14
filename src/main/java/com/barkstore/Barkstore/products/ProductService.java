@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,12 @@ public class ProductService {
     public ProductService(ProductRepo repo, EmailSender emailSender) {
         this.repo = repo;
         this.emailSender = emailSender;
+    }
+
+    public Product createProductLob(Product product, MultipartFile file) throws IOException {
+        product.setImageData(Base64.getEncoder().encodeToString(file.getBytes()));
+        repo.save(product);
+        return product;
     }
 
     public void uploadFile(String uploadDir, String fileName, MultipartFile file) throws IOException {
@@ -44,40 +51,17 @@ public class ProductService {
         }
     }
 
-    public Product createProduct(ProductRequest productRequest) {
-        Product product = new Product();
-        product.setName(productRequest.getName());
-        product.setDescription(productRequest.getDescription());
-        product.setStock(productRequest.getStock());
-        product.setCost(productRequest.getCost());
-        System.out.println("prodReq photo: " + productRequest.getPhoto());
-        product.setPhoto(productRequest.getPhoto());
-        repo.save(product);
-        return product;
-    }
-
-//    public String createProduct(MultipartFile file, ProductRequest productRequest) throws IOException {
+//    public Product createProduct(ProductRequest productRequest) {
 //        Product product = new Product();
 //        product.setName(productRequest.getName());
 //        product.setDescription(productRequest.getDescription());
 //        product.setStock(productRequest.getStock());
 //        product.setCost(productRequest.getCost());
-//        product.setImageData(ImageUtil.compressImage(file.getBytes()));
-//        product.setImageName(file.getOriginalFilename());
-//        product.setImageType(file.getContentType());
+//        System.out.println("prodReq photo: " + productRequest.getPhoto());
+//        product.setPhoto(productRequest.getPhoto());
 //        repo.save(product);
-//        return null;
+//        return product;
 //    }
-//
-//    public byte[] getImageByProductId(Long id) {
-//        Optional<Product> product = repo.findById(id);
-//        byte[] image = ImageUtil.decompressImage(product.get().getImageData());
-//        return image;
-//    }
-
-
-
-
 
     public String lowInventoryNotif (Product product) {
         int stock = product.getStock();

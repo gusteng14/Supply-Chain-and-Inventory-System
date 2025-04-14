@@ -13,15 +13,7 @@ import java.io.Serializable;
 @Entity
 public class Product implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "product_sequence",
-            sequenceName = "product_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "product_sequence"
-    )
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     private Integer itemNo;
@@ -39,15 +31,17 @@ public class Product implements Serializable {
     private Integer cost;
     private Integer stock;
 
-//    @Lob
-//    private byte[] imageData;
+    @Lob
+    private String imageData;
 //    private String imageName;
 //    private String imageType;
 
     private String photo;
 
-    @Transient
-    private String photosPath;
+//    @Transient
+//    private String photosPath;
+
+
 
 
     @ManyToOne

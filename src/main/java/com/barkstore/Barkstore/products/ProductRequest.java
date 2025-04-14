@@ -17,7 +17,8 @@ public class ProductRequest {
     private String description;
     private Integer cost;
     private Integer stock;
-    private String photo;
-//    private byte[] imageData;
+//    private String photo;
+
+    private String imageData;
 
 }

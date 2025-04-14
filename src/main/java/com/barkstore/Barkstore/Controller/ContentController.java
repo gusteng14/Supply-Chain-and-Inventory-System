@@ -11,6 +11,10 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -73,21 +77,28 @@ public class ContentController {
         return "product";
     }
 
+    @GetMapping(value = "/{productId}/product_image")
+    public ResponseEntity<byte[]> getProductImage(@PathVariable Long productId) {
+        Optional<Product> productOptional = productRepo.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            byte[] imageBytes = java.util.Base64.getDecoder().decode(product.getImageData());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/product/create")
-    public String createProduct(Model model, @ModelAttribute ProductRequest productRequest, @RequestParam("image") MultipartFile file) throws IOException {
-        Product product = new Product();
+    public String createProduct(Model model, @ModelAttribute Product product, @RequestParam("image") MultipartFile file) throws IOException {
         model.addAttribute("product", product);
+        System.out.println("Create Product (Controller): ");
         System.out.println(file.getOriginalFilename());
 
-        if(!file.isEmpty()) {
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            productRequest.setPhoto(fileName);
-            Product savedProduct = productService.createProduct(productRequest);
+        productService.createProductLob(product, file);
 
-            String uploadDir = "product-photos/" + savedProduct.getId();
-            System.out.println(uploadDir);
-            productService.uploadFile(uploadDir, fileName, file);
-        }
         return "redirect:/product";
     }
 

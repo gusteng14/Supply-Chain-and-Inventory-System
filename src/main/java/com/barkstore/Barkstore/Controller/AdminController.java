@@ -2,19 +2,28 @@ package com.barkstore.Barkstore.Controller;
 
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
+import com.barkstore.Barkstore.appuser.UpdateUserRequest;
+import com.barkstore.Barkstore.products.Product;
 import com.barkstore.Barkstore.products.ProductRepo;
+import com.barkstore.Barkstore.products.ProductRequest;
 import com.barkstore.Barkstore.products.ProductService;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
 import jakarta.validation.Valid;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -41,8 +50,8 @@ public class AdminController {
         return "employee";
     }
 
-    @GetMapping("/employee/edit")
-    public String editEmployee(Model model, @RequestParam Long id) {
+    @GetMapping("/employee/{id}")
+    public String viewEmployee(Model model, @PathVariable Long id) {
         MyUser user = repository.findById(id).get();
         model.addAttribute("user", user);
 
@@ -56,21 +65,51 @@ public class AdminController {
         registrationRequest.setPassword(user.getPassword());
 
         model.addAttribute("registrationRequest", registrationRequest);
+        System.out.println(user.getRoles().toString());
+
+        return "viewEmployee";
+    }
+
+//    @GetMapping(value = "/{employeeId}/emp_image")
+//    public ResponseEntity<byte[]> getEmployeeImage(@PathVariable Long employeeId) {
+//        Optional<MyUser> userOptional = repository.findById(employeeId);
+//        if (userOptional.isPresent()) {
+//            MyUser user = userOptional.get();
+//            byte[] imageBytes = java.util.Base64.getDecoder().decode(user.getImageData());
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.IMAGE_JPEG);
+//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+    @GetMapping("/employee/edit")
+    public String editEmployee(Model model, @RequestParam Long id) {
+        MyUser user = repository.findById(id).get();
+        model.addAttribute("user", user);
+
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setFirstName(user.getFirstName());
+        updateUserRequest.setLastName(user.getLastName());
+        updateUserRequest.setMiddleName(user.getMiddleName());
+        updateUserRequest.setContactNo(user.getContactNo());
+        updateUserRequest.setEmail(user.getEmail());
+
+        model.addAttribute("updateUserRequest", updateUserRequest);
         return "editEmployee";
     }
 
     @PostMapping("/employee/edit")
-    public String updateEmployee(Model model, @RequestParam Long id, @Valid @ModelAttribute RegistrationRequest registrationRequest) {
+    public String updateEmployee(Model model, @RequestParam Long id, @Valid @ModelAttribute UpdateUserRequest updateUserRequest) {
         MyUser user = repository.findById(id).get();
         model.addAttribute("user", user);
 
-        user.setFirstName(registrationRequest.getFirstName());
-        user.setMiddleName(registrationRequest.getMiddleName());
-        user.setLastName(registrationRequest.getLastName());
-        user.setContactNo(registrationRequest.getContactNo());
-        user.setUsername(registrationRequest.getUsername());
-        user.setEmail(registrationRequest.getEmail());
-        user.setPassword(registrationRequest.getPassword());
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setMiddleName(updateUserRequest.getMiddleName());
+        user.setLastName(updateUserRequest.getLastName());
+        user.setContactNo(updateUserRequest.getContactNo());
+        user.setEmail(updateUserRequest.getEmail());
         repository.save(user);
 
         return "redirect:/employee";

@@ -55,11 +55,9 @@ public class RegistrationRequest {
     @Size(min = 8, max = 100, message = "Password must be between 8 to 100 characters.")
     private String password;
 
-
     private String roleRequest;
-
-
     private Set<RoleRequest> roles;
+    private String imageData;
 
 
 
