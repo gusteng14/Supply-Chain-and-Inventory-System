@@ -127,7 +127,14 @@
                                         <input style="color: black;" th:field="*{password}" id="password" type="password" class="validate" required>
                                         <label for="password">Password</label>
                                     </div>
-
+                                    <div class="input-field col s6">
+                                        <i class="material-icons-round prefix">lock</i>
+                                        <input style="color: black;"  id="confirm-password" type="password" class="validate" required>
+                                        <label for="confirm-password">Confirm Password</label>
+                                        <p id="message"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">manage_accounts</i>
                                         <select th:field="*{roleRequest}" id="role" name="role" required>
@@ -191,12 +198,17 @@
             })
 
             $(document).ready(function() {
+                $('#password, #confirm-password').on('keyup', function() {
+                   if($('#password').val() == $('#confirm-password').val()) {
+                       $('#message').html("Password matched!").css('color','green');
+                   } else {
+                       $('#message').html("Password does not match!").css('color','red');
+                   }
+                });
+
                 $('.tabs').tabs();
-
                 $('select').formSelect();
-
                 $("#registerForm").submit(function(event) {
-
                     event.preventDefault();
                     ajaxPost();
                     refreshForm();
