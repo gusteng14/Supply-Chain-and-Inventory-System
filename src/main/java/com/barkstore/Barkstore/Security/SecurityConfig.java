@@ -79,8 +79,9 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/index")
-                        .failureForwardUrl("/login")
+                        .defaultSuccessUrl("/", true)
+
+//                        .failureForwardUrl("/login")
                 )
                 //.httpBasic(Customizer.withDefaults())
                 .build();

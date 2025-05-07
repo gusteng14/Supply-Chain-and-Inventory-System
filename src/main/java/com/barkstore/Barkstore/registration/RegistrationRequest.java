@@ -1,6 +1,7 @@
 package com.barkstore.Barkstore.registration;
 
 import com.barkstore.Barkstore.appuser.RoleRequest;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,37 +20,42 @@ import java.util.Set;
 
 public class RegistrationRequest {
     @Valid
-
     @NotEmpty
     @NotBlank
     @Size(message = "First name can not be blank.")
     private String firstName;
 
+    @Valid
     @NotEmpty
     @NotBlank
     @Size(message = "Last name can not be blank.")
     private String lastName;
 
+    @Valid
     @NotEmpty
     @NotBlank
     @Size(message = "Middle name can not be blank.")
     private String middleName;
 
+    @Valid
     @NotEmpty
     @NotBlank
-//    @Size(min=11, message = "Contact number length must be 11.")
+    @Size(min=11, message = "Contact number length must be 11.")
     private String contactNo;
 
+    @Valid
     @NotEmpty
     @NotBlank
     @Size(min=6, max=30, message = "Username length must be between 6 to 30 characters.")
     private String username;
 
+    @Valid
     @NotEmpty
     @NotBlank
     @Size(message = "Email can not be blank.")
     private String email;
 
+    @Valid
     @NotEmpty
     @NotBlank
     @Size(min = 8, max = 100, message = "Password must be between 8 to 100 characters.")

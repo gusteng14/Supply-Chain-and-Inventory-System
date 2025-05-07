@@ -3,14 +3,17 @@ package com.barkstore.Barkstore.registration;
 
 import com.barkstore.Barkstore.Email.EmailSender;
 import com.barkstore.Barkstore.appuser.MyUser;
+import com.barkstore.Barkstore.appuser.MyUserRepository;
 import com.barkstore.Barkstore.appuser.MyUserRole;
 import com.barkstore.Barkstore.appuser.MyUserService;
 import com.barkstore.Barkstore.registration.token.ConfirmationToken;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -20,30 +23,39 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final ConfirmationTokenService confirmationTokenService;
+    private final MyUserRepository userRepository;
 
-     //ADMIN CREATING AN EMPLOYEE ACCOUNT (DEFAULT ROLE IS USER ONLY)
-//    public String register(RegistrationRequest request) {
-//        boolean isValidEmail = emailValidator.test(request.getEmail());
-//
-//        if(!isValidEmail) {
-//            throw new IllegalStateException("email not valid");
-//        }
-//        String token = userService.signUpUser(
-//                new MyUser(
-//                        request.getFirstName(),
-//                        request.getLastName(),
-//                        request.getMiddleName(),
-//                        request.getContactNo(),
-//                        request.getUsername(),
-//                        request.getEmail(),
-//                        request.getPassword(),
-//                        request.getRole()
-//                        )
-//        );
+   //  ADMIN CREATING AN EMPLOYEE ACCOUNT (DEFAULT ROLE IS USER ONLY)
+    public String register(RegistrationRequest request) throws IOException {
+        boolean isValidEmail = emailValidator.test(request.getEmail());
+        if (userRepository.findByUsername(request.getUsername()) != null) {
+            throw new UsernameNotFoundException(String.format("User %s is invalid!", request.getUsername()));
+        }
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
+        }
+        userService.signUpUser(
+                new MyUser(
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getMiddleName(),
+                        request.getContactNo(),
+                        request.getUsername(),
+                        request.getEmail(),
+                        request.getPassword(),
+                        request.getRoleRequest()
+                )
+        );
+
+        return "";
+    }
+
+
 //        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
 //        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link), "Confirm your email");
 //        return token;
-//    }
+
 
 //    @Transactional
 //    public String confirmToken(String token) {

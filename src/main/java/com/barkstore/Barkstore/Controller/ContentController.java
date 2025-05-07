@@ -7,7 +7,6 @@ import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
-import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

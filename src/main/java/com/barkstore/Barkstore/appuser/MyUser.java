@@ -27,7 +27,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 
-public class MyUser implements Serializable {
+public class MyUser implements UserDetails {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -42,6 +42,10 @@ public class MyUser implements Serializable {
     private String username;
     private String email;
     private String password;
+    private Boolean enabled = false;
+
+    @Column(unique = true)
+    private String verificationCode;
 
     @Transient
     private String roleRequest;
@@ -93,22 +97,11 @@ public class MyUser implements Serializable {
         this.roles = roles;
     }
 
-//    public MyUser(String firstName, String lastName, String middleName, String contactNo, String username, String email, String password, MyUserRole myUserRole) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.middleName = middleName;
-//        this.contactNo = contactNo;
-//        this.username = username;
-//        this.email = email;
-//        this.password = password;
-//        this.myUserRole = myUserRole;
-//    }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ADMIN");
-//        return Collections.singletonList(authority);
-//    }
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 
     public String getFullName() {
         return firstName + " " + lastName;
@@ -118,6 +111,11 @@ public class MyUser implements Serializable {
         this.password = password;
     }
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 
     public String getPassword() {
         return password;
@@ -189,8 +187,5 @@ public class MyUser implements Serializable {
         return false;
     }
 
-//    @Override
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
+
 }

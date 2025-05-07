@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
@@ -21,10 +22,8 @@
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
-
-
 </head>
+
 <body>
         <div class="grid-container">
             <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
@@ -104,8 +103,15 @@
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">phone</i>
-                                        <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{contactNo}" id="contact_no" th:class="${#fields.hasErrors('contactNo')}? fieldError"
+                                               type="text" class="validate" required>
                                         <label for="contact_no">Contact No</label>
+                                        <span  th:if="${#fields.hasErrors('contactNo')}" th:errors="*{contactNo}">
+                                            Invalid Contact Number
+                                        </span>
+                                        <span class="helper-text" th:if="${#fields.hasErrors('contactNo')}" th:errors="*{contactNo}"
+                                              data-error="wrong" data-success="right"></span>
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -113,12 +119,18 @@
                                         <i class="material-icons-round prefix">account_circle</i>
                                         <input style="color: black;" th:field="*{username}" id="username" type="text" class="validate" required>
                                         <label for="username">Username</label>
+                                        <p  th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                            Invalid Username
+                                        </p>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">alternate_email</i>
                                         <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
                                         <label for="email">Email</label>
                                         <span class="helper-text" data-error="wrong" data-success="right"></span>
+                                        <p  th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                            Invalid Email
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -131,7 +143,9 @@
                                         <i class="material-icons-round prefix">lock</i>
                                         <input style="color: black;"  id="confirm-password" type="password" class="validate" required>
                                         <label for="confirm-password">Confirm Password</label>
-                                        <p id="message"></p>
+                                        <p  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                                            Invalid Password
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -139,6 +153,7 @@
                                         <i class="material-icons-round prefix">manage_accounts</i>
                                         <select th:field="*{roleRequest}" id="role" name="role" required>
                                             <option value="" disabled selected>Choose your option</option>
+                                            <option sec:authorize="hasRole('SUPERADMIN')" value="SUPERADMIN">Super Admin</option>
                                             <option sec:authorize="hasRole('SUPERADMIN')" value="ADMIN">Admin</option>
                                             <option value="USER">User</option>
                                         </select>
@@ -161,7 +176,7 @@
 <!--                                        </div>-->
 <!--                                    </div>-->
                                 </div>
-                                <button id="submit" type="submit"  class="btn btn-primary">Submit</button>
+                                <button id="submit" type="submit" onclick="passwordMatch()" class="btn btn-primary">Submit</button>
                             </form>
                             </div>
                             <div class="col l2"></div>
@@ -201,10 +216,14 @@
                 $('#password, #confirm-password').on('keyup', function() {
                    if($('#password').val() == $('#confirm-password').val()) {
                        $('#message').html("Password matched!").css('color','green');
+                       $("#submit").prop('disabled', false);
                    } else {
                        $('#message').html("Password does not match!").css('color','red');
+                       $("#submit").prop('disabled', true);
                    }
                 });
+
+
 
                 $('.tabs').tabs();
                 $('select').formSelect();
@@ -214,6 +233,14 @@
                     refreshForm();
                 });
 
+                function passwordMatch() {
+                    if ($("#password").val() != $("#confirm-password").val()) {
+                        alert("Password don't match!");
+                        event.preventDefault();
+
+                    }
+                }
+
                 function refreshForm() {
                     $("#first_name").val("");
                     $("#last_name").val("");
@@ -222,6 +249,7 @@
                     $("#username").val("");
                     $("#email").val("");
                     $("#password").val("");
+                    $("#confirm-password").val("");
                     $("#role").val("");
                     $("#image").val("");
                 }
@@ -246,7 +274,14 @@
                         url: "api/v1/registration/test",
                         data: JSON.stringify(formData),
                         dataType: 'text',
-                        success : function(data, textStatus, xhr) {
+                        success : function(response, data, textStatus, xhr) {
+                            if ($(response).find('.has-error').length) {
+//                                $form.replaceWith(response);
+                                M.toast({html: ' Something went wrong.'});
+                            }
+                            if (xhr.status == 500) {
+                                M.toast({html: ' Something went wrong.'});
+                            }
                             if (xhr.status == 200) {
                                 M.toast({html: 'Employee Added!!'});
                             } else {
@@ -255,7 +290,6 @@
                         },
                         error: function(e) {
                             console.log(e)
-
                         }
                     })
                 }

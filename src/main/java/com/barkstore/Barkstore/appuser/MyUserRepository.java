@@ -16,6 +16,13 @@ public interface MyUserRepository extends JpaRepository<MyUser, Long> {
     MyUser findByUsername (String username);
     Boolean existsByUsername(String username);
 
+    @Modifying
+    @Query("UPDATE MyUser u SET u.enabled = true WHERE u.id = ?1")
+    void enable(Long id);
+
+    @Query("SELECT u FROM MyUser u WHERE u.verificationCode = ?1")
+    MyUser findByVerificationCode (String code);
+
 
 //    @Transactional
 //    @Modifying

@@ -109,8 +109,12 @@
                             <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
                             <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
-                            <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
-                            <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
+                        <a href="#name"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text name"></span></a>
+                        <a href="#email">
+                            <span th:if="${#strings.contains(#authentication.principal.authorities, 'ROLE_USER')}" class="white-text email">
+                                User
+                            </span>
+                        </a>
                    </div>
                 </li>
                 <li><a class="subheader"><i>Inventory</i></a></li>
@@ -149,8 +153,12 @@
                             <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
                         <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
-                        <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
-                        <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
+                        <a href="#name"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text name"></span></a>
+                        <a href="#email">
+                            <span th:if="${#strings.contains(#authentication.principal.authorities, 'ROLE_ADMIN')}" class="white-text email">
+                                Admin
+                            </span>
+                        </a>
                     </div>
                 </li>
                 <li><a class="subheader"><i>Inventory</i></a></li>
@@ -206,8 +214,12 @@
                             <img style="filter: blur(3px);" th:src="@{../images/login-bg.jpg}">
                         </div>
                         <a href="#user"><img class="circle" th:src="@{../images/barkstorelogo.png}"></a>
-                        <a href="#name"><span sec:authentication="name" class="white-text name"></span></a>
-                        <a href="#email"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text email"></span></a>
+                        <a href="#name"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text name"></span></a>
+                        <a href="#email">
+                            <span th:if="${#strings.contains(#authentication.principal.authorities, 'ROLE_SUPERADMIN')}" class="white-text email">
+                                Super Admin
+                            </span>
+                        </a>
                     </div>
                 </li>
                 <li><a class="subheader"><i>Inventory</i></a></li>
