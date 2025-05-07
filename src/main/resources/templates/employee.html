@@ -50,6 +50,7 @@
                                         <th>Full Name</th>
                                         <th>Contact No.</th>
                                         <th>Email</th>
+                                        <th>Status</th>
                                         <th>Role</th>
                                         <th></th>
                                     </tr>
@@ -59,6 +60,10 @@
                                         <td th:text="${user.getFullName()}">z</td>
                                         <td th:text="${user.contactNo}">z</td>
                                         <td th:text="${user.email}">z</td>
+                                        <td>
+                                            <p th:if="${user.enabled == true}"> Enabled </p>
+                                            <p th:unless="${user.enabled}"> Disabled </p>
+                                        </td>
                                         <td th:each="userRole : ${user.roles}" th:text="${userRole.getName()}"> </td>
 <!--                                            <td th:text="${user.roles}">z</td>-->
 
@@ -143,9 +148,10 @@
                                         <i class="material-icons-round prefix">lock</i>
                                         <input style="color: black;"  id="confirm-password" type="password" class="validate" required>
                                         <label for="confirm-password">Confirm Password</label>
-                                        <p  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
-                                            Invalid Password
-                                        </p>
+                                        <p id="message"></p>
+<!--                                        <p  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
+<!--                                            Invalid Password-->
+<!--                                        </p>-->
                                     </div>
                                 </div>
                                 <div class="row">
@@ -223,8 +229,6 @@
                    }
                 });
 
-
-
                 $('.tabs').tabs();
                 $('select').formSelect();
                 $("#registerForm").submit(function(event) {
@@ -255,7 +259,7 @@
                 }
 
                 function ajaxPost() {
-                    alert($("#role").val());
+                    alert($("Account created successfully.").val());
 
                     var formData = {
                         firstName : $("#first_name").val(),
