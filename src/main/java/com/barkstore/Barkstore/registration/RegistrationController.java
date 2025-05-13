@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.print.attribute.standard.Media;
 import java.io.IOException;
@@ -78,15 +79,19 @@ public class RegistrationController {
     }
 
     @GetMapping(path = "confirm")
-    public String confirm(@Param("token") String token, Model model) throws IOException {
+    public RedirectView confirm(@Param("token") String token, Model model, HttpServletResponse response) throws IOException {
         System.out.println("Token sa controller: " + token);
         boolean verified = userService.verifyUser(token);
 
         if (!verified) {
-            return "verification failed.";
+            return new RedirectView("/verificationFailed");
         }
-        return "verified.";
+        return new RedirectView("/verified");
+        //return "confirm";
+//        return "verifiedPage";
     }
+
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

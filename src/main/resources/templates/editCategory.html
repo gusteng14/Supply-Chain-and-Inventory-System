@@ -8,15 +8,18 @@
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
-        900&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
 
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
@@ -37,11 +40,11 @@
         <div class="content">
             <div class="form-block">
                 <div class="employee-form">
-                    <h3 style="color:black;">Employee Details Setup</h3>
+                    <h3 style="color:black;">Update Category Details</h3>
                     <form class="col s12" id="registerForm" action="#" th:action="@{/category/edit}" method="post" th:object="${categoryRequest}">
                         <div class="row">
                             <div class="input-field col s6">
-                                <input readonly style="color: black;" th:value="${category.id}" id="id" name="id">
+                                <input readonly style="color: black;" th:value="${category.id}" id="id" type="text" name="id">
                                 <label for="id">ID</label>
                             </div>
                         </div>
@@ -55,16 +58,6 @@
                                 <label for="description">Category Description</label>
                             </div>
                         </div>
-<!--                        <div class="row">-->
-<!--                            <div class="input-field col s6">-->
-<!--                                <input style="color: black;" th:field="*{stock}" id="stock" type="number" class="validate" required>-->
-<!--                                <label for="stock">Item Stock</label>-->
-<!--                            </div>-->
-<!--                            <div class="input-field col s6">-->
-<!--                                <input style="color: black;" th:field="*{cost}" id="cost" type="number" class="validate" required>-->
-<!--                                <label for="cost">Item Cost</label>-->
-<!--                            </div>-->
-<!--                        </div>-->
                         <button id="submit" type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -75,15 +68,6 @@
 
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 <script>
-
-    const tabs = document.querySelectorAll('.tab_btn');
-    const all_content = document.querySelectorAll('.content');
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems);
-    });
-
     $(document).ready(function() {
         $('.tabs').tabs();
         $('#image').on('change', function() {

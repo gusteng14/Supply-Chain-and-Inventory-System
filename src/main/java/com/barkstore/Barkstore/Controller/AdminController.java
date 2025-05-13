@@ -40,6 +40,16 @@ public class AdminController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/verified")
+    public String verifiedPage() {
+        return "verified";
+    }
+
+    @GetMapping("/verificationFailed")
+    public String verificationFailedPage() {
+        return "verificationFailed";
+    }
+
     //    @RequestMapping(value = "/register", method = RequestMethod.GET)
 //    @Secured("ADMIN")
     @GetMapping("/employee")

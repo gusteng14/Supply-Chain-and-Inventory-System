@@ -72,8 +72,21 @@ public class ContentController {
     public String viewProduct(Model model) {
         model.addAttribute("productRequest", new ProductRequest());
         List<Product> product = productRepo.findAll();
+        List<Category> category = categoryRepo.findAll();
+        List<ItemType> itemType = itemTypeRepo.findAll();
         model.addAttribute("product", product);
+        model.addAttribute("category", category);
+        model.addAttribute("itemType", itemType);
         return "product";
+    }
+
+    @GetMapping("/product/{id}")
+    public String viewProduct(@PathVariable Long id, Model model) {
+        Product product = productRepo.findById(id).get();
+        model.addAttribute("product", product);
+
+
+        return "viewProduct";
     }
 
     @GetMapping(value = "/{productId}/product_image")
@@ -91,12 +104,12 @@ public class ContentController {
     }
 
     @PostMapping("/product/create")
-    public String createProduct(Model model, @ModelAttribute Product product, @RequestParam("image") MultipartFile file) throws IOException {
-        model.addAttribute("product", product);
+    public String createProduct(Model model, @ModelAttribute ProductRequest productRequest, @RequestParam("image") MultipartFile file) throws IOException {
+        model.addAttribute("productRequest", productRequest);
         System.out.println("Create Product (Controller): ");
         System.out.println(file.getOriginalFilename());
 
-        productService.createProductLob(product, file);
+        productService.createProductLob(productRequest, file);
 
         return "redirect:/product";
     }

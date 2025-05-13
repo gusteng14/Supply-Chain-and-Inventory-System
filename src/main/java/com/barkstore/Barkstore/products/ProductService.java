@@ -13,7 +13,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Service
 //@AllArgsConstructor
@@ -23,14 +26,30 @@ public class ProductService {
     private ProductRepo repo;
     @Autowired
     private final EmailSender emailSender;
+    @Autowired
+    private CategoryRepo categoryRepo;
+    @Autowired
+    private ItemTypeRepo itemTypeRepo;
 
     public ProductService(ProductRepo repo, EmailSender emailSender) {
         this.repo = repo;
         this.emailSender = emailSender;
     }
 
-    public Product createProductLob(Product product, MultipartFile file) throws IOException {
+    public Product createProductLob(ProductRequest productRequest, MultipartFile file) throws IOException {
+        Product product = new Product();
         product.setImageData(Base64.getEncoder().encodeToString(file.getBytes()));
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
+        product.setStock(productRequest.getStock());
+        product.setCost(productRequest.getCost());
+
+        Category category = categoryRepo.findByName(productRequest.getCategory()).get();
+        product.setCategory(category);
+
+        ItemType itemType = itemTypeRepo.findByName(productRequest.getItemType()).get();
+        product.setItemType(itemType);
+
         repo.save(product);
         return product;
     }
@@ -61,6 +80,11 @@ public class ProductService {
 //        product.setPhoto(productRequest.getPhoto());
 //        repo.save(product);
 //        return product;
+//    }
+
+//    public void initProductDB() {
+//        List<Product> products = IntStream.rangeClosed(1, 200)
+//                .mapToObj(i -> new Product("product" + i, new Random().nextInt(100)))
 //    }
 
     public String lowInventoryNotif (Product product) {

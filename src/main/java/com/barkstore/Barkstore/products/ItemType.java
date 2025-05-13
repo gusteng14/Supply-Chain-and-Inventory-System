@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,6 +29,9 @@ public class ItemType implements Serializable {
 //    private MyUser lastUpdatedBy;
 
     // NEED TO IMPLEMENT SOFT DELETE FUNCTION
+
+    @OneToMany(mappedBy="itemType")
+    private Set<Product> products;
 
     @CreationTimestamp
     private Instant createdOn;

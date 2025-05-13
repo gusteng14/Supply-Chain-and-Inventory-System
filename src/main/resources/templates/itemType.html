@@ -8,18 +8,18 @@
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
-        900&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
 
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
 
-
-
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
@@ -43,19 +43,16 @@
         <div class="row">
             <div class="col s12">
                 <ul class="tabs">
-                    <li class="tab col s3 l6"><a href="#view-itemType-tab">View Products</a></li>
-                    <li class="tab col s3 l6"><a href="#create-itemType-tab">Create Products</a></li>
+                    <li class="tab col s3 l6"><a href="#view-itemType-tab">View Item Types</a></li>
+                    <li class="tab col s3 l6"><a href="#create-itemType-tab">Create Item Types</a></li>
                 </ul>
                 <div id="view-itemType-tab">
-                    <h4>Item Types</h4>
-                    <table class="striped">
-                        <thead>
-                            <tr>
-                                <th>Item Type Id</th>
-                                <th>Item Type Name</th>
-
-                                <!--                                <th>Stock</th>-->
-                                <!--                                <th>Cost</th>-->
+                    <h5 style="color: black; padding-bottom: 10px;">Item Types</h5>
+                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                            <tr class="tr-csis">
+                                <th class="th-csis">Item Type Id</th>
+                                <th class="th-csis">Item Type Name</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -63,13 +60,15 @@
                             <tr th:each="itemType : ${itemType}">
                                 <td th:text="${itemType.id}">z</td>
                                 <td th:text="${itemType.name}">z</td>
-    <!--                                <td th:text="${category.description}">z</td>-->
-                                <!--                                <td th:text="${product.stock}">z</td>-->
-                                <!--                                <td th:text="${product.cost}">z</td>-->
-                                <td th:value="${itemType.id}">
-                                    <a th:href="@{/itemType/edit(id=${itemType.id})}"><span style="color: gray;" class="material-icons-outlined">update</span></a>
-                                    <a th:href="@{'/itemType/delete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                        <span style="color: red;" class="material-icons-outlined">close</span>
+                                <td class="td-csis crud right" th:value="${itemType.id}">
+                                    <a class="waves-effect waves-light btn-small" th:href="@{/itemType/edit(id=${itemType.id})}">
+                                        View
+                                    </a>
+                                    <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/itemType/edit(id=${itemType.id})}">
+                                        Update
+                                    </a>
+                                    <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/itemType/delete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                        Delete
                                     </a>
                                 </td>
                             </tr>
@@ -82,7 +81,7 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <input style="color: black;" th:field="*{name}" id="name" type="text" required>
-                                <label for="name">Category Name</label>
+                                <label for="name">Item Type Name</label>
                             </div>
 <!--                                <div class="input-field col s6">-->
 <!--                                    <input style="color: black;" th:field="*{description}" id="description" type="text" required>-->

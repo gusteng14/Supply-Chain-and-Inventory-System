@@ -9,15 +9,18 @@
 
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,
-        900&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
 
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
@@ -43,16 +46,16 @@
                             <li class="tab col s3 l6"><a href="#create-staff-tab">Create User Account</a></li>
                         </ul>
                         <div id="view-staff-tab">
-                            <h4 style="color: black;">List of Users</h4>
-                            <table class="responsive-table highlight">
+                            <h5 style="padding-bottom: 10px;">List of Users</h5>
+                            <table id="table-csis" class="responsive-table highlight z-depth-1">
                                 <thead style="background-color: rgba(234,233,233,0.5);">
-                                    <tr>
-                                        <th>Full Name</th>
-                                        <th>Contact No.</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                        <th>Role</th>
-                                        <th></th>
+                                    <tr class="tr-csis">
+                                        <th class="th-csis">Full Name</th>
+                                        <th class="th-csis">Contact No.</th>
+                                        <th class="th-csis">Email</th>
+                                        <th class="th-csis">Status</th>
+                                        <th class="th-csis">Role</th>
+                                        <th class="th-csis"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,38 +94,32 @@
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">badge</i>
-                                        <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" required>
                                         <label for="first_name">First Name</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">badge</i>
-                                        <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" required>
                                         <label for="middle_name">Middle Name</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">badge</i>
-                                        <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" required>
                                         <label for="last_name">Last Name</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">phone</i>
-                                        <input style="color: black;" th:field="*{contactNo}" id="contact_no" th:class="${#fields.hasErrors('contactNo')}? fieldError"
-                                               type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" required>
                                         <label for="contact_no">Contact No</label>
-                                        <span  th:if="${#fields.hasErrors('contactNo')}" th:errors="*{contactNo}">
-                                            Invalid Contact Number
-                                        </span>
-                                        <span class="helper-text" th:if="${#fields.hasErrors('contactNo')}" th:errors="*{contactNo}"
-                                              data-error="wrong" data-success="right"></span>
-
+                                        <p id="contactNo-message"></p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">account_circle</i>
-                                        <input style="color: black;" th:field="*{username}" id="username" type="text" class="validate" required>
+                                        <input style="color: black;" th:field="*{username}" id="username" type="text" required>
                                         <label for="username">Username</label>
                                         <p  th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
                                             Invalid Username
@@ -130,25 +127,21 @@
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">alternate_email</i>
-                                        <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
+                                        <input style="color: black;" th:field="*{email}" id="email" type="email" required>
                                         <label for="email">Email</label>
-                                        <span class="helper-text" data-error="wrong" data-success="right"></span>
-                                        <p  th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
-                                            Invalid Email
-                                        </p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">lock</i>
-                                        <input style="color: black;" th:field="*{password}" id="password" type="password" class="validate" required>
+                                        <input style="color: black;" th:field="*{password}" id="password" type="password" required>
                                         <label for="password">Password</label>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">lock</i>
-                                        <input style="color: black;"  id="confirm-password" type="password" class="validate" required>
+                                        <input style="color: black;"  id="confirm-password" type="password" required>
                                         <label for="confirm-password">Confirm Password</label>
-                                        <p id="message"></p>
+                                        <p id="password-message"></p>
 <!--                                        <p  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
 <!--                                            Invalid Password-->
 <!--                                        </p>-->
@@ -165,24 +158,8 @@
                                         </select>
                                         <label>Role</label>
                                     </div>
-<!--                                    <div class="row">-->
-<!--                                        <div class="file-field input-field col s6">-->
-<!--                                            <div class="btn">-->
-<!--                                                <span>File</span>-->
-<!--                                                <input type="file" id="image" name="image" accept="image/*" required>-->
-<!--                                            </div>-->
-<!--                                            <div class="file-path-wrapper">-->
-<!--                                                <input class="file-path validate" type="text">-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="row">-->
-<!--                                        <div>-->
-<!--                                            <img class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">-->
-<!--                                        </div>-->
-<!--                                    </div>-->
                                 </div>
-                                <button id="submit" type="submit" onclick="passwordMatch()" class="btn btn-primary">Submit</button>
+                                <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             </div>
                             <div class="col l2"></div>
@@ -194,39 +171,29 @@
         <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 
         <script>
-
-            // ---------- TABS DESIGN ----------
-            const tabs = document.querySelectorAll('.tab_btn');
-            const all_content = document.querySelectorAll('.content');
-
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('.sidenav');
-                var instances = M.Sidenav.init(elems);
-            });
-
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', (e)=> {
-                    tabs.forEach(tab=>{tab.classList.remove('active')})
-                    tab.classList.add('active');
-
-                    var line = document.querySelector('.line');
-                    line.style.width = e.target.offsetWidth + "px";
-                    line.style.left = e.target.offsetLeft + "px";
-
-                    all_content.forEach(content=>{content.classList.remove('active')})
-                    all_content[index].classList.add('active');
-                })
-            })
-
             $(document).ready(function() {
                 $('#password, #confirm-password').on('keyup', function() {
                    if($('#password').val() == $('#confirm-password').val()) {
-                       $('#message').html("Password matched!").css('color','green');
+                       $('#password-message').html("Password matched!").css('color','green');
                        $("#submit").prop('disabled', false);
                    } else {
-                       $('#message').html("Password does not match!").css('color','red');
+                       $('#password-message').html("Password does not match!").css('color','red');
                        $("#submit").prop('disabled', true);
                    }
+                });
+
+                $('#contact_no').on('keyup', function() {
+                    if ($('#contact_no').val().length == 0 || $('#contact_no').val().length == null) {
+                        $('#contactNo-message').html('')
+                    }
+                    else if($('#contact_no').val().length != 11) {
+                        $('#contactNo-message').html('Contact number must be valid!').css('color', 'red');
+                        $("#submit").prop('disabled', true);
+                    } else {
+                        $('#contactNo-message').html('')
+                        $("#submit").prop('disabled', false);
+                    }
+
                 });
 
                 $('.tabs').tabs();
@@ -236,14 +203,6 @@
                     ajaxPost();
                     refreshForm();
                 });
-
-                function passwordMatch() {
-                    if ($("#password").val() != $("#confirm-password").val()) {
-                        alert("Password don't match!");
-                        event.preventDefault();
-
-                    }
-                }
 
                 function refreshForm() {
                     $("#first_name").val("");
@@ -259,8 +218,6 @@
                 }
 
                 function ajaxPost() {
-                    alert($("Account created successfully.").val());
-
                     var formData = {
                         firstName : $("#first_name").val(),
                         lastName : $("#last_name").val(),
@@ -278,11 +235,7 @@
                         url: "api/v1/registration/test",
                         data: JSON.stringify(formData),
                         dataType: 'text',
-                        success : function(response, data, textStatus, xhr) {
-                            if ($(response).find('.has-error').length) {
-//                                $form.replaceWith(response);
-                                M.toast({html: ' Something went wrong.'});
-                            }
+                        success : function(data, textStatus, xhr) {
                             if (xhr.status == 500) {
                                 M.toast({html: ' Something went wrong.'});
                             }

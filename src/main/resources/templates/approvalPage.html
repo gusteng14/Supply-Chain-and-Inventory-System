@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Product Page</title>
+    <title>Approval Page</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -48,62 +48,62 @@
                     <h5 style="padding-bottom: 10px;">List of Products</h5>
                     <table id="table-csis" class="responsive-table highlight z-depth-1">
                         <thead style="background-color: rgba(234,233,233,0.5);">
-                            <tr class="tr-csis">
-                                <!--                                <th>Item No</th>-->
-                                <th class="th-csis">Item Photo</th>
-                                <th class="th-csis">Item Name</th>
-                                <th class="th-csis">Description</th>
-                                <th class="th-csis">Category</th>
-                                <th class="th-csis">Item Type</th>
-                                <th class="th-csis">Stock</th>
-                                <th class="th-csis">Cost</th>
-                                <th class="th-csis"></th>
-                            </tr>
+                        <tr class="tr-csis">
+                            <!--                                <th>Item No</th>-->
+                            <th class="th-csis">Item Photo</th>
+                            <th class="th-csis">Item Name</th>
+                            <th class="th-csis">Description</th>
+                            <th class="th-csis">Category</th>
+                            <th class="th-csis">Item Type</th>
+                            <th class="th-csis">Stock</th>
+                            <th class="th-csis">Cost</th>
+                            <th class="th-csis"></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-csis" th:each="product : ${product}">
-                                <td class="td-csis">
-                                    <a class="modal-trigger" th:attr="data-target=|modal-${product.id}|"><img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}"></a>
-                                    <div th:id="|modal-${product.id}|" class="modal">
-                                        <div class="modal-content">
-                                            <img class="center" id="modal-image" th:src="@{/{productId}/product_image(productId=${product.id})}">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-                                        </div>
+                        <tr class="tr-csis" th:each="product : ${product}">
+                            <td class="td-csis">
+                                <a class="modal-trigger" th:attr="data-target=|modal-${product.id}|"><img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}"></a>
+                                <div th:id="|modal-${product.id}|" class="modal">
+                                    <div class="modal-content">
+                                        <img class="center" id="modal-image" th:src="@{/{productId}/product_image(productId=${product.id})}">
                                     </div>
-                                </td>
-                                <td class="td-csis" th:text="${product.name}">z</td>
-                                <td class="td-csis" th:text="${product.description}">z</td>
-                                <td class="td-csis">
-                                    <th:block th:each="category : ${product.category}">
-                                        <th:block th:text="${category.name}">[category name]</th:block>
-                                        <br>
-                                    </th:block>
-                                </td>
-                                <td class="td-csis">
-                                    <th:block th:each="itemType : ${product.itemType}">
-                                        <th:block th:text="${itemType.name}">[itemType name]</th:block>
-                                        <br>
-                                    </th:block>
-                                </td>
-<!--                                <td class="product-td" th:each="category : ${product.category}" th:text="${category.getName()}"></td>-->
-<!--                                <td class="product-td" th:each="itemType : ${product.itemType}" th:text="${itemType.getName()}">z</td>-->
-                                <td class="td-csis" th:text="${product.stock}">z</td>
-                                <td class="td-csis" th:text="'P' + ${product.cost}">z</td>
-                                <td class="td-csis crud" th:value="${product.id}">
-                                    <a class="waves-effect waves-light btn-small" th:href="@{'/product/' + ${product.id}}">
-                                        View
-                                    </a>
-                                    <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">
-                                        Update
-                                    </a>
-                                    <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                        Delete
-                                    </a>
-                                </td>
+                                    <div class="modal-footer">
+                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="td-csis" th:text="${product.name}">z</td>
+                            <td class="td-csis" th:text="${product.description}">z</td>
+                            <td class="td-csis">
+                                <th:block th:each="category : ${product.category}">
+                                    <th:block th:text="${category.name}">[category name]</th:block>
+                                    <br>
+                                </th:block>
+                            </td>
+                            <td class="td-csis">
+                                <th:block th:each="itemType : ${product.itemType}">
+                                    <th:block th:text="${itemType.name}">[itemType name]</th:block>
+                                    <br>
+                                </th:block>
+                            </td>
+                            <!--                                <td class="product-td" th:each="category : ${product.category}" th:text="${category.getName()}"></td>-->
+                            <!--                                <td class="product-td" th:each="itemType : ${product.itemType}" th:text="${itemType.getName()}">z</td>-->
+                            <td class="td-csis" th:text="${product.stock}">z</td>
+                            <td class="td-csis" th:text="'P' + ${product.cost}">z</td>
+                            <td class="td-csis crud" th:value="${product.id}">
+                                <a class="waves-effect waves-light btn-small" th:href="@{'/product/' + ${product.id}}">
+                                    View
+                                </a>
+                                <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">
+                                    Update
+                                </a>
+                                <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                    Delete
+                                </a>
+                            </td>
 
-                            </tr>
+                        </tr>
                         </tbody>
                     </table>
 
@@ -150,7 +150,7 @@
                             <div class="input-field col s6">
                                 <i class="material-icons-round prefix">manage_accounts</i>
                                 <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
-                                    <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
+                                    <option class="archivo-narrow-a" value="" selected>Choose your option</option>
                                     <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
                                 </select>
                                 <label>Item Type</label>
@@ -184,15 +184,15 @@
     const tabs = document.querySelectorAll('.tab_btn');
     const all_content = document.querySelectorAll('.content');
 
-//    var productImg = document.getElementById("test");
-//    var modal = document.getElementById("modal");
-//    var modalImage = document.getElementById("modal-image");
-//
-//    productImg.onclick = function (e) {
-//        var src = e.srcElement.src;
-//        alert(src);
-//        modalImage.src = src;
-//    };
+    //    var productImg = document.getElementById("test");
+    //    var modal = document.getElementById("modal");
+    //    var modalImage = document.getElementById("modal-image");
+    //
+    //    productImg.onclick = function (e) {
+    //        var src = e.srcElement.src;
+    //        alert(src);
+    //        modalImage.src = src;
+    //    };
 
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -222,55 +222,55 @@
 
     }
 
-//    $(document).ready(function() {
-//        $("#registerForm").submit(function(event) {
-////            event.preventDefault();
-////            ajaxPost();
-//            refreshForm();
-//        });
-//
-//        function refreshForm() {
-//            $("#name").val("");
-//            $("#description").val("");
-//            $("#cost").val("");
-//        }
-//
-//        function ajaxPost() {
-//            var formData = {
-//                name : $("#name").val(),
-//                description : $("#description").val(),
-//                cost : $("#cost").val(),
-//            }
-//
-//            $.ajax({
-//                type: "POST",
-//                contentType : "application/json",
-//                url: "product/create",
-//                data: JSON.stringify(formData),
-//                dataType: 'text',
-//                success : function(data, textStatus, xhr) {
-//                    if (xhr.status == 200) {
-//                        M.toast({html: 'Item Added!!'});
-//                    } else {
-//                        M.toast({html: ' Something went wrong.'});
-//                    }
-//                },
-//                error: function(e) {
-//                    console.log(e)
-//
-//                }
-//            })
-//        }
-//
-//        //                function ajaxGet() {
-//        //                    $.ajax({
-//        //                        type: "GET",
-//        //                        url:
-//        //                    })
-//        //                }
-//
-//
-//    });
+    //    $(document).ready(function() {
+    //        $("#registerForm").submit(function(event) {
+    ////            event.preventDefault();
+    ////            ajaxPost();
+    //            refreshForm();
+    //        });
+    //
+    //        function refreshForm() {
+    //            $("#name").val("");
+    //            $("#description").val("");
+    //            $("#cost").val("");
+    //        }
+    //
+    //        function ajaxPost() {
+    //            var formData = {
+    //                name : $("#name").val(),
+    //                description : $("#description").val(),
+    //                cost : $("#cost").val(),
+    //            }
+    //
+    //            $.ajax({
+    //                type: "POST",
+    //                contentType : "application/json",
+    //                url: "product/create",
+    //                data: JSON.stringify(formData),
+    //                dataType: 'text',
+    //                success : function(data, textStatus, xhr) {
+    //                    if (xhr.status == 200) {
+    //                        M.toast({html: 'Item Added!!'});
+    //                    } else {
+    //                        M.toast({html: ' Something went wrong.'});
+    //                    }
+    //                },
+    //                error: function(e) {
+    //                    console.log(e)
+    //
+    //                }
+    //            })
+    //        }
+    //
+    //        //                function ajaxGet() {
+    //        //                    $.ajax({
+    //        //                        type: "GET",
+    //        //                        url:
+    //        //                    })
+    //        //                }
+    //
+    //
+    //    });
 </script>
 
 </body>

@@ -32,24 +32,33 @@ body {
     color: rgba(45, 106, 95, 1);
 }
 
-#product-table {
-    border-radius: 30px;
+#table-csis {
+    border-radius: 10px;
+    padding-top: 50px;
 }
 
-.product-tr:first-child .product-th:first-child {
-    border-top-left-radius: 30px;
+.tr-csis:first-child .th-csis:first-child {
+    border-top-left-radius: 10px;
 }
 
-.product-tr:first-child .product-th:last-child {
-    border-top-right-radius: 30px;
+.tr-csis:first-child .th-csis:last-child {
+    border-top-right-radius: 10px;
 }
 
-.product-tr:last-child .product-td:first-child {
-    border-bottom-left-radius: 30px;
+.tr-csis .td-csis:last-child {
+    right: 500px;
 }
 
-.product-tr:last-child .product-td:first-child {
-    border-bottom-left-radius: 30px;
+/*.tr-csis:last-child .th-csis:first-child {*/
+/*    border-bottom-left-radius: 30px;*/
+/*}*/
+
+/*.tr-csis:last-child .th-csis:first-child {*/
+/*    border-bottom-left-radius: 30px;*/
+/*}*/
+
+.crud {
+    padding-right: 50px;
 }
 
 header, main, footer {
@@ -152,10 +161,24 @@ a {
 
 /*----------MAIN----------*/
 
-.main-container {
-    padding-left: 330px;
-    padding-right: 60px;
+.main-verify {
+    padding-left: 150px;
+    padding-right: 150px;
     background-color: #ffffff;
+/*    font-family: "Archivo Narrow", sans-serif;*/
+/*    font-optical-sizing: auto;*/
+/*    font-weight: 400;*/
+/*    font-style: normal;*/
+}
+
+.main-container {
+    padding-left: 470px;
+    padding-right: 200px;
+    background-color: #ffffff;
+    font-family: "Archivo Narrow", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 /*    overflow-y: auto;*/
 /*    color: black;*/
 }
@@ -305,9 +328,14 @@ input[type=password] {
 }
 
 .productImg {
-    height: 60px;
-    width: 60px;
+    height: 50px;
+    width: 50px;
     border-radius: 25%;
+    transition: transform .2s;
+}
+
+.productImg:hover {
+    transform: scale(2);
 }
 
 .productThumbnail {
@@ -315,12 +343,21 @@ input[type=password] {
     width: auto;
 }
 
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+
+
 td {
-    padding: 15px 30px;
+    padding: 10px 30px 10px 15px;
 }
 
 th {
-    padding: 15px 30px
+    padding: 15px 30px 15px 15px;
 }
 
 .profile {
@@ -342,6 +379,44 @@ th {
 .test {
     padding-left: 500px;
 }
+
+/*---------- FONTS ----------*/
+
+
+.archivo-narrow-a {
+    font-family: "Archivo Narrow", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.archivo-a {
+    font-family: "Archivo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "wdth" 100;
+}
+
+.archivo-black-regular {
+    font-family: "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* <weight>: Use a value from 300 to 800*/
+
+.open-sans-a{
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-variation-settings:
+    "wdth" 100;
+}
+
 
 
 /*----------MEDIUA QUERIES (RESPONSIVE WEB PAGE)----------*/

@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class Category implements Serializable {
     private String categoryCode;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products;
 //    @AUDITING
 //    private MyUser createdBy;
 //    @AUDITING

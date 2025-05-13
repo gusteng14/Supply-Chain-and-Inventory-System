@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirect Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+<div class="grid-container">
+    <!--    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>-->
+    <!--    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>-->
+
+    <!--    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>-->
+    <!--    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>-->
+
+    <!--    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>-->
+    <!--    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>-->
+
+    <nav>
+        <div class="nav-wrapper teal">
+            <a href="#" class="brand-logo">Barkstore</a>
+            <!--                <ul id="nav-mobile" class="right hide-on-med-and-down">-->
+            <!--                    <li><a href="sass.html">Sass</a></li>-->
+            <!--                    <li><a href="badges.html">Components</a></li>-->
+            <!--                    <li><a href="collapsible.html">JavaScript</a></li>-->
+            <!--                </ul>-->
+        </div>
+    </nav>
+
+
+    <main class="main-verify">
+        <div class="row">
+            <div class="col l6">
+                <div class="row">
+                    <div>
+                        <h1 style="font-size: 105px;" class="open-sans-a left">Something went wrong.</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <h5 class="left">If refreshing does not fix the problem,<br>please contact websikexyz@gmail.com</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col l6">
+                <div>
+                    <img style="height: 700px; width: auto;" class="center" th:src="@{../images/cat-fail.jpg}">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="padding: 0;" class="page-footer teal">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Company Bio</h5>
+                    <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+                </div>
+                <div class="col l3 s12">
+                    <h5 class="white-text">Settings</h5>
+                    <ul>
+                        <li><a class="white-text" href="#!">Link 1</a></li>
+                        <li><a class="white-text" href="#!">Link 2</a></li>
+                        <li><a class="white-text" href="#!">Link 3</a></li>
+                        <li><a class="white-text" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+                <div class="col l3 s12">
+                    <h5 class="white-text">Connect</h5>
+                    <ul>
+                        <li><a class="white-text" href="#!">Link 1</a></li>
+                        <li><a class="white-text" href="#!">Link 2</a></li>
+                        <li><a class="white-text" href="#!">Link 3</a></li>
+                        <li><a class="white-text" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container center-align">
+                &copy; Barkstore
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+    <script>
+
+
+
+        $(document).ready(function() {
+            $('.sidenav').sidenav();
+        });
+    </script>
+</div>
+</body>
+
+</html>

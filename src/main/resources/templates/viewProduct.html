@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>View Product</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="grid-container">
+    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
+    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
+
+    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
+    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
+
+    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
+    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="col l12">
+                <div><h3 class="archivo-black-regular" th:text="${product.name}"></h3></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l4">
+                <p class="grey-text">Item ID: <span class="grey-text text-darken-2" th:text="${product.id}"></span></p>
+            </div>
+            <div class="col l4">
+                <p class="grey-text">Created on: <span class="grey-text text-darken-2" th:text="${product.createdOn}"></span></p>
+            </div>
+            <div class="col l4">
+                <p class="grey-text">Updated on: <span class="grey-text text-darken-2" th:text="${product.lastUpdatedOn}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <div class="row">
+                    <div class="input-field col s6">
+<!--                        <i class="material-icons prefix">account_circle</i>-->
+                        <label for="category">Category</label>
+                        <th:block th:each="category : ${product.category}">
+                            <input class="archivo-narrow-a" readonly th:value="${category.name}" id="category" type="text">
+                            <br>
+                        </th:block>
+                    </div>
+                    <div class="input-field col s6">
+<!--                        <i class="material-icons prefix">phone</i>-->
+                        <label for="itemType">Item Type</label>
+                        <th:block th:each="itemType : ${product.itemType}">
+                            <input class="archivo-narrow-a" readonly th:value="${itemType.name}" id="itemType" type="text">
+                            <br>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <!--                        <i class="material-icons prefix">account_circle</i>-->
+                        <input class="archivo-narrow-a" readonly th:value="${product.stock}" id="stock" type="number">
+                        <label for="stock">Stock</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <!--                        <i class="material-icons prefix">phone</i>-->
+                        <input class="archivo-narrow-a" readonly th:value="${product.cost}" id="price" type="number">
+                        <label for="price">Price (&#8369;)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <!--                        <i class="material-icons prefix">account_circle</i>-->
+                        <input class="archivo-narrow-a" readonly id="description" type="text" th:value="${product.description}">
+                        <label for="description">Description</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6">
+                <div>
+                    <img class="center" th:src="@{/{productId}/product_image(productId=${product.id})}">
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script>
+
+    const tabs = document.querySelectorAll('.tab_btn');
+    const all_content = document.querySelectorAll('.content');
+
+    //    var productImg = document.getElementById("test");
+    //    var modal = document.getElementById("modal");
+    //    var modalImage = document.getElementById("modal-image");
+    //
+    //    productImg.onclick = function (e) {
+    //        var src = e.srcElement.src;
+    //        alert(src);
+    //        modalImage.src = src;
+    //    };
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+        $('select').formSelect();
+        $('.modal').modal();
+        $('#image').on('change', function() {
+
+            //console.log(this.files);
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        })
+    });
+
+    function showThumbnail(fileInput) {
+
+
+
+    }
+
+    //    $(document).ready(function() {
+    //        $("#registerForm").submit(function(event) {
+    ////            event.preventDefault();
+    ////            ajaxPost();
+    //            refreshForm();
+    //        });
+    //
+    //        function refreshForm() {
+    //            $("#name").val("");
+    //            $("#description").val("");
+    //            $("#cost").val("");
+    //        }
+    //
+    //        function ajaxPost() {
+    //            var formData = {
+    //                name : $("#name").val(),
+    //                description : $("#description").val(),
+    //                cost : $("#cost").val(),
+    //            }
+    //
+    //            $.ajax({
+    //                type: "POST",
+    //                contentType : "application/json",
+    //                url: "product/create",
+    //                data: JSON.stringify(formData),
+    //                dataType: 'text',
+    //                success : function(data, textStatus, xhr) {
+    //                    if (xhr.status == 200) {
+    //                        M.toast({html: 'Item Added!!'});
+    //                    } else {
+    //                        M.toast({html: ' Something went wrong.'});
+    //                    }
+    //                },
+    //                error: function(e) {
+    //                    console.log(e)
+    //
+    //                }
+    //            })
+    //        }
+    //
+    //        //                function ajaxGet() {
+    //        //                    $.ajax({
+    //        //                        type: "GET",
+    //        //                        url:
+    //        //                    })
+    //        //                }
+    //
+    //
+    //    });
+</script>
+
+</body>
+
+</html>

@@ -11,6 +11,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+    whitelabel:
+      enabled: false
 
 spring:
   servlet:
@@ -35,8 +37,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: gusteng211@gmail.com
-    password: ycnp kdha ftku bcny
+    username: websikexyz@gmail.com
+    password: taqq uipf shqp pvgn
 
     properties:
       mail:
@@ -49,3 +51,5 @@ spring:
           connectiontimeout: 5000
           timeout: 3000
           writetimeout: 5000
+
+

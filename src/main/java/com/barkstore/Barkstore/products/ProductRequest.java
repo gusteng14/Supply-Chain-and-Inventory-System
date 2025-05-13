@@ -5,6 +5,8 @@ package com.barkstore.Barkstore.products;
 //import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,8 +17,10 @@ public class ProductRequest {
     private Long id;
     private String name;
     private String description;
-    private Integer cost;
+    private BigDecimal cost;
     private Integer stock;
+    private String category;
+    private String itemType;
 //    private String photo;
 
     private String imageData;
