@@ -118,6 +118,9 @@
         var instances = M.Sidenav.init(elems);
     });
 
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', (e)=> {
             tabs.forEach(tab=>{tab.classList.remove('active')})

@@ -184,21 +184,13 @@
     const tabs = document.querySelectorAll('.tab_btn');
     const all_content = document.querySelectorAll('.content');
 
-    //    var productImg = document.getElementById("test");
-    //    var modal = document.getElementById("modal");
-    //    var modalImage = document.getElementById("modal-image");
-    //
-    //    productImg.onclick = function (e) {
-    //        var src = e.srcElement.src;
-    //        alert(src);
-    //        modalImage.src = src;
-    //    };
-
-
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
     });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
 
     $(document).ready(function() {
         $('.tabs').tabs();

@@ -21,14 +21,19 @@
 <body>
 
         <header th:fragment="header-main-user">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
                         <ul id="nav-mobile-main-user" class="right hide-on-med-and-down">
-                            <li><a href="sass.html">---</a></li>
-                            <li><a href="badges.html">---</a></li>
-                            <li><a href="collapsible.html">---</a></li>
+                            <li class="logout">
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="btn waves-effect waves-light red lighten-1 logout-button" type="submit" onclick="return confirm('Are you sure you want to logout?')">
+                                        Logout
+                                        <i style="position: relative; bottom: 12px;" class="material-icons-round right">logout</i>
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -36,14 +41,19 @@
         </header>
 
         <header th:fragment="header-main-admin">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-3">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
                         <ul id="nav-mobile-main-admin" class="right hide-on-med-and-down">
-                            <li><a href="sass.html">---</a></li>
-                            <li><a href="badges.html">---</a></li>
-                            <li><a href="collapsible.html">---</a></li>
+                            <li class="logout">
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="btn waves-effect waves-light red lighten-1 logout-button" type="submit" onclick="return confirm('Are you sure you want to logout?')">
+                                        Logout
+                                        <i style="position: relative; bottom: 12px;" class="material-icons-round right">logout</i>
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -51,22 +61,29 @@
         </header>
 
         <header th:fragment="header-main-superadmin">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-4">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
                         <ul id="nav-mobile-main-superadmin" class="right hide-on-med-and-down">
-                            <li><a href="sass.html">---</a></li>
-                            <li><a href="badges.html">---</a></li>
-                            <li><a href="collapsible.html">---</a></li>
+                            <li class="logout">
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="btn waves-effect waves-light red lighten-1 logout-button" type="submit" onclick="return confirm('Are you sure you want to logout?')">
+                                        Logout
+                                        <i style="position: relative; bottom: 12px;" class="material-icons-round right">logout</i>
+                                    </button>
+                                </form>
+                            </li>
+
                         </ul>
+
                     </div>
                 </nav>
             </div>
         </header>
 
         <header th:fragment="header-homepage-user">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
@@ -78,7 +95,7 @@
         </header>
 
         <header th:fragment="header-homepage-admin">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
@@ -90,7 +107,7 @@
         </header>
 
         <header th:fragment="header-homepage-superadmin">
-            <div class="navbar-fixed">
+            <div style="z-index: 9999;" class="navbar-fixed">
                 <nav>
                     <div style="background: #46bba9;" class="nav-wrapper teal lighten-2">
                         <a th:href="@{/index}" class="brand-logo">Barkstore</a>
@@ -102,7 +119,7 @@
         </header>
 
         <aside th:fragment="sidebar-user">
-            <ul id="slide-out-user" class="sidenav user sidenav-fixed">
+            <ul style="margin-top: 65px;" id="slide-out-user" class="sidenav user sidenav-fixed">
                 <li>
                     <div class="user-view">
                         <div class="background">
@@ -133,20 +150,11 @@
                 <li>
                     <a style="color: white;" href="#"> Settings </a>
                 </li>
-                <li class="logout">
-                    <form method="post" th:action="@{/logout}">
-                        <button type="submit" id="logout-user" class="waves-effect waves-light btn red lighten-1" onclick="return confirm('Are you sure you want to logout?')">
-                            <i class="material-icons-round left">logout</i>
-                            Logout
-                        </button>
-                    </form>
-                </li>
-
             </ul>
             <a href="#" data-target="slide-out" class="sidenav-trigger"><span style="color:black;" class="material-icons-round">menu</span></a>
         </aside>
         <aside th:fragment="sidebar-admin">
-            <ul id="slide-out-admin" class="sidenav admin sidenav-fixed">
+            <ul style="margin-top: 65px;" id="slide-out-admin" class="sidenav admin sidenav-fixed">
                 <li>
                     <div class="user-view">
                         <div class="background">
@@ -174,8 +182,22 @@
                 <li><div class="divider"></div></li>
                 <li><a class="subheader"><i>Menu</i></a></li>
                 <!--                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
-                <li>
-                    <a style="color: white;" th:href="@{/employee}"> User Management </a>
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a style="color: white; padding-left: 30px;" class="collapsible-header">User Management<i style="color: white;" class="material-icons-round right">arrow_drop_down</i></a>
+                            <div class="collapsible-body teal lighten-1">
+                                <ul>
+                                    <li>
+                                        <a style="color: white;" th:href="@{/employee}"> Users </a>
+                                    </li>
+                                    <li><a style="color: white;" href="#!">Second</a></li>
+                                    <li><a style="color: white;" href="#!">Third</a></li>
+                                    <li><a style="color: white;" href="#!">Fourth</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
                 </li>
                 <li >
                     <a style="color: white;" th:href="@{/category}"> Categories </a>
@@ -192,22 +214,13 @@
                 <li>
                     <a style="color: white;" href="#"> Settings </a>
                 </li>
-                <li class="logout">
-                    <form method="post" th:action="@{/logout}">
-                        <button type="submit" id="logout-admin" class="waves-effect waves-light btn red lighten-1" onclick="return confirm('Are you sure you want to logout?')">
-                            <i class="material-icons-round left">logout</i>
-                            Logout
-                        </button>
-                    </form>
-                </li>
-
             </ul>
             <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>button</a>
 
             <a href="#" data-target="slide-out" class="sidenav-trigger"><span style="color:black;" class="material-icons-round">menu</span></a>
         </aside>
         <aside th:fragment="sidebar-superadmin">
-            <ul id="slide-out-superadmin" class="sidenav superadmin sidenav-fixed">
+            <ul style="margin-top: 65px;" id="slide-out-superadmin" class="sidenav superadmin sidenav-fixed">
                 <li>
                     <div class="user-view">
                         <div class="background">
@@ -238,8 +251,22 @@
                 <li><div class="divider"></div></li>
                 <li><a class="subheader"><i>Menu</i></a></li>
                 <!--                <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
-                <li>
-                    <a style="color: white;" th:href="@{/employee}"> User Management </a>
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a style="color: white; padding-left: 30px;" class="collapsible-header">User Management<i style="color: white;" class="material-icons-round right">arrow_drop_down</i></a>
+                            <div class="collapsible-body teal lighten-2">
+                                <ul>
+                                    <li>
+                                        <a style="color: white;" th:href="@{/employee}"> Users </a>
+                                    </li>
+                                    <li><a style="color: white;" href="#!">Second</a></li>
+                                    <li><a style="color: white;" href="#!">Third</a></li>
+                                    <li><a style="color: white;" href="#!">Fourth</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
                 </li>
                 <li >
                     <a style="color: white;" th:href="@{/category}"> Categories </a>
@@ -256,21 +283,25 @@
                 <li>
                     <a style="color: white;" href="#"> Settings </a>
                 </li>
-                <li class="logout">
-                    <form method="post" th:action="@{/logout}">
-                        <button type="submit" id="logout-superadmin" class="waves-effect waves-light btn red lighten-1" onclick="return confirm('Are you sure you want to logout?')">
-                            <i class="material-icons-round left">logout</i>
-                            Logout
-                        </button>
-                    </form>
-                </li>
             </ul>
 
 
 
-            <a href="#" data-target="slide-out" class="sidenav-trigger"><span style="color:black;" class="material-icons-round">menu</span></a>
+<!--            <a href="#" data-target="slide-out" class="sidenav-trigger"><span style="color:black;" class="material-icons-round">menu</span></a>-->
         </aside>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {});
+    });
 
+     var collapsibleElem = document.querySelector('.collapsible');
+     var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+    $(document).ready(function () {
+        $('.sidenav').sidenav();
+    });
+</script>
 </body>
 </html>

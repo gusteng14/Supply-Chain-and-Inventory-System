@@ -106,72 +106,70 @@
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
 
-                <div class="row"></div>
                 <div id="create-products-tab">
                     <div class="col l2"></div>
-                    <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1"  id="registerForm" action="#" th:action="@{/product/create}" method="post" enctype="multipart/form-data" th:object="${productRequest}">
-                        <h3>Item Setup</h3>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">inventory_2</i>
-                                <input class="archivo-narrow-a" style="color: black;" th:field="*{name}" id="name" type="text" required>
-                                <label for="name">Item Name</label>
-                            </div>
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">description</i>
-                                <input class="archivo-narrow-a" style="color: black;" th:field="*{description}" id="description" type="text" required>
-                                <label for="description">Item Description</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">add_circle</i>
-                                <input class="archivo-narrow-a" style="color: black;" th:field="*{stock}" id="stock" type="number" required>
-                                <label for="stock">Item Stock</label>
-                            </div>
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">sell</i>
-                                <input class="archivo-narrow-a" style="color: black;" th:field="*{cost}" id="cost" type="number" step=".01" required>
-                                <label for="cost">Item Cost</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">manage_accounts</i>
-                                <select class="archivo-narrow-a" th:field="*{category}" id="category" name="category" required>
-                                    <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
-                                    <option class="archivo-narrow-a" th:each="category : ${category} " th:value="${category.name}" th:text="${category.name}"></option>
-                                </select>
-                                <label>Item Type</label>
-                            </div>
-                            <div class="input-field col s6">
-                                <i class="material-icons-round prefix">manage_accounts</i>
-                                <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
-                                    <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
-                                    <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
-                                </select>
-                                <label>Item Type</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="file-field input-field col s6">
-                                <div class="btn">
-                                    <span>File</span>
-                                    <input class="archivo-narrow-a" type="file" id="image" name="image" accept="image/*" required>
+                        <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1"  id="registerForm" action="#" th:action="@{/product/create}" method="post" enctype="multipart/form-data" th:object="${productRequest}">
+                            <h3>Item Setup</h3>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">inventory_2</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                    <label for="name">Item Name</label>
                                 </div>
-                                <div class="file-path-wrapper">
-                                    <input class="file-path validate archivo-narrow-a" type="text">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">description</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{description}" id="description" type="text" required>
+                                    <label for="description">Item Description</label>
                                 </div>
                             </div>
-                            <div>
-                                <img style="padding-left: 100px;" class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">add_circle</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{stock}" id="stock" type="number" required>
+                                    <label for="stock">Item Stock</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">sell</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{cost}" id="cost" type="number" step=".01" required>
+                                    <label for="cost">Item Cost</label>
+                                </div>
                             </div>
-                        </div>
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">manage_accounts</i>
+                                    <select class="archivo-narrow-a" th:field="*{category}" id="category" name="category" required>
+                                        <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
+                                        <option class="archivo-narrow-a" th:each="category : ${category} " th:value="${category.name}" th:text="${category.name}"></option>
+                                    </select>
+                                    <label>Item Type</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">manage_accounts</i>
+                                    <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
+                                        <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
+                                        <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
+                                    </select>
+                                    <label>Item Type</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="file-field input-field col s6">
+                                    <div class="btn">
+                                        <span>File</span>
+                                        <input class="archivo-narrow-a" type="file" id="image" name="image" accept="image/*" required>
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate archivo-narrow-a" type="text">
+                                    </div>
+                                </div>
+                                <div>
+                                    <img style="padding-left: 100px;" class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">
+                                </div>
+                            </div>
+                            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        </form>
                 </div>
             </div>
         </div>
@@ -200,7 +198,11 @@
         var instances = M.Sidenav.init(elems);
     });
 
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
     $(document).ready(function() {
+        $('.sidenav').sidenav();
         $('.tabs').tabs();
         $('select').formSelect();
         $('.modal').modal();
