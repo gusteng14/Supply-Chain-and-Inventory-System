@@ -28,57 +28,49 @@
 </head>
 <body>
     <div class="grid-container">
-        <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
-        <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
-
-        <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
-        <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
-
-        <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
-        <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+        <header class="header" th:replace="~{fragments :: header-main}"></header>
+        <aside th:replace="~{fragments :: sidebar}"></aside>
 
         <div class="main-container">
-            <div class="content">
-                <div class="form-block">
-                    <div class="employee-form">
-                        <h3 style="color:black;">Update User Details</h3>
-                        <form class="col s12" id="registerForm" action="#" th:action="@{/employee/edit}" method="post" th:object="${updateUserRequest}">
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input readonly style="color: black;" th:value="${user.id}" id="id" type="text" name="id">
-                                    <label for="id">ID</label>
-                                </div>
+            <div class="form-block">
+                <div class="gray-background">
+                    <h3 style="color:black;">Update User Details</h3>
+                    <form class="col s12" id="registerForm" action="#" th:action="@{/employee/edit}" method="post" th:object="${updateUserRequest}">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input readonly style="color: black;" th:value="${user.id}" id="id" type="text" name="id">
+                                <label for="id">ID</label>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" class="validate" required>
-                                    <label for="first_name">First Name</label>
-                                </div>
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" class="validate" required>
-                                    <label for="middle_name">Middle Name</label>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{firstName}" id="first_name" type="text" class="validate" required>
+                                <label for="first_name">First Name</label>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" class="validate" required>
-                                    <label for="last_name">Last Name</label>
-                                </div>
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" class="validate" required>
-                                    <label for="contact_no">Contact No</label>
-                                </div>
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{middleName}" id="middle_name" type="text" class="validate" required>
+                                <label for="middle_name">Middle Name</label>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
-                                    <label for="email">Email</label>
-                                    <span class="helper-text" data-error="wrong" data-success="right"></span>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{lastName}" id="last_name" type="text" class="validate" required>
+                                <label for="last_name">Last Name</label>
                             </div>
-                            <button id="submit" type="submit" class="btn btn-primary">Save</button>
-                        </form>
-                    </div>
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{contactNo}" id="contact_no" type="text" class="validate" required>
+                                <label for="contact_no">Contact No</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{email}" id="email" type="email" class="validate" required>
+                                <label for="email">Email</label>
+                                <span class="helper-text" data-error="wrong" data-success="right"></span>
+                            </div>
+                        </div>
+                        <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                    </form>
                 </div>
             </div>
         </div>

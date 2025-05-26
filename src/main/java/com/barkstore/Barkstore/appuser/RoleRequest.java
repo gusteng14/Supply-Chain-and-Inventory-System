@@ -10,4 +10,6 @@ import java.util.Set;
 public class RoleRequest {
     private String name;
     private Set<AuthorityRequest> authorities;
+    private String auths;
+
 }

@@ -87,20 +87,9 @@ a {
     height: 100%;
 }
 
-.sidenav.user {
-    width: 270px;
-    background-color: #26a69a;
-}
-
-.sidenav.admin {
+.sidenav.layout {
     width: 270px;
     background-color: #4db6ac;
-
-}
-
-.sidenav.superadmin {
-    width: 270px;
-    background-color: #80cbc4;
 }
 
 .logout {
@@ -171,20 +160,14 @@ a {
 
 .form-block {
     display: grid;
-/*    grid-template-columns: 0.3fr 0.3fr 0.3fr;*/
-/*    grid-template-rows: 1fr;*/
     justify-content: center;
     align-items: center;
-
 }
 
-.employee-form {
-/*    grid-column: 2;*/
+.gray-background {
     padding: 50px;
-    margin: 50px;
-    box-shadow: 0 10px 15px -2px rgba(0, 0, 0, 0.35);
     width: 1200px;
-    background-color: #efefef;
+    background-color: #d5d5d54d;
     color: black;
 }
 
@@ -334,6 +317,22 @@ th {
 
 .test {
     padding-left: 500px;
+}
+
+.page-header {
+    color: black;
+    padding-bottom: 10px;
+    margin-top: 0px;
+}
+
+.checked {
+    color: black;
+}
+
+.dropdown-auth {
+    padding: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 /*---------- FONTS ----------*/

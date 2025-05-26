@@ -60,10 +60,11 @@ public class MyUser implements UserDetails {
 //    private String imageData;
 
     @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
     private Set<Role> roles;
-    //private Set<Role> roles = new HashSet<>();
 
     public MyUser(String firstName, String lastName, String middleName, String contactNo, String username, String email, String password) {
         this.firstName = firstName;

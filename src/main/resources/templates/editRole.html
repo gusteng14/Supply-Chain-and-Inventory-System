@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Role</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <div class="main-container">
+        <div class="row">
+            <div class="form-block">
+                <div style="width: 1200px;" class="gray-background">
+                    <h3 style="color:black;">Update Role Details</h3>
+                    <form class="col s12" id="registerForm" action="#" th:action="@{/role/edit}" method="post" th:object="${roleRequest}">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input readonly style="color: black;" th:value="${role.id}" id="id" type="text" name="id">
+                                <label for="id">ID</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input style="color: black;" th:field="*{name}" id="name" type="text" class="validate" required>
+                                <label for="name">Role Name</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col l12">
+                                <h5 style="padding-bottom: 5px;">Existing Permissions</h5>
+                            </div>
+
+                            <div class="col l4">
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>User Related Permissions</span>
+                                            <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'USER')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Role Related Permissions</span>
+                                            <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'ROLE')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col l4">
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Supplier Related Permissions</span>
+                                            <i style="position: relative; left: 60px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'SUPPLIER')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Supply Chain Related Permissions</span>
+                                            <i style="position: relative; left: 32px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'REQUEST')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'APPROVE')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col l4">
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Product Related Permissions</span>
+                                            <i style="position: relative; left: 64px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'PRODUCT')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Category Related Permissions</span>
+                                            <i style="position: relative; left: 56px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'CATEGORY')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul style="width: 300px;" class="collapsible expandable ">
+                                    <li class="active">
+                                        <div class="collapsible-header teal lighten-4">
+                                            <span>Item Type Related Permissions</span>
+                                            <i style="position: relative; left: 53px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'ITEMTYPE')}">
+                                                <label  th:each="auth : ${role.authorities}">
+                                                    <input  type="checkbox" name="authority[]" class="filled-in"
+                                                            th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                            th:value="${authority.name}"
+
+                                                    />
+                                                    <span style="color: black;"
+                                                          th:id="${#ids.seq('auth')}"
+                                                          th:if="${#strings.equals(authority.name, auth.name)}"
+                                                          th:text="${authority.name}"
+                                                    >z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <ul>
+                        <li class="divider" tabindex="-1"></li>
+                        </ul>
+
+                        <div class="row">
+                            <div class="col l12">
+                                <h5 style="padding-bottom: 5px;">Available Permissions</h5>
+                            </div>
+
+                            <div class="col l4">
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>User Related Permissions</span>
+                                            <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'USER')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Role Related Permissions</span>
+                                            <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'ROLE')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col l4">
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Supplier Related Permissions</span>
+                                            <i style="position: relative; left: 60px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'SUPPLIER')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Supply Chain Related Permissions</span>
+                                            <i style="position: relative; left: 32px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'REQUEST')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'APPROVE')}">
+                                                <label th:id="${#ids.seq('checkbox')}">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <div class="col l4">
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Product Related Permissions</span>
+                                            <i style="position: relative; left: 64px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'PRODUCT')}">
+                                                <label th:id="${#ids.seq('checkbox')}">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Category Related Permissions</span>
+                                            <i style="position: relative; left: 56px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'CATEGORY')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 300px;" class="collapsible expandable">
+                                    <li>
+                                        <div class="collapsible-header">
+                                            <span>Item Type Related Permissions</span>
+                                            <i style="position: relative; left: 53px;" class="material-icons-round right">arrow_drop_down</i>
+                                        </div>
+                                        <div class="collapsible-body dropdown-auth">
+                                            <p th:each="availableAuth : ${avilableAuths}" th:if="${#strings.contains(availableAuth, 'ITEMTYPE')}">
+                                                <label th:id="${#ids.seq('checkbox')}" onclick="changeColor()">
+                                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                                           th:value="${availableAuth}"/>
+                                                    <span th:id="${#ids.seq('text')}" th:text="${availableAuth}">z</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script th:inline="javascript">
+    function changeColor() {
+        //        alert(event.srcElement.id);
+        const checkBoxTextColor = document.getElementById(event.srcElement.id);
+        checkBoxTextColor.classList.toggle('checked');
+
+    }
+</script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+
+
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+        $('.collapsible').collapsible();
+
+        $('input[type="checkbox"]').on('change', function() {
+            if (!$('input[type="checkbox"]').is(':checked')) {
+                $("#submit").prop('disabled', true);
+            } else {
+                // At least one checkbox is checked
+                $("#submit").prop('disabled', false);
+            }
+        });
+
+//        $('#password, #confirm-password').on('keyup', function() {
+//            if($('#password').val() == $('#confirm-password').val()) {
+//                $('#password-message').html("Password matched!").css('color','green');
+//                $("#submit").prop('disabled', false);
+//            } else {
+//                $('#password-message').html("Password does not match!").css('color','red');
+//                $("#submit").prop('disabled', true);
+//            }
+//        });
+
+
+
+        $('#image').on('change', function() {
+            //console.log(this.files);
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        })
+
+
+    });
+</script>
+
+</body>
+</html>

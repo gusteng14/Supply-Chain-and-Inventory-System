@@ -26,19 +26,10 @@
     </head>
     <body>
         <div class="grid-container">
-
-            <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
-            <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
-
-            <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
-            <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
-
-            <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
-            <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+            <header class="header" th:replace="~{fragments :: header-main}"></header>
+            <aside th:replace="~{fragments :: sidebar}"></aside>
 
             <main class="main-container">
-
-
                 <div class="row">
                     <div class="col l3">
                         <div class="card vs">

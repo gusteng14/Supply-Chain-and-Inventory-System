@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class AuthenticatedUser implements UserDetails {
     @Autowired
@@ -46,6 +47,16 @@ public class AuthenticatedUser implements UserDetails {
 
     public String getFullName() {
         return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public String getRole() {
+        Set<Role> role = user.getRoles();
+        String userRole = "";
+        for (Role i : role) {
+            userRole = i.getName();
+        }
+
+        return userRole;
     }
 
 

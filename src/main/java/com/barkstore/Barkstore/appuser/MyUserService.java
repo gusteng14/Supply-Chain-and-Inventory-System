@@ -110,45 +110,13 @@ public class MyUserService implements UserDetailsService {
         }
     }
 
-
-//    public MyUser signUpUser(RegistrationRequest registrationRequest) throws IOException {
-//        System.out.println("First Name: "  + registrationRequest.getFirstName());
-//        System.out.println("Last Name: "  + registrationRequest.getLastName());
-//        System.out.println("Middle Name: "  + registrationRequest.getMiddleName());
-//        System.out.println("Email: "  + registrationRequest.getEmail());
-//        System.out.println("Contact No: "  + registrationRequest.getContactNo());
-//        System.out.println("Username: "  + registrationRequest.getUsername());
-//        System.out.println("CHOSEN ROLE:::"  + registrationRequest.getRoleRequest());
-//
-//        MyUser user = new MyUser();
-//        user.setFirstName(registrationRequest.getFirstName());
-//        user.setMiddleName(registrationRequest.getMiddleName());
-//        user.setLastName(registrationRequest.getLastName());
-//        user.setContactNo(registrationRequest.getContactNo());
-//        user.setEmail(registrationRequest.getEmail());
-//        user.setUsername(registrationRequest.getUsername());
-//        user.setPassword(registrationRequest.getPassword());
-//        String encodedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encodedPassword);
-////        user.setImageData(Base64.getEncoder().encodeToString(file.getBytes()));
-//
-//
-//
-//        Role roles = roleRepository.findByName(registrationRequest.getRoleRequest()).get();
-//        user.setRoles(Collections.singleton(roles));
-//
-//
-//
-//        return userRepository.save(user);
-//    }
-
-    private Set<Authority> getAuthoritiesFromRequest(RoleRequest roleRequest) {
+    public Set<Authority> getAuthoritiesFromRequest(RoleRequest roleRequest) {
         return roleRequest.getAuthorities().stream().map(authorityRequest -> {
             return getOrCreateAuthority(authorityRequest);
         }).collect(Collectors.toSet());
     }
 
-    private Authority getOrCreateAuthority(AuthorityRequest authorityRequest) {
+    public Authority getOrCreateAuthority(AuthorityRequest authorityRequest) {
         return authorityRepository.findByName(authorityRequest.getName()).orElseGet(() -> {
             Authority auth = new Authority();
             auth.setName(authorityRequest.getName());
@@ -156,7 +124,7 @@ public class MyUserService implements UserDetailsService {
         });
     }
 
-    private Role getOrCreateRole(RoleRequest roleRequest) {
+    public Role getOrCreateRole(RoleRequest roleRequest) {
         return roleRepository.findByName(roleRequest.getName()).orElseGet(() -> {
             Role r = new Role();
             r.setName(roleRequest.getName());

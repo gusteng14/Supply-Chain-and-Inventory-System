@@ -12,10 +12,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
 
-
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
@@ -26,26 +29,21 @@
 </head>
 <body>
 <div class="grid-container">
-    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
-    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
-
-    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
-    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
-
-    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
-    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
 
     <main class="main-container">
         <div class="row">
-            <div class="col s12">
-                <ul class="tabs">
+            <div class="col l12 s12">
+                <h4 class="page-header">List of Products</h4>
+                <ul sec:authorize="hasAuthority('CREATE_PRODUCT_PERM')" class="tabs">
                     <li class="tab col s3 l6"><a href="#view-products-tab">View Products</a></li>
                     <li class="tab col s3 l6"><a href="#create-products-tab">Create Products</a></li>
                 </ul>
 
+                <div sec:authorize="hasAuthority('CREATE_PRODUCT_PERM')" class="row"></div>
 
                 <div  id="view-products-tab">
-                    <h5 style="padding-bottom: 10px;">List of Products</h5>
                     <table id="table-csis" class="responsive-table highlight z-depth-1">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
@@ -92,13 +90,13 @@
                                 <td class="td-csis" th:text="${product.stock}">z</td>
                                 <td class="td-csis" th:text="'P' + ${product.cost}">z</td>
                                 <td class="td-csis crud" th:value="${product.id}">
-                                    <a class="waves-effect waves-light btn-small" th:href="@{'/product/' + ${product.id}}">
+                                    <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/product/' + ${product.id}}">
                                         View
                                     </a>
-                                    <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">
+                                    <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">
                                         Update
                                     </a>
-                                    <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                    <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                         Delete
                                     </a>
                                 </td>
@@ -108,10 +106,10 @@
                     </table>
                 </div>
 
-                <div id="create-products-tab">
+                <div sec:authorize="hasAuthority('CREATE_PRODUCT_PERM')" id="create-products-tab">
                     <div class="col l2"></div>
                         <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1"  id="registerForm" action="#" th:action="@{/product/create}" method="post" enctype="multipart/form-data" th:object="${productRequest}">
-                            <h3>Item Setup</h3>
+                            <h5>Item Setup</h5>
                             <div class="row">
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">inventory_2</i>

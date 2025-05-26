@@ -28,19 +28,13 @@
 
 <body>
 <div class="grid-container">
-    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
-    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
-
-    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
-    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
-
-    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
-    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
 
     <div class="main-container">
-        <div class="content">
+        <div class="row">
             <div class="form-block">
-                <div class="employee-form">
+                <div class="gray-background">
                     <h3 style="color:black;">Update Product Details</h3>
                     <form class="col s12" id="registerForm" action="#" th:action="@{/product/edit}" method="post" th:object="${productRequest}">
                         <div class="row">

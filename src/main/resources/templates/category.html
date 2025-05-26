@@ -16,10 +16,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
 
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
-
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 
 
@@ -27,24 +29,19 @@
 </head>
 <body>
 <div class="grid-container">
-    <header sec:authorize="hasRole('USER')" class="header" th:replace="~{fragments :: header-main-user}"></header>
-    <aside sec:authorize="hasRole('USER')" th:replace="~{fragments :: sidebar-user}"></aside>
-
-    <header sec:authorize="hasRole('ADMIN')" class="header" th:replace="~{fragments :: header-main-admin}"></header>
-    <aside sec:authorize="hasRole('ADMIN')" th:replace="~{fragments :: sidebar-admin}"></aside>
-
-    <header sec:authorize="hasRole('SUPERADMIN')" class="header" th:replace="~{fragments :: header-main-superadmin}"></header>
-    <aside sec:authorize="hasRole('SUPERADMIN')" th:replace="~{fragments :: sidebar-superadmin}"></aside>
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
 
     <main class="main-container">
         <div class="row">
             <div class="col s12">
-                <ul class="tabs">
+                <h4 class="page-header">Categories</h4>
+                <ul sec:authorize="hasAuthority('CREATE_CATEGORY_PERM')" class="tabs">
                     <li class="tab col s3 l6"><a href="#view-category-tab">View Categories</a></li>
                     <li class="tab col s3 l6"><a href="#create-category-tab">Create Category</a></li>
                 </ul>
+                <div sec:authorize="hasAuthority('CREATE_CATEGORY_PERM')" class="row"></div>
                 <div id="view-category-tab">
-                    <h5 style="color: black; padding-bottom: 10px;">Categories</h5>
                     <table id="table-csis" class="responsive-table highlight z-depth-1">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
@@ -60,13 +57,13 @@
                                 <td th:text="${category.name}">z</td>
                                 <td th:text="${category.description}">z</td>
                                 <td class="td-csis crud right" th:value="${category.id}">
-                                    <a class="waves-effect waves-light btn-small" th:href="@{/category/edit(id=${category.id})}">
+                                    <a sec:authorize="hasAuthority('READ_CATEGORY_PERM')" class="waves-effect waves-light btn-small" th:href="@{/category/edit(id=${category.id})}">
                                         View
                                     </a>
-                                    <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/category/edit(id=${category.id})}">
+                                    <a sec:authorize="hasAuthority('UPDATE_CATEGORY_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/category/edit(id=${category.id})}">
                                         Update
                                     </a>
-                                    <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/category/delete/' + ${category.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                    <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/category/delete/' + ${category.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                         Delete
                                     </a>
                                 </td>
@@ -74,9 +71,11 @@
                             </tbody>
                     </table>
                 </div>
-                <div id="create-category-tab">
-                    <h3>Category Setup</h3>
-                    <form class="col s12" id="registerForm" action="#" th:action="@{/category/create}" method="post" th:object="${categoryRequest}">
+                <div sec:authorize="hasAuthority('CREATE_CATEGORY_PERM')" id="create-category-tab">
+                    <div class="col l2"></div>
+                    <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1" id="registerForm" action="#"
+                          th:action="@{/category/create}" method="post" th:object="${categoryRequest}">
+                        <h5>Category Setup</h5>
                         <div class="row">
                             <div class="input-field col s6">
                                 <i class="material-icons-round prefix">category</i>

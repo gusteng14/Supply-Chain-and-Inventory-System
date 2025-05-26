@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Roles Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="form-block">
+                <div class="gray-background">
+                    <div class="col l12">
+                        <h3 class="page-header">Role Details</h3>
+                        <div class="row">
+                            <form class="col s12" id="registerForm" action="#" th:action="@{/role/create}" method="post" th:object="${roleRequest}">
+                                <div class="row">
+                                    <div class="col l12">
+                                        <label for="name">Role Name</label>
+                                        <h5 id="name" th:text="${role.name}"></h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col l12">
+                                        <h5 style="padding-bottom: 5px;">Permissions</h5>
+                                    </div>
+
+                                    <div class="col l4">
+                                        <ul style="width: 300px;" class="collapsible expandable">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>User Related Permissions</span>
+                                                    <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'USER')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Role Related Permissions</span>
+                                                    <i style="position: relative; left: 80px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'ROLE')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col l4">
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Supplier Related Permissions</span>
+                                                    <i style="position: relative; left: 60px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'SUPPLIER')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Supply Chain Related Permissions</span>
+                                                    <i style="position: relative; left: 32px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'REQUEST')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'APPROVE')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col l4">
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Product Related Permissions</span>
+                                                    <i style="position: relative; left: 64px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'PRODUCT')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Category Related Permissions</span>
+                                                    <i style="position: relative; left: 56px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'CATEGORY')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Item Type Related Permissions</span>
+                                                    <i style="position: relative; left: 53px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'ITEMTYPE')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col l12">
+
+            </div>
+        </div>
+    </main>
+</div>
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+
+<script>
+
+    // ---------- TABS DESIGN ----------
+    const tabs = document.querySelectorAll('.tab_btn');
+    const all_content = document.querySelectorAll('.content');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', (e)=> {
+            tabs.forEach(tab=>{tab.classList.remove('active')})
+            tab.classList.add('active');
+
+            var line = document.querySelector('.line');
+            line.style.width = e.target.offsetWidth + "px";
+            line.style.left = e.target.offsetLeft + "px";
+
+            all_content.forEach(content=>{content.classList.remove('active')})
+            all_content[index].classList.add('active');
+        })
+    })
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+        $('.collapsible').collapsible();
+
+
+        //        $("#registerForm").submit(function(event) {
+//            event.preventDefault();
+//            alert($("input[name='authority[]']:checked").val());
+////            $("input").attr("name").each(function() {
+////
+////            });
+//        });
+
+    });
+    // ---------- ---------- ----------
+
+
+
+    //    $(document).ready(function() {
+    //        $("#registerForm").submit(function(event) {
+    ////            event.preventDefault();
+    ////            ajaxPost();
+    //            refreshForm();
+    //        });
+    //
+    //        function refreshForm() {
+    //            $("#name").val("");
+    //            $("#description").val("");
+    //            $("#cost").val("");
+    //        }
+    //
+    //        function ajaxPost() {
+    //            var formData = {
+    //                name : $("#name").val(),
+    //                description : $("#description").val(),
+    //                cost : $("#cost").val(),
+    //            }
+    //
+    //            $.ajax({
+    //                type: "POST",
+    //                contentType : "application/json",
+    //                url: "product/create",
+    //                data: JSON.stringify(formData),
+    //                dataType: 'text',
+    //                success : function(data, textStatus, xhr) {
+    //                    if (xhr.status == 200) {
+    //                        M.toast({html: 'Item Added!!'});
+    //                    } else {
+    //                        M.toast({html: ' Something went wrong.'});
+    //                    }
+    //                },
+    //                error: function(e) {
+    //                    console.log(e)
+    //
+    //                }
+    //            })
+    //        }
+    //
+    //        //                function ajaxGet() {
+    //        //                    $.ajax({
+    //        //                        type: "GET",
+    //        //                        url:
+    //        //                    })
+    //        //                }
+    //
+    //
+    //    });
+</script>
+
+</body>
+
+</html>

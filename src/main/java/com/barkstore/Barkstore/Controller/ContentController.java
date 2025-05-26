@@ -274,8 +274,6 @@ public class ContentController {
     public String deleteItemTypeById(@PathVariable(name="id") Long id) {
         System.out.println("C ID IS: " + id);
         itemTypeRepo.deleteById(id);
-
-
         return "redirect:/itemType";
     }
 

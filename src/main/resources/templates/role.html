@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Roles Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="col l12">
+                <h4 class="page-header">Roles & Permissions</h4>
+                <ul sec:authorize="hasAuthority('CREATE_ROLE_PERM')" class="tabs">
+                    <li class="tab col s3 l6"><a href="#view-roles-tab">View Roles</a></li>
+                    <li class="tab col s3 l6"><a href="#create-role-tab">Create Role</a></li>
+                </ul>
+
+                <div sec:authorize="hasAuthority('CREATE_ROLE_PERM')" class="row"></div>
+
+
+
+                <div id="view-roles-tab">
+                    <h5 class="page-header">Roles</h5>
+                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                        <tr class="tr-csis">
+                            <th class="th-csis">Role Id</th>
+                            <th class="th-csis">Role Name</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="role : ${role}">
+                            <td th:text="${role.id}">z</td>
+                            <td th:text="${role.name}">z</td>
+                            <td class="td-csis crud right" th:value="${role.id}">
+                                <a class="waves-effect waves-light btn-small" th:href="@{'/role/' + ${role.id}}">
+                                    View
+                                </a>
+                                <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/role/edit(id=${role.id})}">
+                                    Update
+                                </a>
+                                <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/role/delete/' + ${role.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row"></div>
+
+                    <h5 class="page-header">Permissions</h5>
+
+                    <table class="responsive-table highlight z-depth-1">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                        <tr class="tr-csis">
+                            <th class="th-csis">#</th>
+                            <th class="th-csis">Permission</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="authority : ${authority}">
+                            <td th:text="${authority.id}">z</td>
+                            <td th:text="${authority.name}">z</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div sec:authorize="hasAuthority('CREATE_ROLE_PERM')" id="create-role-tab">
+                    <div class="col l2"></div>
+                    <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1" id="registerForm" action="#" th:action="@{/role/create}" method="post" th:object="${roleRequest}">
+                            <h5>Role Setup</h5>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">manage_accounts</i>
+                                    <input style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                    <label for="name">Role Name</label>
+                                </div>
+                            </div>
+
+
+                        <h5>Permission Setup</h5>
+
+                        <div class="row"></div>
+
+                        <div class="col l4">
+                            <h6>User Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'USER')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'USER')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+
+                            <h6>Role Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'ROLE')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'ROLE')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+                        </div>
+
+                        <div class="col l4">
+                            <h6>Supplier Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'SUPPLIER')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'SUPPLIER')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+
+                            <h6>Supply Chain Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'REQUEST')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'REQUEST')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'APPROVE')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'APPROVE')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+                        </div>
+
+                        <div class="col l4">
+                            <h6>Product Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'PRODUCT')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'PRODUCT')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+
+                            <h6>Category Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'CATEGORY')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'CATEGORY')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+
+                            <h6>Item Type Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'ITEMTYPE')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'ITEMTYPE')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
+                        </div>
+
+                        <div class="row">
+                            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+
+<script>
+
+    // ---------- TABS DESIGN ----------
+    const tabs = document.querySelectorAll('.tab_btn');
+    const all_content = document.querySelectorAll('.content');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', (e)=> {
+            tabs.forEach(tab=>{tab.classList.remove('active')})
+            tab.classList.add('active');
+
+            var line = document.querySelector('.line');
+            line.style.width = e.target.offsetWidth + "px";
+            line.style.left = e.target.offsetLeft + "px";
+
+            all_content.forEach(content=>{content.classList.remove('active')})
+            all_content[index].classList.add('active');
+        })
+    })
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+
+//        $("#registerForm").submit(function(event) {
+//            event.preventDefault();
+//            alert($("input[name='authority[]']:checked").val());
+////            $("input").attr("name").each(function() {
+////
+////            });
+//        });
+
+    });
+    // ---------- ---------- ----------
+
+
+
+    //    $(document).ready(function() {
+    //        $("#registerForm").submit(function(event) {
+    ////            event.preventDefault();
+    ////            ajaxPost();
+    //            refreshForm();
+    //        });
+    //
+    //        function refreshForm() {
+    //            $("#name").val("");
+    //            $("#description").val("");
+    //            $("#cost").val("");
+    //        }
+    //
+    //        function ajaxPost() {
+    //            var formData = {
+    //                name : $("#name").val(),
+    //                description : $("#description").val(),
+    //                cost : $("#cost").val(),
+    //            }
+    //
+    //            $.ajax({
+    //                type: "POST",
+    //                contentType : "application/json",
+    //                url: "product/create",
+    //                data: JSON.stringify(formData),
+    //                dataType: 'text',
+    //                success : function(data, textStatus, xhr) {
+    //                    if (xhr.status == 200) {
+    //                        M.toast({html: 'Item Added!!'});
+    //                    } else {
+    //                        M.toast({html: ' Something went wrong.'});
+    //                    }
+    //                },
+    //                error: function(e) {
+    //                    console.log(e)
+    //
+    //                }
+    //            })
+    //        }
+    //
+    //        //                function ajaxGet() {
+    //        //                    $.ajax({
+    //        //                        type: "GET",
+    //        //                        url:
+    //        //                    })
+    //        //                }
+    //
+    //
+    //    });
+</script>
+
+</body>
+
+</html>
