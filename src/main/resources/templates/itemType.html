@@ -57,7 +57,7 @@
                                 <td th:text="${itemType.id}">z</td>
                                 <td th:text="${itemType.name}">z</td>
                                 <td class="td-csis crud right" th:value="${itemType.id}">
-                                    <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small" th:href="@{/itemType/edit(id=${itemType.id})}">
+                                    <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/itemType/' + ${itemType.id}}">
                                         View
                                     </a>
                                     <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/itemType/edit(id=${itemType.id})}">
@@ -81,22 +81,20 @@
                                 <input style="color: black;" th:field="*{name}" id="name" type="text" required>
                                 <label for="name">Item Type Name</label>
                             </div>
-<!--                                <div class="input-field col s6">-->
-<!--                                    <input style="color: black;" th:field="*{description}" id="description" type="text" required>-->
-<!--                                    <label for="description">Category Description</label>-->
-<!--                                </div>-->
+
                         </div>
-                        <!--                            <div class="row">-->
-                        <!--                                <div class="input-field col s6">-->
-                        <!--                                    <input style="color: black;" th:field="*{stock}" id="stock" type="number" required>-->
-                        <!--                                    <label for="stock">Item Stock</label>-->
-                        <!--                                </div>-->
-                        <!--                                <div class="input-field col s6">-->
-                        <!--                                    <input style="color: black;" th:field="*{cost}" id="cost" type="number" required>-->
-                        <!--                                    <label for="cost">Item Cost</label>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <button style="display: none;" id="modal-trigger" data-target="modal1" class="btn modal-trigger">Modal</button>
+
+                        <div id="modal1" class="modal">
+                            <div class="modal-content">
+                                <h4>Tool Tip</h4>
+                                <p>Item Type created successfully.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a id="close-modal" href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -106,11 +104,6 @@
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 
 <script>
-
-    // ---------- TABS DESIGN ----------
-    const tabs = document.querySelectorAll('.tab_btn');
-    const all_content = document.querySelectorAll('.content');
-
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
@@ -119,76 +112,13 @@
     var collapsibleElem = document.querySelector('.collapsible');
     var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
 
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', (e)=> {
-            tabs.forEach(tab=>{tab.classList.remove('active')})
-            tab.classList.add('active');
-
-            var line = document.querySelector('.line');
-            line.style.width = e.target.offsetWidth + "px";
-            line.style.left = e.target.offsetLeft + "px";
-
-            all_content.forEach(content=>{content.classList.remove('active')})
-            all_content[index].classList.add('active');
-        })
-    })
 
     $(document).ready(function() {
         $('.tabs').tabs();
+        $('.modal').modal();
+
     });
-    // ---------- ---------- ----------
 
-
-
-    //    $(document).ready(function() {
-    //        $("#registerForm").submit(function(event) {
-    ////            event.preventDefault();
-    ////            ajaxPost();
-    //            refreshForm();
-    //        });
-    //
-    //        function refreshForm() {
-    //            $("#name").val("");
-    //            $("#description").val("");
-    //            $("#cost").val("");
-    //        }
-    //
-    //        function ajaxPost() {
-    //            var formData = {
-    //                name : $("#name").val(),
-    //                description : $("#description").val(),
-    //                cost : $("#cost").val(),
-    //            }
-    //
-    //            $.ajax({
-    //                type: "POST",
-    //                contentType : "application/json",
-    //                url: "product/create",
-    //                data: JSON.stringify(formData),
-    //                dataType: 'text',
-    //                success : function(data, textStatus, xhr) {
-    //                    if (xhr.status == 200) {
-    //                        M.toast({html: 'Item Added!!'});
-    //                    } else {
-    //                        M.toast({html: ' Something went wrong.'});
-    //                    }
-    //                },
-    //                error: function(e) {
-    //                    console.log(e)
-    //
-    //                }
-    //            })
-    //        }
-    //
-    //        //                function ajaxGet() {
-    //        //                    $.ajax({
-    //        //                        type: "GET",
-    //        //                        url:
-    //        //                    })
-    //        //                }
-    //
-    //
-    //    });
 </script>
 
 </body>

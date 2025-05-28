@@ -155,12 +155,18 @@
 <!--                                            <option sec:authorize="hasRole('SUPERADMIN')" value="SUPERADMIN">Super Admin</option>-->
 <!--                                            <option sec:authorize="hasRole('SUPERADMIN')" value="ADMIN">Admin</option>-->
 <!--                                            <option value="USER">User</option>-->
-                                            <option th:each="role : ${role}" th:text="${role.name}" th:value="${role.name}"></option>
+<!--                                            th:remove="(${role.name} == 'Super Admin'-->
+<!--                                            or ${role.name} == 'System Admin') and (${#authentication.principal.getRole()} != 'Super Admin' or ${#authentication.principal.getRole()} != 'System Admin' ) ? all : none"-->
+                                            <option th:each="role : ${role}" th:text="${role.name}" th:value="${role.name}"
+                                                    th:if="${role.name} != 'System Admin'"
+                                                    th:remove="${role.name} == 'Super Admin' and (${#authentication.principal.getRole()} != 'System Admin' and
+                                                     ${#authentication.principal.getRole()} != 'Super Admin') ? all : none" ></option>
                                         </select>
                                         <label>Role</label>
                                     </div>
                                 </div>
                                 <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+
                             </form>
                             <div class="col l2"></div>
                         </div>
@@ -208,6 +214,8 @@
                 $('.sidenav').sidenav();
                 $('.tabs').tabs();
                 $('select').formSelect();
+                $('.modal').modal();
+
                 $("#registerForm").submit(function(event) {
                     event.preventDefault();
                     ajaxPost();

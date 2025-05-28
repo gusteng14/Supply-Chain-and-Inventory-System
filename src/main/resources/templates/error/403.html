@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Page Not Found</title>
+    <title>Forbidden</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -57,15 +57,15 @@
                 </div>
                 <div class="row">
                     <div>
-                        <h5 class="open-sans-a">404 - Page not found</h5>
-                        <h6>The page you are looking for does not exist or has been recently removed.</h6>
+                        <h5 class="open-sans-a">403 - Forbidden</h5>
+                        <h6>You do not have permission to access this page.</h6>
                     </div>
                 </div>
             </div>
 
             <div class="col l6">
                 <div>
-                    <img style="height: 700px; width: auto;" class="center right" th:src="@{../images/question.png}">
+                    <img style="height: 700px; width: auto;" class="center right" th:src="@{/images/denied.png}">
                 </div>
             </div>
         </div>

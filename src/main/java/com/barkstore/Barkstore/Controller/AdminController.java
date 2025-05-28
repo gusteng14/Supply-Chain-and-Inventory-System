@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class AdminController {
         return "verificationFailed";
     }
 
+    @PreAuthorize("hasAuthority('READ_ROLE_PERM')")
     @GetMapping("/roles")
     public String roles(Model model) {
         model.addAttribute("roleRequest", new RoleRequest());
@@ -63,7 +65,7 @@ public class AdminController {
         return "role";
     }
 
-
+    @PreAuthorize("hasAuthority('READ_ROLE_PERM')")
     @GetMapping("/role/{id}")
     public String viewRole(Model model, @PathVariable Long id) {
         Role role = roleRepository.findById(id).get();
@@ -81,6 +83,7 @@ public class AdminController {
         return "viewRole";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_ROLE_PERM')")
     @PostMapping("/role/create")
     public String createRole(Model model, @ModelAttribute RoleRequest roleRequest, @RequestParam("authority") String authority) {
         Role role = new Role();
@@ -99,6 +102,7 @@ public class AdminController {
         return "redirect:/roles";
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_ROLE_PERM')")
     @GetMapping("/role/edit")
     public String editRole(Model model, @RequestParam Long id, @ModelAttribute RoleRequest roleRequest) {
         List<Authority> authority = authorityRepository.findAll();
@@ -119,6 +123,7 @@ public class AdminController {
         return "editRole";
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_ROLE_PERM')")
     @PostMapping("/role/edit")
     public String updateRole(Model model, @RequestParam Long id, @ModelAttribute RoleRequest roleRequest, @RequestParam("authority") String authority) {
         Role role = roleRepository.findById(id).get();
@@ -141,13 +146,14 @@ public class AdminController {
         return "redirect:/roles";
     }
 
+    @PreAuthorize("hasAuthority('DELETE_ROLE_PERM')")
     @GetMapping("/role/delete/{id}")
     public String deleteRoleById(@PathVariable(name="id") Long id) {
         roleRepository.deleteById(id);
         return "redirect:/roles";
     }
 
-
+    @PreAuthorize("hasAuthority('READ_USER_PERM')")
     @GetMapping("/employee")
     public String register(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest());
@@ -158,6 +164,7 @@ public class AdminController {
         return "employee";
     }
 
+    @PreAuthorize("hasAuthority('READ_USER_PERM')")
     @GetMapping("/employee/{id}")
     public String viewEmployee(Model model, @PathVariable Long id) {
         MyUser user = repository.findById(id).get();
@@ -192,6 +199,7 @@ public class AdminController {
 //        }
 //    }
 
+    @PreAuthorize("hasAuthority('UPDATE_USER_PERM')")
     @GetMapping("/employee/edit")
     public String editEmployee(Model model, @RequestParam Long id) {
         MyUser user = repository.findById(id).get();
@@ -208,6 +216,7 @@ public class AdminController {
         return "editEmployee";
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_USER_PERM')")
     @PostMapping("/employee/edit")
     public String updateEmployee(Model model, @RequestParam Long id, @Valid @ModelAttribute UpdateUserRequest updateUserRequest) {
         MyUser user = repository.findById(id).get();
@@ -223,6 +232,7 @@ public class AdminController {
         return "redirect:/employee";
     }
 
+    @PreAuthorize("hasAuthority('DELETE_USER_PERM')")
     @GetMapping("/employee/delete/{id}")
     public String deleteUserById(@PathVariable(name="id") Long id) {
         System.out.println("C ID IS: " + id);

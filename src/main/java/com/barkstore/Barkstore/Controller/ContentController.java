@@ -45,6 +45,8 @@ public class ContentController {
     private CategoryRepo categoryRepo;
     @Autowired
     private ItemTypeRepo itemTypeRepo;
+    @Autowired
+    private ItemTypeService itemTypeService;
 
     @GetMapping("/login")
     public String login() {
@@ -179,6 +181,14 @@ public class ContentController {
         return "redirect:/category";
     }
 
+    @GetMapping("/category/{id}")
+    public String viewCategory(@PathVariable Long id, Model model) {
+        Category category = categoryRepo.findById(id).get();
+        model.addAttribute("category", category);
+
+        return "viewCategory";
+    }
+
     @GetMapping("/category/edit")
     public String editCategory(Model model, @RequestParam Long id) {
         Category category = categoryRepo.findById(id).get();
@@ -232,14 +242,27 @@ public class ContentController {
         ItemType itemType = new ItemType();
         model.addAttribute("itemType", itemType);
 
+        System.out.println("Item Type: " + itemTypeRequest.getName());
         itemType.setName(itemTypeRequest.getName());
+
+
 //        itemType.setDescription(itemTypeRequest.getDescription());
 //        itemType.setStock(itemTypeRequest.getStock());
 //        itemType.setCost(itemTypeRequest.getCost());
 
         itemTypeRepo.save(itemType);
 
+//        itemTypeService.createItemType(itemTypeRequest);
+
         return "redirect:/itemType";
+    }
+
+    @GetMapping("/itemType/{id}")
+    public String viewItemType(@PathVariable Long id, Model model) {
+        ItemType itemType = itemTypeRepo.findById(id).get();
+        model.addAttribute("itemType", itemType);
+
+        return "viewItemType";
     }
 
     @GetMapping("/itemType/edit")
