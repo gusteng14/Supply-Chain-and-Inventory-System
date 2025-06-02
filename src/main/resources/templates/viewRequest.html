@@ -44,7 +44,12 @@
                     <div class="col l12">
                         <form class="col l12"  id="registerForm" action="#" th:action="@{/approve}" method="post">
                             <div class="row">
-                                <h5>Request Header</h5>
+                                <div class="col l11"><h5>Request Header</h5></div>
+                                <div class="col l1">
+                                    <h5 th:if="${hdr.status == 'Approved'}"><span class="approved" th:text="${hdr.status}"></span></h5>
+                                    <h5 th:if="${hdr.status == 'Rejected'}"><span class="rejected" th:text="${hdr.status}"></span></h5>
+                                    <h5 th:if="${hdr.status == 'Pending'}"><span class="pending" th:text="${hdr.status}"></span></h5>
+                                </div>
                                     <input hidden="hidden" th:value="${hdr.id}" id="id" name="id">
                                 <div class="input-field col l3">
                                     <input readonly class="archivo-narrow-a" style="color: black;" th:value="${hdr.name}"  id="name" type="text" required>
@@ -58,6 +63,7 @@
                                     <input readonly class="archivo-narrow-a" style="color: black;"  th:value="${hdr.description}" id="description" type="text" required>
                                     <label for="description">Request Description</label>
                                 </div>
+
                             </div>
                             <div class="row form-setup">
                                 <h5>Request Details</h5>
@@ -91,8 +97,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button id="approve" name="status" class="btn" value="1">Approve</button>
-                            <button id="reject" name="status" class="btn red" value="0">Reject</button>
+                            <div th:if="${hdr.status == 'Pending'}">
+                                <button id="approve" name="status" class="btn" value="1">Approve</button>
+                                <button id="reject" name="status" class="btn red" value="0">Reject</button>
+                            </div>
+                            <div th:unless="${hdr.status == 'Pending'}">
+                                <button disabled id="disabled-approve" name="status" class="btn" value="1">Approve</button>
+                                <button disabled id="disabled-reject" name="status" class="btn red" value="0">Reject</button>
+                            </div>
                         </form>
                     </div>
                 </div>
