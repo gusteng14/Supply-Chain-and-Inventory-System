@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Requisition Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="col l12">
+                <div class="row">
+                    <div class="col l12">
+                        <h4 class="page-header">Item Requisition Form</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l12">
+                        <form class="col l12"  id="registerForm" action="#" th:action="@{/request}" method="post">
+                            <div class="row form-setup">
+                                <h5>Request Header</h5>
+                                <div class="input-field col s6">
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="${headerDTO.requestName}"  id="name" type="text" required>
+                                    <label for="name">Request Title</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input class="archivo-narrow-a" style="color: black;"  th:field="${headerDTO.requestDescription}" id="description" type="text" required>
+                                    <label for="description">Request Description</label>
+                                </div>
+                            </div>
+                            <div class="row form-setup">
+                                <h5>Request Details</h5>
+
+                                <button style="margin-bottom: 5px;" type="button" id="add" name="addRow" class="btn right"><i class="material-icons-round left">add</i>Add Request</button>
+
+                                <div class="col l12">
+<!--                                    <button id="add" type="submit" name="addRow" class="right">Add Request</button>-->
+                                </div>
+                                <table class="responsive-table highlight z-depth-1">
+                                    <thead style="background-color: #2bbbad42;">
+                                    <tr>
+                                        <th style="padding-right: 0px; margin-right: 0px;"></th>
+                                        <th>Item Name</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="requestDetail">
+                                        <tr>
+                                            <td style="padding-right: 0px; margin-right: 0px;">
+                                                <a><img class="productImg" id="product-image" src=""></a>
+                                            </td>
+                                            <td>
+                                                <select id="itemList" name="itemList[]">
+                                                    <option th:id="${#ids.seq('item')}" th:each="product : ${product}" th:text="${product.name}"
+                                                            th:value="${product.name}" th:attr="data-id=${product.id}, data-cost=${product.cost}"></option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="archivo-narrow-a" style="color: black;"  id="qty" name="qty[]" type="number" required>
+                                            </td>
+                                            <td>
+                                                <input readonly class="archivo-narrow-a" style="color: black;" id="total" name="total[]" type="number" required>
+                                            </td>
+                                            <td>
+                                                <button type="button" id="removeRow" name="removeRow" class="btn red right removeRow"><i class="material-icons-round left">delete</i>Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button id="submit" name="submit" class="btn">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+
+
+    $(document).ready(function() {
+        $('.sidenav').sidenav();
+        $('.tabs').tabs();
+        $('select').formSelect();
+        $('.modal').modal();
+
+        var vars = {};
+        var i = 0;
+
+        $('#registerForm').on('change load', function() {
+            var cost = parseFloat($('#itemList option:selected').attr('data-cost'));
+            var qty = parseFloat($('#qty').val());
+            var total = cost * qty;
+            $('#total').val(total);
+
+            var imgId = $('#itemList option:selected').attr('data-id');
+            $('#product-image').attr('src', '/' + imgId + '/' + 'product_image');
+
+            vars['cost'+i] = parseFloat($('#itemList' + i +' option:selected').attr('data-id'));
+            vars['qty'+i] = parseFloat($('#qty'+i).val());
+            vars['total'+i] = vars['cost'+i] * vars['qty'+i];
+            $('#total'+i).val(vars['total'+i]);
+
+            vars['imgId'+i] = $('#itemList' + i + ' option:selected').attr('data-id');
+            $('#product-image'+i).attr('src', '/' + vars['imgId'+i] + '/' + 'product_image');
+        })
+
+        $('#add').on('click change', function() {
+            i++;
+            $('#requestDetail').append(
+                "<tr>"
+                + "<td style='padding-right: 0px; margin-right: 0px;'><a><img class='productImg' id='product-image" + i +"' src=''></a></td>"
+                + "<td id='selectRow" + i +"'></td>"
+                + "<td><input class='archivo-narrow-a' style='color: black;'  id='qty" + i +"' name='qty[]' type='number' required></td>"
+                + "<td><input readonly class='archivo-narrow-a' style='color: black;' id='total" + i +"' name='total[]' type='number' required></td>"
+                + "<td><button type='button' id='removeRow' name='removeRow' class='btn red right removeRow'><i class='material-icons-round left'>delete</i>Remove</button></td>"
+                + "</tr>");
+            $('select#itemList').clone().attr('id','itemList'+i).css('display','block').appendTo('#selectRow' + i);
+            vars['cost'+i] = parseFloat($('#itemList' + i + ' option:selected').attr('data-id'));
+            vars['qty'+i] = parseFloat($('#qty'+i).val());
+            vars['total'+i] = vars['cost'+i] * vars['qty'+i];
+            $('#total'+i).val(vars['total'+i]);
+            vars['imgId'+i] = $('#itemList' + i + ' option:selected').attr('data-id');
+            $('#product-image'+i).attr('src', '/' + vars['imgId'+i] + '/' + 'product_image');
+        });
+
+        $(document).on('click', 'button[id^="removeRow"]', function(){
+            $(this).parent().parent().remove();
+        });
+
+    });
+</script>
+
+</body>
+
+</html>

@@ -3,6 +3,8 @@ package com.barkstore.Barkstore.requisition;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
@@ -23,7 +25,7 @@ public class RequestHeader {
 
     private String name;
     private String description;
-    private Boolean status;
+    private String status = "Pending";
 
     @CreationTimestamp
     private Instant createdOn;
@@ -31,7 +33,7 @@ public class RequestHeader {
     @UpdateTimestamp
     private Instant lastUpdatedOn;
 
-    @OneToMany(mappedBy = "headerId")
+    @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RequestDetails> requestDetails;
 
     //    @AUDITING
@@ -41,4 +43,13 @@ public class RequestHeader {
 //    private ItemType itemType;
 //    NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
+    public void addDtl(RequestDetails dtl) {
+        dtl.setHeaderId(this);
+        requestDetails.add(dtl);
+    }
+
+    public void removeDtl(RequestDetails dtl) {
+        requestDetails.remove(dtl);
+        dtl.setHeaderId(null);
+    }
 }

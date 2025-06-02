@@ -6,6 +6,10 @@ import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
+import com.barkstore.Barkstore.requisition.DetailsRepository;
+import com.barkstore.Barkstore.requisition.HeaderRepository;
+import com.barkstore.Barkstore.requisition.RequestDetails;
+import com.barkstore.Barkstore.requisition.RequestHeader;
 import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,10 @@ public class AdminController {
     private AuthorityRepository authorityRepository;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private DetailsRepository detailsRepository;
+    @Autowired
+    private HeaderRepository headerRepository;
 
     @GetMapping("/verified")
     public String verifiedPage() {
@@ -240,5 +248,71 @@ public class AdminController {
 
         return "redirect:/employee";
     }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @GetMapping("/approve")
+    public String getRequests(Model model) {
+        List<RequestDetails> requestDetails = detailsRepository.findAll();
+        List<RequestHeader> requestHeaders = headerRepository.findAll();
+        model.addAttribute("requestDetails", requestDetails);
+        model.addAttribute("requestHeaders", requestHeaders);
+
+
+        return "requestList";
+    }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @PostMapping("/approve")
+    public String processRequest(Model model, @RequestParam Long id, @RequestParam("status") int status) {
+        RequestHeader hdr = headerRepository.findById(id).get();
+        if (status == 0) {
+            hdr.setStatus("Rejected");
+            headerRepository.save(hdr);
+        } else {
+            hdr.setStatus("Approved");
+            headerRepository.save(hdr);
+        }
+
+        System.out.println(id);
+
+
+        return "redirect:/approve";
+    }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @GetMapping("/approve/delete/{id}")
+    public String deleteRequestById(@PathVariable(name="id") Long id) {
+        List<RequestDetails> dtl = detailsRepository.findByHeaderId_Id(id);
+
+        for(RequestDetails detail : dtl) {
+            detailsRepository.delete(detail);
+        }
+
+        headerRepository.deleteById(id);
+
+        return "redirect:/approve";
+    }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @GetMapping("/approve/{id}")
+    public String viewRequest(@PathVariable Long id, Model model) {
+        RequestHeader hdr = headerRepository.findById(id).get();
+        List<RequestDetails> dtl = detailsRepository.findByHeaderId_Id(id);
+
+        for(RequestDetails dtl1 : dtl) {
+            String productName = dtl1.getProduct();
+            Optional<Product> product = productRepo.findByName(productName);
+            Long productId = product.get().getId();
+            dtl1.setImgUrl("/" + productId + "/" + "product_image");
+            System.out.println(dtl1.getImgUrl());
+        }
+
+
+        model.addAttribute("hdr", hdr);
+        model.addAttribute("dtl", dtl);
+
+        return "viewRequest";
+    }
+
 
 }

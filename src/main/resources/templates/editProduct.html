@@ -55,11 +55,11 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s6">
-                                <input style="color: black;" th:field="*{stock}" id="stock" type="number" class="validate" required>
+                                <input style="color: black;" th:field="*{stock}" id="stock" type="number" class="validate" min="0" required>
                                 <label for="stock">Item Stock</label>
                             </div>
                             <div class="input-field col s6">
-                                <input style="color: black;" th:field="*{cost}" id="cost" type="number" class="validate" required>
+                                <input style="color: black;" th:field="*{cost}" id="cost" type="number" step="0.01" min="0" required>
                                 <label for="cost">Item Cost</label>
                             </div>
                         </div>

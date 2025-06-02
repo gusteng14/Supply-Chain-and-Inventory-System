@@ -7,9 +7,12 @@ import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
+import com.barkstore.Barkstore.requisition.*;
+import com.barkstore.Barkstore.requisition.RequestHeader;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +51,12 @@ public class ContentController {
     private ItemTypeRepo itemTypeRepo;
     @Autowired
     private ItemTypeService itemTypeService;
+    @Autowired
+    private HeaderService headerService;
+    @Autowired
+    private DetailsService detailsService;
+    @Autowired
+    private SupplyChainService supplyChainService;
 
     @GetMapping("/login")
     public String login() {
@@ -298,6 +308,40 @@ public class ContentController {
         System.out.println("C ID IS: " + id);
         itemTypeRepo.deleteById(id);
         return "redirect:/itemType";
+    }
+
+    @GetMapping("/request")
+    public String createRequest(Model model, @ModelAttribute HeaderDTO headerDTO, @ModelAttribute DetailsDTO detailsDTO) {
+        List<Product> product = productRepo.findAll();
+        model.addAttribute("product", product);
+        return "requisitionPage";
+    }
+
+//    @GetMapping("/requests")
+//    public String addRow(@RequestParam("addRow") String test) {
+//        System.out.println("Add ka ng row be");
+//        return "requisitionPage";
+//    }
+
+    @PostMapping("/request")
+    public String sendRequest(@RequestParam("qty") String qty, @RequestParam("itemList") String itemList, @RequestParam("total") String total,
+                              @ModelAttribute HeaderDTO headerDTO, @ModelAttribute DetailsDTO detailsDTO) {
+        String[] stringArray1 = itemList.split(",");
+        List<String> list1 = Arrays.asList(stringArray1);
+        String[] stringArray2 = qty.split(",");
+        List<String> list2 = Arrays.asList(stringArray2);
+        String[] stringArray3 = total.split(",");
+        List<String> list3 = Arrays.asList(stringArray3);
+//        System.out.println("\nQuantities: " + list1);
+//        System.out.println("Item List: " + list2);
+//        System.out.println("Totals: " + list3);
+//        System.out.println("Header Title: " + headerDTO.getRequestName());
+//        System.out.println("Header Description: " + headerDTO.getRequestDescription());
+
+        RequestHeader requestHeader = supplyChainService.saveHeader(headerDTO);
+        supplyChainService.saveDetails(requestHeader, list1, list2, list3);
+
+        return "redirect:/request";
     }
 
 }

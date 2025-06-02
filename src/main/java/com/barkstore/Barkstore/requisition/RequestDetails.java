@@ -4,6 +4,8 @@ import com.barkstore.Barkstore.products.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
@@ -20,7 +22,12 @@ public class RequestDetails {
     private Long id;
 
     private Integer quantity;
+    private Integer total;
+    private String product;
     private Boolean status;
+
+    @Transient
+    private String imgUrl;
 
     @CreationTimestamp
     private Instant createdOn;
@@ -28,11 +35,11 @@ public class RequestDetails {
     @UpdateTimestamp
     private Instant lastUpdatedOn;
 
-    @OneToOne
-    private Product product;
+//    @OneToOne
+//    private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "headerId", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "header_id", nullable = false, referencedColumnName = "id")
     private RequestHeader headerId;
 
     //    @AUDITING

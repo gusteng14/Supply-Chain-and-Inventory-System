@@ -35,7 +35,7 @@
     <main class="main-container">
         <div class="row">
             <div class="col l12 s12">
-                <h4 class="page-header">List of Products</h4>
+                <h4 class="page-header">Products</h4>
                 <ul sec:authorize="hasAuthority('CREATE_PRODUCT_PERM')" class="tabs">
                     <li class="tab col s3 l6"><a href="#view-products-tab">View Products</a></li>
                     <li class="tab col s3 l6"><a href="#create-products-tab">Create Products</a></li>
@@ -125,29 +125,29 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">add_circle</i>
-                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{stock}" id="stock" type="number" required>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{stock}" id="stock" type="number" min="0" required>
                                     <label for="stock">Item Stock</label>
                                 </div>
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">sell</i>
-                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{cost}" id="cost" type="number" step=".01" required>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{cost}" id="cost" type="number" step="0.01" min="0" required>
                                     <label for="cost">Item Cost</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">manage_accounts</i>
-                                    <select class="archivo-narrow-a" th:field="*{category}" id="category" name="category" required>
+                                    <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
                                         <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
-                                        <option class="archivo-narrow-a" th:each="category : ${category} " th:value="${category.name}" th:text="${category.name}"></option>
+                                        <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
                                     </select>
                                     <label>Item Type</label>
                                 </div>
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">manage_accounts</i>
-                                    <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
+                                    <select class="archivo-narrow-a" th:field="*{category}" id="category" name="category" required>
                                         <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
-                                        <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
+                                        <option class="archivo-narrow-a" th:each="category : ${category} " th:value="${category.name}" th:text="${category.name}"></option>
                                     </select>
                                     <label>Item Type</label>
                                 </div>

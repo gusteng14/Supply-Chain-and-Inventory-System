@@ -335,6 +335,30 @@ th {
     padding-bottom: 0px;
 }
 
+.form-setup {
+    border: 1px solid #cfcfcf;
+    border-radius: 30px;
+    padding: 30px;
+}
+
+.pending {
+    background-color: yellow;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.approved {
+    background-color: #00ff00;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.rejected {
+    background-color: red;
+    border-radius: 8px;
+    padding: 8px;
+}
+
 /*---------- FONTS ----------*/
 
 

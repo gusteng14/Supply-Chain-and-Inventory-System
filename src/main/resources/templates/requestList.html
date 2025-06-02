@@ -35,12 +35,16 @@
     <main class="main-container">
         <div class="row">
             <div class="col l12">
+                <div class="col l12">
+                    <h4 class="page-header">List of Requests</h4>
+                </div>
                 <table id="table-csis" class="responsive-table highlight z-depth-1">
                     <thead style="background-color: rgba(234,233,233,0.5);">
                     <tr class="tr-csis">
                         <th class="th-csis">#</th>
                         <th class="th-csis">Request Name</th>
                         <th class="th-csis">Request Description</th>
+                        <th class="th-csis">Updated</th>
                         <th class="th-csis">Status</th>
                         <th class="th-csis"></th>
                     </tr>
@@ -50,7 +54,23 @@
                         <td class="td-csis" th:text="${header.id}"></td>
                         <td class="td-csis" th:text="${header.name}">z</td>
                         <td class="td-csis" th:text="${header.description}">z</td>
-                        <td class="td-csis" th:text="${header.status}">z</td>
+                        <td class="td-csis" th:text="${header.lastUpdatedOn}">z</td>
+                        <td class="td-csis" >
+                            <span th:if="${header.status == 'Pending'} " class="pending" th:text="${header.status}"></span>
+                            <span th:if="${header.status == 'Approved'} " class="approved" th:text="${header.status}"></span>
+                            <span th:if="${header.status  == 'Rejected'}" class="rejected" th:text="${header.status}"></span>
+                        </td>
+                        <td class="td-csis crud right" th:value="${header.id}">
+                            <a class="waves-effect waves-light btn-small" th:href="@{'/approve/' + ${header.id}}">
+                                View
+                            </a>
+<!--                            <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">-->
+<!--                                Update-->
+<!--                            </a>-->
+                            <a  class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/approve/delete/' + ${header.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                Delete
+                            </a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
