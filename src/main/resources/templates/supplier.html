@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Supplier Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- CSS -->
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+
+            <div class="col s12">
+                <h4 class="page-header">Suppliers</h4>
+                <ul sec:authorize="hasAuthority('CREATE_SUPPLIER_PERM')" class="tabs">
+                    <li class="tab col s3 l6"><a href="#view-supplier-tab">View Suppliers</a></li>
+                    <li class="tab col s3 l6"><a href="#create-supplier-tab">Create Supplier</a></li>
+                </ul>
+                <div sec:authorize="hasAuthority('CREATE_SUPPLIER_PERM')" class="row"></div>
+                <div id="view-supplier-tab">
+                    <table id="supplierTable" class="z-depth-1 display table-csis">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                            <tr class="tr-csis">
+                                <th class="dt-head-left th-csis">#</th>
+                                <th class="dt-head-left th-csis">Name</th>
+                                <th class="dt-head-left th-csis">Email</th>
+                                <th class="dt-head-left th-csis">Contact No</th>
+                                <th class="dt-head-left th-csis">Address</th>
+                                <th class="dt-head-left th-csis">Agent</th>
+                                <th class="dt-head-left th-csis">Agent Contact No</th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr-csis-body" th:each="supplier : ${supplier}">
+                                <td class="dt-body-left td-csis" th:text="${supplier.id}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.name}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.email}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.contactNo}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.getAddress()}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.agentName}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${supplier.agentContactNo}">z</td>
+                                <td class="dt-body-left td-csis" th:value="${supplier.id}">
+                                    <div class="right">
+                                        <a sec:authorize="hasAuthority('READ_SUPPLIER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/supplier/' + ${supplier.id}}">
+                                            View
+                                        </a>
+                                        <a sec:authorize="hasAuthority('UPDATE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/supplier/edit(id=${supplier.id})}">
+                                            Update
+                                        </a>
+                                        <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/supplier/delete/' + ${supplier.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div sec:authorize="hasAuthority('CREATE_SUPPLIER_PERM')" id="create-supplier-tab">
+                    <div class="col l2"></div>
+                    <form style="border-radius: 30px; padding: 30px;" class="col s12 l8 z-depth-1" id="registerForm" action="#"
+                          th:action="@{/supplier/create}" method="post" th:object="${supplierRequest}">
+                        <h5>Supplier Setup</h5>
+                        <div class="row">
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                <label for="name">Supplier Name</label>
+                            </div>
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{contactNo}" id="contactNo" type="text" required>
+                                <label for="name">Contact No</label>
+                                <p id="contactNo-message"></p>
+                            </div>
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{email}" id="email" type="text" required>
+                                <label for="name">Email</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{addressLine1}" id="address1" type="text" required>
+                                <label for="name">Address Line 1</label>
+                            </div>
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{addressLine2}" id="address2" type="text" required>
+                                <label for="name">Address Line 2</label>
+                            </div>
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{addressLine3}" id="address3" type="text" required>
+                                <label for="name">Address Line 3</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{agentName}" id="agentName" type="text" required>
+                                <label for="name">Agent Name</label>
+                            </div>
+                            <div class="input-field col l6">
+                                <input style="color: black;" th:field="*{agentContactNo}" id="agentContactNo" type="text" required>
+                                <label for="name">Agent Contact No</label>
+                                <p id="agentContactNo-message"></p>
+
+                            </div>
+                        </div>
+                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <button style="display: none;" id="modal-trigger" data-target="modal1" class="btn modal-trigger">Modal</button>
+
+                        <div id="modal1" class="modal">
+                            <div class="modal-content">
+                                <h4>Tool Tip</h4>
+                                <p>Item Type created successfully.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a id="close-modal" href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+        $('.modal').modal();
+        $('#supplierTable').DataTable({
+
+        });
+        $('select').formSelect();
+
+        $('#contactNo').on('keyup', function() {
+            if ($('#contactNo').val().length == 0 || $('#contactNo').val().length == null) {
+                $('#contactNo-message').html('')
+            }
+            else if($('#contactNo').val().length != 11) {
+                $('#contactNo-message').html('Contact number must be valid!').css('color', 'red');
+                $("#submit").prop('disabled', true);
+            } else {
+                $('#contactNo-message').html('')
+                $("#submit").prop('disabled', false);
+            }
+        });
+
+        $('#agentContactNo').on('keyup', function() {
+            if ($('#agentContactNo').val().length == 0 || $('#agentContactNo').val().length == null) {
+                $('#agentContactNo-message').html('')
+            }
+            else if($('#agentContactNo').val().length != 11) {
+                $('#agentContactNo-message').html('Contact number must be valid!').css('color', 'red');
+                $("#submit").prop('disabled', true);
+            } else {
+                $('#agentContactNo-message').html('')
+                $("#submit").prop('disabled', false);
+            }
+        });
+
+    });
+
+</script>
+
+</body>
+
+</html>

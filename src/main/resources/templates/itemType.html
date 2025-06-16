@@ -19,12 +19,14 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
 
 
 </head>
@@ -44,28 +46,30 @@
                 </ul>
                 <div sec:authorize="hasAuthority('CREATE_ITEMTYPE_PERM')" class="row"></div>
                 <div id="view-itemType-tab">
-                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                    <table id="itemTypeTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
-                                <th class="th-csis">Item Type Id</th>
-                                <th class="th-csis">Item Type Name</th>
-                                <th></th>
+                                <th class="dt-head-left th-csis">Item Type Id</th>
+                                <th class=" dt-head-left th-csis">Item Type Name</th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="itemType : ${itemType}">
-                                <td th:text="${itemType.id}">z</td>
-                                <td th:text="${itemType.name}">z</td>
-                                <td class="td-csis crud right" th:value="${itemType.id}">
-                                    <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/itemType/' + ${itemType.id}}">
-                                        View
-                                    </a>
-                                    <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/itemType/edit(id=${itemType.id})}">
-                                        Update
-                                    </a>
-                                    <a sec:authorize="hasAuthority('DELETE_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/itemType/delete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                        Delete
-                                    </a>
+                            <tr class="tr-csis-body" th:each="itemType : ${itemType}">
+                                <td class="dt-body-left td-csis" th:text="${itemType.id}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${itemType.name}">z</td>
+                                <td class="dt-body-left td-csis" th:value="${itemType.id}">
+                                    <div class="right">
+                                        <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/itemType/' + ${itemType.id}}">
+                                            View
+                                        </a>
+                                        <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/itemType/edit(id=${itemType.id})}">
+                                            Update
+                                        </a>
+                                        <a sec:authorize="hasAuthority('DELETE_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/itemType/delete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                            Delete
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -116,6 +120,10 @@
     $(document).ready(function() {
         $('.tabs').tabs();
         $('.modal').modal();
+        $('#itemTypeTable').DataTable({
+
+        });
+        $('select').formSelect();
 
     });
 

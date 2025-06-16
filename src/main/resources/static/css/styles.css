@@ -11,9 +11,9 @@ main, footer {
 }
 
 nav .brand-logo {
-    padding-left: 30px;
-    font-family: "Modak", serif;
-    font-size: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
     color: white;
 }
 
@@ -48,7 +48,7 @@ a {
     color: rgba(45, 106, 95, 1);
 }
 
-#table-csis {
+.table-csis {
     border-radius: 10px;
     padding-top: 50px;
 }
@@ -65,16 +65,12 @@ a {
     right: 500px;
 }
 
-/*.tr-csis:last-child .th-csis:first-child {*/
-/*    border-bottom-left-radius: 30px;*/
-/*}*/
-
-/*.tr-csis:last-child .th-csis:first-child {*/
-/*    border-bottom-left-radius: 30px;*/
-/*}*/
+.tr-csis-body:last-child {
+    border-bottom: none;
+}
 
 .crud {
-    padding-right: 50px;
+    width: 75px;
 }
 
 .bg {
@@ -341,22 +337,81 @@ th {
     padding: 30px;
 }
 
-.pending {
+.pendingR {
     background-color: yellow;
     border-radius: 8px;
     padding: 8px;
 }
 
-.approved {
+.approvedR {
     background-color: #00ff00;
     border-radius: 8px;
     padding: 8px;
 }
 
-.rejected {
+.rejectedR {
     background-color: red;
     border-radius: 8px;
     padding: 8px;
+}
+
+.grand-total {
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid;
+    border-bottom-style: double;
+}
+
+[aria-label="pagination"] {
+    color: black;
+    background-color: white;
+    box-shadow: none;
+}
+
+.select-wrapper + label {
+    position: absolute;
+    top: -10px;
+    font-size: 0.8rem;
+}
+
+div.dt-container.dt-empty-footer tbody>tr:last-child>* {
+    border-bottom: 0px;
+}
+
+input[id^="dt-search-"] {
+    height: 2rem !important;
+    width: 200px !important;
+
+}
+
+.barkstore-logo {
+    height: 53px;
+    width: auto;
+    padding-left: 10px;
+    padding-top: 1px;
+}
+
+.rejected {
+    background-color: #cdcdcd;
+    color: gray;
+    transition: 2s;
+}
+
+table.highlight>tbody>.rejected:hover {
+    background-color: #9e9e9e;
+}
+
+.pressed {
+    background-color: gray;
+}
+
+.pressed:hover {
+    background-color: pink;
+}
+
+.pressed:focus {
+    background-color: #6e6e6e;
+
 }
 
 /*---------- FONTS ----------*/

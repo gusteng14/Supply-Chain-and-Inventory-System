@@ -46,9 +46,9 @@
                             <div class="row">
                                 <div class="col l11"><h5>Request Header</h5></div>
                                 <div class="col l1">
-                                    <h5 th:if="${hdr.status == 'Approved'}"><span class="approved" th:text="${hdr.status}"></span></h5>
-                                    <h5 th:if="${hdr.status == 'Rejected'}"><span class="rejected" th:text="${hdr.status}"></span></h5>
-                                    <h5 th:if="${hdr.status == 'Pending'}"><span class="pending" th:text="${hdr.status}"></span></h5>
+                                    <h5 th:if="${hdr.status == 'Approved'}"><span class="approvedR" th:text="${hdr.status}"></span></h5>
+                                    <h5 th:if="${hdr.status == 'Rejected'}"><span class="rejectedR" th:text="${hdr.status}"></span></h5>
+                                    <h5 th:if="${hdr.status == 'Pending'}"><span class="pendingR" th:text="${hdr.status}"></span></h5>
                                 </div>
                                     <input hidden="hidden" th:value="${hdr.id}" id="id" name="id">
                                 <div class="input-field col l3">
@@ -65,8 +65,9 @@
                                 </div>
 
                             </div>
+                            <h5>Request Details</h5>
+
                             <div class="row form-setup">
-                                <h5>Request Details</h5>
                                 <div class="col l12">
                                 </div>
                                 <table class="responsive-table highlight z-depth-1">
@@ -76,36 +77,85 @@
                                         <th>Item Name</th>
                                         <th>Quantity</th>
                                         <th>Total</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="requestDetail" th:each="dtl : ${dtl}">
-                                        <tr>
+                                    <tbody>
+                                        <tr id="requestDetail" class="" th:each="dtl : ${dtl}">
+                                            <input hidden="hidden" name="count[]" th:value="${dtlStat.count}">
                                             <td style="padding-right: 0px; margin-right: 0px;">
                                                 <a><img class="productImg" id="product-image" th:src="${dtl.imgUrl}"></a>
                                             </td>
-                                            <td>
-                                                <p class="archivo-narrow-a" style="color: black;"  th:text="${dtl.product}" id="product"></p>
+                                            <td class="item">
+                                                <p class="archivo-narrow-a" th:text="${dtl.product}" id="product"></p>
+                                            </td>
+                                            <td class="quantity">
+                                                <p class="archivo-narrow-a" th:text="${dtl.quantity}" id="qty"></p>
                                             </td>
                                             <td>
-                                                <p class="archivo-narrow-a" style="color: black;"  th:text="${dtl.quantity}" id="qty"></p>
+                                                <p class="archivo-narrow-a" th:text="${dtl.total}" id="total" name="total[]"></p>
                                             </td>
+                                            <td class="reqStatus">
+                                                <p class="archivo-narrow-a" th:text="${dtl.status}" id="status" name="status[]"></p>
+                                                <input hidden="hidden" class="archivo-narrow-a" type="text" th:id="${#ids.seq('reqStatus')}" name="reqStatus[]">
+                                            </td>
+                                            <td class="req">
+                                                <div th:if="${hdr.status == 'Pending'}" class="right">
+                                                    <button style="width: 130px;" type="button" th:id="${#ids.seq('approveDtl')}" name="approveDtl[]" class="btn approveDtl pressed" value="1">
+                                                        <i class="material-icons-round left">check_circle</i>Approve
+                                                    </button>
+                                                    <button style="width: 130px;" type="button" th:id="${#ids.seq('rejectDtl')}" name="rejectDtl[]" class="btn red rejectDtl" value="0">
+                                                        <i class="material-icons-round left">block</i>Reject
+                                                    </button>
+                                                </div>
+                                                <div hidden="hidden" th:unless="${hdr.status == 'Pending'}" class="right">
+                                                    <button style="width: 130px;" type="button" th:id="${#ids.seq('approveDtl')}" name="approveDtl[]" class="btn approveDtl pressed" value="1">
+                                                        <i class="material-icons-round left">check_circle</i>Approve
+                                                    </button>
+                                                    <button style="width: 130px;" type="button" th:id="${#ids.seq('rejectDtl')}" name="rejectDtl[]" class="btn red rejectDtl" value="0">
+                                                        <i class="material-icons-round left">block</i>Reject
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color: #e7e7e7;">
+                                            <td></td>
                                             <td>
-                                                <p class="archivo-narrow-a" style="color: black;"  th:text="${dtl.total}" id="total"></p>
+                                                <p style=" font-size: 18px; font-weight: bold;">Grand Total: </p>
                                             </td>
+                                            <td></td>
+                                            <td>
+                                                <p class="">
+                                                    <span id="grandTotal" class="grand-total"></span>
+                                                </p>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <div th:if="${hdr.status == 'Pending'}" class="right">
+                                <button style="width: 53px;" id="approveAll" type="button" name="approveAll"
+                                        class="btn tooltipped" data-position="top" data-tooltip="Approve all" value="1">
+                                    <i class="material-icons-round left">check_circle</i>
+                                </button>
+                                <button style="width: 53px;" id="rejectAll" type="button" name="rejectAll"
+                                        class="btn red tooltipped" data-position="top" data-tooltip="Reject all" value="0">
+                                    <i class="material-icons-round left">block</i>
+                                </button>
+                            </div>
                             <div th:if="${hdr.status == 'Pending'}">
-                                <button id="approve" name="status" class="btn" value="1">Approve</button>
-                                <button id="reject" name="status" class="btn red" value="0">Reject</button>
+                                <button id="submit" name="status" class="btn" value="1">Submit</button>
                             </div>
-                            <div th:unless="${hdr.status == 'Pending'}">
-                                <button disabled id="disabled-approve" name="status" class="btn" value="1">Approve</button>
-                                <button disabled id="disabled-reject" name="status" class="btn red" value="0">Reject</button>
-                            </div>
+
+                            <button th:if="${hdr.status == 'Approved'}" id="generate" type="button" class="btn">Generate Purchase Order</button>
                         </form>
+                        <p hidden="hidden" id="requestor" th:text="${#authentication.getPrincipal().getFullName()}"></p>
+                        <p hidden="hidden" id="reqId" th:text="${hdr.id}"></p>
+                        <p hidden="hidden" id="dateCreated" th:text="${hdr.createdOn}"></p>
+
                     </div>
                 </div>
             </div>
@@ -114,6 +164,7 @@
 </div>
 
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
@@ -123,60 +174,287 @@
     var collapsibleElem = document.querySelector('.collapsible');
     var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
 
-
-
     $(document).ready(function() {
         $('.sidenav').sidenav();
         $('.tabs').tabs();
         $('select').formSelect();
         $('.modal').modal();
+        $('.tooltipped').tooltip();
 
+        var grandTotal = 0;
         var vars = {};
         var i = 0;
+        var approvedCount = 0;
+        var status = "";
+
+        let PHP = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP',
+        });
+
+        $('input[id^="reqStatus"]').val(1);
+
+        $("p[name='total[]']").each(function(index) {
+            status = $(this).parent().siblings('.reqStatus').children('p').text();
+            if(status == 'Rejected') {
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').addClass("pressed");
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').removeClass("red");
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').val(1);
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').siblings().val(0);
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').siblings().removeClass("pressed");
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').parent().parent().parent().addClass("rejected");
+                $(this).parent().siblings('.req').children().children('[id^="rejectDtl"]').parent().parent().siblings('.reqStatus').children('input').val(0);
+            } else {
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').addClass("pressed");
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').val(1);
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').siblings().val(0);
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').siblings().removeClass("pressed");
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').siblings().addClass("red");
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').parent().parent().parent().removeClass("rejected");
+                $(this).parent().siblings('.req').children().children('[id^="approveDtl"]').parent().parent().siblings('.reqStatus').children('input').val(1);
+                approvedCount++;
+                $('#registerForm').append('<p hidden="hidden" name="itemName[]"></p>');
+                $('p[name^="itemName"]').eq(approvedCount-1).text($(this).parent().siblings('.item').children('p').text());
+                $('#registerForm').append('<p hidden="hidden" name="quantity[]"></p');
+                $('p[name^="quantity"]').eq(approvedCount-1).text($(this).parent().siblings('.quantity').children('p').text());
+            }
+            var value = parseInt($(this).text());
+            grandTotal += value;
+        });
+
+        $('#grandTotal').html(PHP.format(grandTotal));
+        $('#submit').val(approvedCount);
+
+
 
         $('#registerForm').on('change load', function() {
             var cost = parseFloat($('#itemList option:selected').attr('data-cost'));
             var qty = parseFloat($('#qty').val());
             var total = cost * qty;
+
             $('#total').val(total);
 
             var imgId = $('#itemList option:selected').attr('data-id');
             $('#product-image').attr('src', '/' + imgId + '/' + 'product_image');
 
-            vars['cost'+i] = parseFloat($('#itemList' + i +' option:selected').attr('data-id'));
+            vars['cost'+i] = parseFloat($('#itemList' + i +' option:selected').attr('data-cost'));
             vars['qty'+i] = parseFloat($('#qty'+i).val());
             vars['total'+i] = vars['cost'+i] * vars['qty'+i];
             $('#total'+i).val(vars['total'+i]);
 
             vars['imgId'+i] = $('#itemList' + i + ' option:selected').attr('data-id');
             $('#product-image'+i).attr('src', '/' + vars['imgId'+i] + '/' + 'product_image');
+
+            approvedCount = 0;
+            $("p[name='total[]']").each(function(index) {
+                btnVal = $(this).parent().siblings('.req').children().children('#approveDtl').val();
+                if (btnVal == 1) {
+                    $('#submit').val(1);
+                    approvedCount++;
+                    var value = parseInt($(this).text());
+                    grandTotal += value;
+                }
+
+            });
+
+            $('#grandTotal').html(PHP.format(grandTotal));
+            $('#submit').val(approvedCount);
+
         })
 
-        $('#add').on('click change', function() {
-            i++;
-            $('#requestDetail').append(
-                "<tr>"
-                + "<td style='padding-right: 0px; margin-right: 0px;'><a><img class='productImg' id='product-image" + i +"' src=''></a></td>"
-                + "<td id='selectRow" + i +"'></td>"
-                + "<td><input class='archivo-narrow-a' style='color: black;'  id='qty" + i +"' name='qty[]' type='number' required></td>"
-                + "<td><input readonly class='archivo-narrow-a' style='color: black;' id='total" + i +"' name='total[]' type='number' required></td>"
-                + "<td><button type='button' id='removeRow" + i +"' name='removeRow' class='btn right removeRow'>Remove</button></td>"
-                + "</tr>");
-            $('select#itemList').clone().attr('id','itemList'+i).css('display','block').appendTo('#selectRow' + i);
-            vars['cost'+i] = parseFloat($('#itemList' + i + ' option:selected').attr('data-id'));
-            vars['qty'+i] = parseFloat($('#qty'+i).val());
-            vars['total'+i] = vars['cost'+i] * vars['qty'+i];
-            $('#total'+i).val(vars['total'+i]);
-            vars['imgId'+i] = $('#itemList' + i + ' option:selected').attr('data-id');
-            $('#product-image'+i).attr('src', '/' + vars['imgId'+i] + '/' + 'product_image');
+
+        $(document).on('click', 'button[id^="approveDtl"]', function(){
+            grandTotal = 0;
+            approvedCount = 0;
+
+            if ($(this).val() == 1) {
+                return;
+            } else {
+                $(this).addClass("pressed");
+                $(this).val(1);
+                $(this).siblings().val(0);
+                $(this).siblings().removeClass("pressed");
+                $(this).siblings().addClass("red");
+                grandTotal = 0;
+                $(this).parent().parent().parent().removeClass("rejected");
+                $(this).parent().parent().siblings('.reqStatus').children('input').val(1);
+
+
+                $("p[name='total[]']").each(function(index) {
+                    var btnVal = $(this).parent().siblings('.req').children().children('[id^=approveDtl]').val();
+
+                    if (btnVal == 1) {
+                        $('#submit').val(1);
+                        approvedCount++;
+                        var value = parseInt($(this).text());
+                        grandTotal += value;
+                    }
+                });
+
+                $('#submit').val(approvedCount);
+                $('#grandTotal').html(PHP.format(grandTotal));
+
+            }
         });
 
-        $(document).on('click', 'button[id^="removeRow"]', function(){
-            $(this).parent().parent().remove();
+        $(document).on('click', 'button[id^="rejectDtl"]', function(){
+            grandTotal = 0;
+            approvedCount = 0;
+
+            if ($(this).val() == 1) {
+                return;
+            } else {
+                $(this).addClass("pressed");
+                $(this).removeClass("red");
+                $(this).val(1);
+                $(this).siblings().val(0);
+                $(this).siblings().removeClass("pressed");
+                $(this).parent().parent().parent().addClass("rejected");
+                $(this).parent().parent().siblings('.reqStatus').children('input').val(0);
+            }
+            $("p[name='total[]']").each(function(index) {
+                var btnVal = $(this).parent().siblings('.req').children().children('[id^=approveDtl]').val();
+
+                if (btnVal == 1) {
+                    $('#submit').val(1);
+                    approvedCount++;
+                    var value = parseInt($(this).text());
+                    grandTotal += value;
+                }
+            });
+
+            $('#grandTotal').html(PHP.format(grandTotal));
+            $('#submit').val(approvedCount);
+
         });
 
+        $(document).on('click', '#approveAll', function(){
+            $('button[name^="approveDtl"]').trigger('click');
+        });
+
+        $(document).on('click', '#rejectAll', function(){
+            $('button[name^="rejectDtl"]').trigger('click');
+        });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        var a = [];
+        var c = [];
+        var requestor = $('#requestor').text();
+        var requestId = $('#reqId').text();
+        var requestDate = $('#dateCreated').text();
+        var d = new Date();
+        var day = d.getDate();
+        var month = d.getMonth()+1;
+        var year = d.getFullYear();
+        var currentDate = year + '-' + day + '-' + month;
+
+        console.log(currentDate);
+
+        $('p[name^="itemName"]').each(function(index) {
+            var b = $(this).text();
+            a.push(b);
+        })
+        $('p[name^="quantity"]').each(function(index) {
+            var b = $(this).text();
+            c.push(b);
+        })
+
+        $('#generate').on('click', function() {
+            var pdfObject = jsPDFInvoiceTemplate.default(props);
+        });
+
+        var props = {
+            outputType: jsPDFInvoiceTemplate.OutputType.Save,
+            returnJsPDFDocObject: true,
+            fileName: "Invoice 2021",
+            orientationLandscape: false,
+            logo: {
+                src: "../images/logo3px.png",
+                type: 'PNG', //optional, when src= data:uri (nodejs case)
+                width: 70, //aspect ratio = width/height
+                height: 15,
+                margin: {
+                    top: 0, //negative or positive num, from the current position
+                    left: 0 //negative or positive num, from the current position
+                }
+            },
+            stamp: {
+                inAllPages: true, //by default = false, just in the last page
+                src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
+                type: 'JPG', //optional, when src= data:uri (nodejs case)
+                width: 20, //aspect ratio = width/height
+                height: 20,
+                margin: {
+                    top: 0, //negative or positive num, from the current position
+                    left: 0 //negative or positive num, from the current position
+                }
+            },
+            business: {
+                name: 'Barkstore',
+                address: "Unit G37 Makati Executive Tower 1 Brgy. Pio Del Pilar, Makati City",
+                phone: "(+355) 069 11 11 111",
+                email: "barkstoresite@gmail.com",
+                email_1: "websike.xyz",
+                website: "",
+            },
+            contact: {
+                label: "Items requested by:",
+                name: requestor,
+                address: "",
+                phone: "",
+                email: "",
+                otherInfo: "",
+            },
+            invoice: {
+                label: "Request #: ",
+                num: requestId,
+                invDate: "Request Date: " + requestDate,
+                invGenDate: "Approval Date: " + currentDate,
+                headerBorder: false,
+                tableBodyBorder: false,
+                header: [
+                    {
+                        title: "#",
+                        style: {
+                            width: 50
+                        }
+                    },
+                    {
+                        title: "Item",
+                        style: {
+                            width: 100
+                        }
+                    },
+                    {
+                        title: "Quantity",
+                        style: {
+                            width: 40
+                        }
+                    },
+                ],
+                table: Array.from(Array(a.length), (item, index)=>([
+                    index + 1,
+                    a[index],
+                    c[index],
+                ])),
+                //    invTotalLabel: "Grand Total: ",
+                //    invTotal: "1231",
+                //    invCurrency: "ALL",
+                invDescLabel: "Invoice Note",
+                invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
+            },
+            footer: {
+                text: "Barkstore®",
+            },
+            pageEnable: true,
+            pageLabel: "Page ",
+        };
+    });
+
+</script>
+
 
 </body>
 

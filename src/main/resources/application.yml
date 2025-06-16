@@ -20,12 +20,12 @@ spring:
       max-file-size: -1
       max-request-size: -1
   datasource:
-    password: websike123
-    url: jdbc:mysql://barkstoredb.cpq4qsyguy1e.ap-southeast-1.rds.amazonaws.com:3306/barkstore_inv
-    username: websike123
-#    password: root
-#    url: jdbc:mysql://localhost:3306/barkstore_inv
-#    username: root
+#    password: websike123
+#    url: jdbc:mysql://barkstoredb.cpq4qsyguy1e.ap-southeast-1.rds.amazonaws.com:3306/barkstore_inv
+#    username: websike123
+    password: root
+    url: jdbc:mysql://localhost:3306/barkstore_inv
+    username: root
   jpa:
     hibernate:
       ddl-auto: update

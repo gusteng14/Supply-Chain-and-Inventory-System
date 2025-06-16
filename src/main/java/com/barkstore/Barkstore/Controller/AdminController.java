@@ -263,18 +263,46 @@ public class AdminController {
 
     @PreAuthorize("hasAuthority('APPROVE_PERM')")
     @PostMapping("/approve")
-    public String processRequest(Model model, @RequestParam Long id, @RequestParam("status") int status) {
+    public String processRequest(Model model, @RequestParam Long id, @RequestParam("status") int status, @RequestParam("count") String count,
+                                  @RequestParam("reqStatus") String reqStatus) {
         RequestHeader hdr = headerRepository.findById(id).get();
+        List<RequestDetails> dtl = detailsRepository.findByHeaderId_Id(id);
+
+        String[] stringArray = count.split(",");
+        List<String> list = Arrays.asList(stringArray);
+        String[] stringArray2 = reqStatus.split(",");
+        List<String> list2 = Arrays.asList(stringArray2);
+
+        System.out.println(list2);
+
+        int parsedCount = Integer.parseInt(list.getLast());
+
         if (status == 0) {
             hdr.setStatus("Rejected");
+            hdr.setTotalRequestedItems(parsedCount);
+            hdr.setNoOfApprovedItems(status);
             headerRepository.save(hdr);
         } else {
             hdr.setStatus("Approved");
+            hdr.setTotalRequestedItems(parsedCount);
+            hdr.setNoOfApprovedItems(status);
             headerRepository.save(hdr);
         }
 
-        System.out.println(id);
-
+        int i = 0;
+        for(RequestDetails dtl1 : dtl) {
+            System.out.println("Status: " + list2.get(i));
+            System.out.println("DTL Id: " + dtl1.getId());
+            if (Objects.equals(list2.get(i), "1")) {
+                System.out.println("Approve mo to pre");
+                dtl1.setStatus("Approved");
+            } else if (Objects.equals(list2.get(i), "0")){
+                System.out.println("Reject mo to pre");
+                dtl1.setStatus("Rejected");
+            }
+            detailsRepository.save(dtl1);
+            i++;
+        }
 
         return "redirect:/approve";
     }
@@ -304,7 +332,6 @@ public class AdminController {
             Optional<Product> product = productRepo.findByName(productName);
             Long productId = product.get().getId();
             dtl1.setImgUrl("/" + productId + "/" + "product_image");
-            System.out.println(dtl1.getImgUrl());
         }
 
 

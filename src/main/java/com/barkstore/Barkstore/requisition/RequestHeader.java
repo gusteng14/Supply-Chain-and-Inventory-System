@@ -7,7 +7,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -26,12 +28,14 @@ public class RequestHeader {
     private String name;
     private String description;
     private String status = "Pending";
+    private Integer noOfApprovedItems;
+    private Integer totalRequestedItems;
 
     @CreationTimestamp
-    private Instant createdOn;
+    private LocalDate createdOn;
 
     @UpdateTimestamp
-    private Instant lastUpdatedOn;
+    private LocalDate lastUpdatedOn;
 
     @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RequestDetails> requestDetails;

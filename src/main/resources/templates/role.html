@@ -12,18 +12,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
 
-
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
+
+
 
 
 
@@ -48,30 +52,32 @@
 
                 <div id="view-roles-tab">
                     <h5 class="page-header">Roles</h5>
-                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                    <table id="roleTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
-                        <tr class="tr-csis">
-                            <th class="th-csis">Role Id</th>
-                            <th class="th-csis">Role Name</th>
-                            <th></th>
-                        </tr>
+                            <tr class="tr-csis">
+                                <th class="dt-head-left th-csis">Role Id</th>
+                                <th class="dt-head-left th-csis">Role Name</th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="role : ${role}">
-                            <td th:text="${role.id}">z</td>
-                            <td th:text="${role.name}">z</td>
-                            <td class="td-csis crud right" th:value="${role.id}">
-                                <a class="waves-effect waves-light btn-small" th:href="@{'/role/' + ${role.id}}">
-                                    View
-                                </a>
-                                <a class="waves-effect waves-light btn-small blue darken-1" th:href="@{/role/edit(id=${role.id})}">
-                                    Update
-                                </a>
-                                <a class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/role/delete/' + ${role.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                    Delete
-                                </a>
-                            </td>
-                        </tr>
+                            <tr class="tr-csis-body" th:each="role : ${role}">
+                                <td class="dt-body-left td-csis" th:text="${role.id}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${role.name}">z</td>
+                                <td class="dt-body-left td-csis" th:value="${role.id}">
+                                    <div class="right">
+                                        <a class="waves-effect waves-light btn-small crud" th:href="@{'/role/' + ${role.id}}">
+                                            View
+                                        </a>
+                                        <a class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/role/edit(id=${role.id})}">
+                                            Update
+                                        </a>
+                                        <a class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/role/delete/' + ${role.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -79,19 +85,18 @@
 
                     <h5 class="page-header">Permissions</h5>
 
-                    <table class="responsive-table highlight z-depth-1">
+                    <table id="authTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
-                        <tr class="tr-csis">
-                            <th class="th-csis">#</th>
-                            <th class="th-csis">Permission</th>
-                            <th></th>
-                        </tr>
+                            <tr class="tr-csis">
+                                <th class="dt-head-left th-csis">#</th>
+                                <th class="dt-head-left th-csis">Permission</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="authority : ${authority}">
-                            <td th:text="${authority.id}">z</td>
-                            <td th:text="${authority.name}">z</td>
-                        </tr>
+                            <tr class="tr-csis-body" th:each="authority : ${authority}">
+                                <td class="dt-body-left td-csis" th:text="${authority.id}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${authority.name}">z</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -103,7 +108,7 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <i class="material-icons-round prefix">manage_accounts</i>
-                                    <input style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{name}" id="name" type="text" required>
                                     <label for="name">Role Name</label>
                                 </div>
                             </div>
@@ -218,7 +223,7 @@
 </div>
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 
-<script>
+<script >
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
@@ -229,8 +234,17 @@
 
     $(document).ready(function() {
         $('.tabs').tabs();
+        $('#authTable').DataTable({
+        });
+        $('#roleTable').DataTable({
 
-//        $("#registerForm").submit(function(event) {
+        });
+        $('select').formSelect();
+
+
+
+
+        //        $("#registerForm").submit(function(event) {
 //            event.preventDefault();
 //            alert($("input[name='authority[]']:checked").val());
 ////            $("input").attr("name").each(function() {

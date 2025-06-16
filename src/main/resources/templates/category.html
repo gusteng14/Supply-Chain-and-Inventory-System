@@ -18,11 +18,14 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
 
 
 
@@ -42,32 +45,34 @@
                 </ul>
                 <div sec:authorize="hasAuthority('CREATE_CATEGORY_PERM')" class="row"></div>
                 <div id="view-category-tab">
-                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                    <table id="categoryTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
-                                <th class="th-csis">Category Id</th>
-                                <th class="th-csis">Category Name</th>
-                                <th class="th-csis">Description</th>
-                                <th></th>
+                                <th class="dt-head-left th-csis">Category Id</th>
+                                <th class="dt-head-left th-csis">Category Name</th>
+                                <th class="dt-head-left th-csis">Description</th>
+                                <th class="dt-head-left th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
                             <tbody>
-                            <tr th:each="category : ${category}">
-                                <td th:text="${category.id}">z</td>
-                                <td th:text="${category.name}">z</td>
-                                <td th:text="${category.description}">z</td>
-                                <td class="td-csis crud right" th:value="${category.id}">
-                                    <a sec:authorize="hasAuthority('READ_CATEGORY_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/category/' + ${category.id}}">
-                                        View
-                                    </a>
-                                    <a sec:authorize="hasAuthority('UPDATE_CATEGORY_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/category/edit(id=${category.id})}">
-                                        Update
-                                    </a>
-                                    <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/category/delete/' + ${category.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                        Delete
-                                    </a>
-                                </td>
-                            </tr>
+                                <tr class="tr-csis-body" th:each="category : ${category}">
+                                    <td class="dt-body-left td-csis" th:text="${category.id}">z</td>
+                                    <td class="dt-body-left td-csis" th:text="${category.name}">z</td>
+                                    <td class="dt-body-left td-csis" th:text="${category.description}">z</td>
+                                    <td class="dt-body-left td-csis" th:value="${category.id}">
+                                        <div class="right">
+                                            <a sec:authorize="hasAuthority('READ_CATEGORY_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/category/' + ${category.id}}">
+                                                View
+                                            </a>
+                                            <a sec:authorize="hasAuthority('UPDATE_CATEGORY_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/category/edit(id=${category.id})}">
+                                                Update
+                                            </a>
+                                            <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/category/delete/' + ${category.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                     </table>
                 </div>
@@ -88,16 +93,6 @@
                                 <label for="description">Category Description</label>
                             </div>
                         </div>
-    <!--                            <div class="row">-->
-    <!--                                <div class="input-field col s6">-->
-    <!--                                    <input style="color: black;" th:field="*{stock}" id="stock" type="number" required>-->
-    <!--                                    <label for="stock">Item Stock</label>-->
-    <!--                                </div>-->
-    <!--                                <div class="input-field col s6">-->
-    <!--                                    <input style="color: black;" th:field="*{cost}" id="cost" type="number" required>-->
-    <!--                                    <label for="cost">Item Cost</label>-->
-    <!--                                </div>-->
-    <!--                            </div>-->
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
@@ -138,6 +133,11 @@
 
     $(document).ready(function() {
         $('.tabs').tabs();
+        $('#categoryTable').DataTable({
+
+        });
+        $('select').formSelect();
+
     })
 
 </script>

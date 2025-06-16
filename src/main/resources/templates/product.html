@@ -18,11 +18,14 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
 
 
 
@@ -44,23 +47,23 @@
                 <div sec:authorize="hasAuthority('CREATE_PRODUCT_PERM')" class="row"></div>
 
                 <div  id="view-products-tab">
-                    <table id="table-csis" class="responsive-table highlight z-depth-1">
+                    <table id="productsTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
                                 <!--                                <th>Item No</th>-->
-                                <th class="th-csis">Item Photo</th>
-                                <th class="th-csis">Item Name</th>
-                                <th class="th-csis">Description</th>
-                                <th class="th-csis">Category</th>
-                                <th class="th-csis">Item Type</th>
-                                <th class="th-csis">Stock</th>
-                                <th class="th-csis">Cost</th>
-                                <th class="th-csis"></th>
+                                <th class="dt-head-left th-csis">Item Photo</th>
+                                <th class="dt-head-left th-csis">Item Name</th>
+                                <th class="dt-head-left th-csis">Description</th>
+                                <th class="dt-head-left th-csis">Category</th>
+                                <th class="dt-head-left th-csis">Item Type</th>
+                                <th class="dt-head-left th-csis">Stock</th>
+                                <th class="dt-head-left th-csis">Cost</th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-csis" th:each="product : ${product}">
-                                <td class="td-csis">
+                            <tr class="tr-csis-body" th:each="product : ${product}">
+                                <td class="dt-body-left td-csis">
                                     <a class="modal-trigger" th:attr="data-target=|modal-${product.id}|"><img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}"></a>
                                     <div th:id="|modal-${product.id}|" class="modal">
                                         <div class="modal-content">
@@ -71,15 +74,15 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="td-csis" th:text="${product.name}">z</td>
-                                <td class="td-csis" th:text="${product.description}">z</td>
-                                <td class="td-csis">
+                                <td class="dt-body-left td-csis" th:text="${product.name}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${product.description}">z</td>
+                                <td class="dt-body-left td-csis">
                                     <th:block th:each="category : ${product.category}">
                                         <th:block th:text="${category.name}">[category name]</th:block>
                                         <br>
                                     </th:block>
                                 </td>
-                                <td class="td-csis">
+                                <td class="dt-body-left td-csis">
                                     <th:block th:each="itemType : ${product.itemType}">
                                         <th:block th:text="${itemType.name}">[itemType name]</th:block>
                                         <br>
@@ -87,18 +90,20 @@
                                 </td>
 <!--                                <td class="product-td" th:each="category : ${product.category}" th:text="${category.getName()}"></td>-->
 <!--                                <td class="product-td" th:each="itemType : ${product.itemType}" th:text="${itemType.getName()}">z</td>-->
-                                <td class="td-csis" th:text="${product.stock}">z</td>
-                                <td class="td-csis" th:text="'P' + ${product.cost}">z</td>
-                                <td class="td-csis crud" th:value="${product.id}">
-                                    <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/product/' + ${product.id}}">
-                                        View
-                                    </a>
-                                    <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">
-                                        Update
-                                    </a>
-                                    <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                        Delete
-                                    </a>
+                                <td class="dt-body-left td-csis" th:text="${product.stock}">z</td>
+                                <td class="dt-body-left td-csis" th:text="'P' + ${product.cost}">z</td>
+                                <td class="dt-body-left td-csis " th:value="${product.id}">
+                                    <div class="right">
+                                        <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/product/' + ${product.id}}">
+                                            View
+                                        </a>
+                                        <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/product/edit(id=${product.id})}">
+                                            Update
+                                        </a>
+                                        <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                            Delete
+                                        </a>
+                                    </div>
                                 </td>
 
                             </tr>
@@ -202,6 +207,9 @@
     $(document).ready(function() {
         $('.sidenav').sidenav();
         $('.tabs').tabs();
+        $('#productsTable').DataTable({
+
+        });
         $('select').formSelect();
         $('.modal').modal();
         $('#image').on('change', function() {

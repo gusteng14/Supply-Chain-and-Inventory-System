@@ -1,5 +1,9 @@
 package com.barkstore.Barkstore.Controller;
 
+import com.barkstore.Barkstore.Supplier.Supplier;
+import com.barkstore.Barkstore.Supplier.SupplierRepository;
+import com.barkstore.Barkstore.Supplier.SupplierRequest;
+import com.barkstore.Barkstore.Supplier.SupplierService;
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
 import com.barkstore.Barkstore.products.*;
@@ -58,6 +62,10 @@ public class ContentController {
     private DetailsService detailsService;
     @Autowired
     private SupplyChainService supplyChainService;
+    @Autowired
+    private SupplierRepository supplierRepository;
+    @Autowired
+    private SupplierService supplierService;
 
     @GetMapping("/login")
     public String login() {
@@ -311,18 +319,73 @@ public class ContentController {
         return "redirect:/itemType";
     }
 
+    @GetMapping("/supplier")
+    public String getAllSuppliers(Model model) {
+        model.addAttribute("supplierRequest", new SupplierRequest());
+        List<Supplier> supplier = supplierRepository.findAll();
+        model.addAttribute("supplier", supplier);
+        return "supplier";
+    }
+
+    @PostMapping("/supplier/create")
+    public String createSupplier(Model model, @ModelAttribute SupplierRequest supplierRequest) {
+        Supplier supplier = new Supplier();
+        model.addAttribute("supplierRequest", supplierRequest);
+        supplierService.createSupplier(supplierRequest);
+        return "redirect:/supplier";
+    }
+
+    @GetMapping("/supplier/{id}")
+    public String viewSupplier(@PathVariable Long id, Model model) {
+        Supplier supplier = supplierRepository.findById(id).get();
+        model.addAttribute("supplier", supplier);
+
+        return "viewSupplier";
+    }
+
+    @GetMapping("/supplier/edit")
+    public String editSupplier(Model model, @RequestParam Long id) {
+        Supplier supplier = supplierRepository.findById(id).get();
+        model.addAttribute("supplier", supplier);
+        SupplierRequest supplierRequest = new SupplierRequest();
+
+        supplierRequest.setSupplierNo(supplier.getSupplierNo());
+        supplierRequest.setName(supplier.getName());
+        supplierRequest.setContactNo(supplier.getContactNo());
+        supplierRequest.setEmail(supplier.getEmail());
+        supplierRequest.setAddressLine1(supplier.getAddressLine1());
+        supplierRequest.setAddressLine2(supplier.getAddressLine2());
+        supplierRequest.setAddressLine3(supplier.getAddressLine3());
+        supplierRequest.setAgentName(supplier.getAgentName());
+        supplierRequest.setAgentContactNo(supplier.getAgentContactNo());
+
+        model.addAttribute("supplierRequest", supplierRequest);
+
+        return "editSupplier";
+    }
+
+    @PostMapping("/supplier/edit")
+    public String updateSupplier(Model model, @RequestParam Long id, @ModelAttribute SupplierRequest supplierRequest) {
+        Supplier supplier = supplierRepository.findById(id).get();
+        model.addAttribute("supplier", supplier);
+
+        supplierService.editSupplier(supplier, supplierRequest);
+
+        return "redirect:/supplier";
+    }
+
+    @GetMapping("/supplier/delete/{id}")
+    public String deleteSupplierById(@PathVariable(name="id") Long id) {
+        supplierRepository.deleteById(id);
+        return "redirect:/supplier";
+    }
+
     @GetMapping("/request")
     public String createRequest(Model model, @ModelAttribute HeaderDTO headerDTO, @ModelAttribute DetailsDTO detailsDTO) {
         List<Product> product = productRepo.findAll();
         model.addAttribute("product", product);
         return "requisitionPage";
     }
-
-//    @GetMapping("/requests")
-//    public String addRow(@RequestParam("addRow") String test) {
-//        System.out.println("Add ka ng row be");
-//        return "requisitionPage";
-//    }
 
     @PostMapping("/request")
     public String sendRequest(@RequestParam("qty") String qty, @RequestParam("itemList") String itemList, @RequestParam("total") String total,
@@ -333,11 +396,6 @@ public class ContentController {
         List<String> list2 = Arrays.asList(stringArray2);
         String[] stringArray3 = total.split(",");
         List<String> list3 = Arrays.asList(stringArray3);
-//        System.out.println("\nQuantities: " + list1);
-//        System.out.println("Item List: " + list2);
-//        System.out.println("Totals: " + list3);
-//        System.out.println("Header Title: " + headerDTO.getRequestName());
-//        System.out.println("Header Description: " + headerDTO.getRequestDescription());
 
         RequestHeader requestHeader = supplyChainService.saveHeader(headerDTO);
         supplyChainService.saveDetails(requestHeader, list1, list2, list3);

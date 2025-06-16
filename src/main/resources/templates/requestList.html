@@ -18,11 +18,14 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
 
 
 
@@ -38,61 +41,49 @@
                 <div class="col l12">
                     <h4 class="page-header">List of Requests</h4>
                 </div>
-                <table id="table-csis" class="responsive-table highlight z-depth-1">
+                <table id="requestTable" class="z-depth-1 display table-csis">
                     <thead style="background-color: rgba(234,233,233,0.5);">
-                    <tr class="tr-csis">
-                        <th class="th-csis">#</th>
-                        <th class="th-csis">Request Name</th>
-                        <th class="th-csis">Request Description</th>
-                        <th class="th-csis">Updated</th>
-                        <th class="th-csis">Status</th>
-                        <th class="th-csis"></th>
-                    </tr>
+                        <tr class="tr-csis">
+                            <th class="dt-head-left th-csis">#</th>
+                            <th class="dt-head-left th-csis">Request Name</th>
+                            <th class="dt-head-left th-csis">Request Description</th>
+                            <th class="dt-head-left th-csis">Created On</th>
+                            <th class="dt-head-left th-csis">Last Updated On</th>
+                            <th class="dt-head-left th-csis">Status</th>
+                            <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr class="tr-csis" th:each="header : ${requestHeaders}">
-                        <td class="td-csis" th:text="${header.id}"></td>
-                        <td class="td-csis" th:text="${header.name}">z</td>
-                        <td class="td-csis" th:text="${header.description}">z</td>
-                        <td class="td-csis" th:text="${header.lastUpdatedOn}">z</td>
-                        <td class="td-csis" >
-                            <span th:if="${header.status == 'Pending'} " class="pending" th:text="${header.status}"></span>
-                            <span th:if="${header.status == 'Approved'} " class="approved" th:text="${header.status}"></span>
-                            <span th:if="${header.status  == 'Rejected'}" class="rejected" th:text="${header.status}"></span>
-                        </td>
-                        <td class="td-csis crud right" th:value="${header.id}">
-                            <a class="waves-effect waves-light btn-small" th:href="@{'/approve/' + ${header.id}}">
-                                View
-                            </a>
-<!--                            <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/product/edit(id=${product.id})}">-->
-<!--                                Update-->
-<!--                            </a>-->
-                            <a  class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/approve/delete/' + ${header.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
+                        <tr class="tr-csis-body" th:each="header : ${requestHeaders}">
+                            <td class="dt-body-left td-csis" th:text="${header.id}"></td>
+                            <td class="dt-body-left td-csis" th:text="${header.name}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${header.description}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${header.createdOn}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${header.lastUpdatedOn}">z</td>
+                            <td class="dt-body-left td-csis">
+                                <span th:if="${header.status == 'Pending'} and ${header.noOfApprovedItems == null}" class="pendingR"
+                                      th:text="${header.status}"></span>
+                                <span th:if="${header.noOfApprovedItems > 0} " class="approvedR"
+                                      th:text="${header.status} + ' ' + ${header.noOfApprovedItems} + ' item/s out of ' + ${header.totalRequestedItems}"></span>
+                                <span th:if="${header.noOfApprovedItems < 1} and ${header.totalRequestedItems != null}" class="rejectedR"
+                                      th:text="'Rejected'"></span>
+                            </td>
+                            <td class="dt-body-left td-csis" th:value="${header.id}">
+                                <div class="right">
+                                    <a th:if="${header.status == 'Pending'}" class="waves-effect waves-light btn-small crud" th:href="@{'/approve/' + ${header.id}}">
+                                        Assess
+                                    </a>
+                                    <a th:unless="${header.status == 'Pending'}" class="waves-effect waves-light btn-small cyan darken-3 crud" th:href="@{'/approve/' + ${header.id}}">
+                                        Review
+                                    </a>
+                                    <a  class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/approve/delete/' + ${header.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-<!--                <table id="table-csis" class="responsive-table highlight z-depth-1">-->
-<!--                    <thead style="background-color: rgba(234,233,233,0.5);">-->
-<!--                    <tr class="tr-csis">-->
-<!--                        <th class="th-csis">#</th>-->
-<!--                        <th class="th-csis">Item</th>-->
-<!--                        <th class="th-csis">Quantity</th>-->
-<!--                        <th class="th-csis">Total</th>-->
-<!--                        <th class="th-csis"></th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    <tr class="tr-csis" th:each="detail : ${requestDetails}">-->
-<!--                        <td class="td-csis" th:text="${detail.id}"></td>-->
-<!--                        <td class="td-csis" th:text="${detail.product}">z</td>-->
-<!--                        <td class="td-csis" th:text="${detail.quantity}">z</td>-->
-<!--                        <td class="td-csis" th:text="${detail.total}">z</td>-->
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
             </div>
         </div>
     </main>
@@ -113,6 +104,10 @@
         $('.tabs').tabs();
         $('select').formSelect();
         $('.modal').modal();
+        $('#requestTable').DataTable();
+
+        $('select').formSelect();
+
 
     });
 </script>

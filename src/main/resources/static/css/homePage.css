@@ -8,10 +8,17 @@
 
 nav ul a,
 nav .brand-logo {
-  padding-left: 300px;
-  font-family: "Modak", serif;
-  font-size: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
   color: white;
+}
+
+.barkstore-logo {
+  height: 53px;
+  width: auto;
+  padding-left: 10px;
+  padding-top: 1px;
 }
 
 .modak-regular {

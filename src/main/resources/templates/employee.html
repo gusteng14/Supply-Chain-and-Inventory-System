@@ -13,18 +13,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
 
-
     <!-- MATERIAL ICON -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
     <!-- CSS -->
-    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -44,39 +47,41 @@
                         <div sec:authorize="hasAuthority('CREATE_USER_PERM')" class="row"></div>
 
                         <div id="view-staff-tab">
-                            <table id="table-csis" class="responsive-table highlight z-depth-1">
+                            <table id="userTable" class="z-depth-1 display table-csis">
                                 <thead style="background-color: rgba(234,233,233,0.5);">
                                     <tr class="tr-csis">
-                                        <th class="th-csis">Full Name</th>
-                                        <th class="th-csis">Contact No.</th>
-                                        <th class="th-csis">Email</th>
-                                        <th class="th-csis">Status</th>
-                                        <th class="th-csis">Role</th>
-                                        <th class="th-csis"></th>
+                                        <th class="dt-head-left th-csis">Full Name</th>
+                                        <th class="dt-head-left th-csis">Contact No.</th>
+                                        <th class="dt-head-left th-csis">Email</th>
+                                        <th class="dt-head-left th-csis">Status</th>
+                                        <th class="dt-head-left th-csis">Role</th>
+                                        <th class="dt-head-left th-csis" data-dt-order="disable"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="user : ${user}"> <!--th:if="${user.enabled}">-->
-                                        <td th:text="${user.getFullName()}">z</td>
-                                        <td th:text="${user.contactNo}">z</td>
-                                        <td th:text="${user.email}">z</td>
-                                        <td>
+                                    <tr class="tr-csis-body" th:each="user : ${user}"> <!--th:if="${user.enabled}">-->
+                                        <td class="dt-body-left td-csis" th:text="${user.getFullName()}">z</td>
+                                        <td class="dt-body-left td-csis" th:text="${user.contactNo}">z</td>
+                                        <td class="dt-body-left td-csis" th:text="${user.email}">z</td>
+                                        <td class="dt-body-left td-csis">
                                             <p th:if="${user.enabled == true}"> Enabled </p>
                                             <p th:unless="${user.enabled}"> Disabled </p>
                                         </td>
-                                        <td th:each="userRole : ${user.roles}" th:text="${userRole.getName()}"> </td>
+                                        <td class="dt-body-left td-csis" th:each="userRole : ${user.roles}" th:text="${userRole.getName()}"> </td>
 <!--                                            <td th:text="${user.roles}">z</td>-->
 
-                                        <td th:value="${user.id}">
-                                            <a sec:authorize="hasAuthority('READ_USER_PERM')" class="waves-effect waves-light btn-small" th:href="@{'/employee/' + ${user.id}}">
-                                                View
-                                            </a>
-                                            <a sec:authorize="hasAuthority('UPDATE_USER_PERM')" class="waves-effect waves-light btn-small blue darken-1" th:href="@{/employee/edit(id=${user.id})}">
-                                                Update
-                                            </a>
-                                            <a sec:authorize="hasAuthority('DELETE_USER_PERM')" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/employee/delete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                                Delete
-                                            </a>
+                                        <td class="dt-body-left td-csis" th:value="${user.id}">
+                                            <div class="right">
+                                                <a sec:authorize="hasAuthority('READ_USER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/employee/' + ${user.id}}">
+                                                    View
+                                                </a>
+                                                <a sec:authorize="hasAuthority('UPDATE_USER_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/employee/edit(id=${user.id})}">
+                                                    Update
+                                                </a>
+                                                <a sec:authorize="hasAuthority('DELETE_USER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/employee/delete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                                    Delete
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -213,8 +218,10 @@
 
                 $('.sidenav').sidenav();
                 $('.tabs').tabs();
-                $('select').formSelect();
                 $('.modal').modal();
+                $('#userTable').DataTable();
+                $('select').formSelect();
+
 
                 $("#registerForm").submit(function(event) {
                     event.preventDefault();
