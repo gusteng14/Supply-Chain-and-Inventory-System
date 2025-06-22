@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Requisition Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap&family=Mansalva&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container-pos">
+        <div class="row">
+            <div class="col l9">
+                <div class="row">
+                    <div class="col l12">
+                        <th:block  th:each="category : ${category}">
+                            <button style="border-radius: 12px; margin-bottom: 10px;" type="button" class="btn white black-text filter" th:text="${category.name}"> </button>
+                        </th:block>
+                    </div>
+                </div>
+                <div style="margin-right: -75px;"class="row">
+                    <div class="col l3" th:each="product : ${product}">
+                        <th:block th:each="ctg : ${product.category}">
+
+                        <div th:id="'p' + ${product.id}" style="border-radius:15px;" th:attr="data-category=${ctg.name}" class="card small hoverable add-order">
+                            <p hidden="hidden" name="productId" th:text="${product.id}"></p>
+                            <div style="border-top-left-radius:15px; border-top-right-radius: 15px;" class="card-image">
+                                <img th:src="@{/{productId}/product_image(productId=${product.id})}">
+                            </div>
+                            <div class="card-content">
+                                <p name="productName" class="bold" th:text="${product.name}"></p>
+                                <p th:text="${product.description}"></p>
+                            </div>
+                            <div style="border-bottom-left-radius:15px; border-bottom-right-radius: 15px;" class="card-action">
+                                <span>&#8369;</span>
+                                <span name="productPrice" th:text="${product.cost}"></span>
+                            </div>
+                        </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+
+            <form class="col l12"  id="registerForm" action="#" th:action="@{/pos}" method="post">
+                <div style="width: 320px; float: right;" class="col l3 pos-order">
+                    <div style="border-top-right-radius: 10px; border-top-left-radius: 10px;" class="row">
+                        <div style="border-bottom: 1px solid black; padding: 12px; background-color: #e5e5e5; border-top-right-radius: 10px; border-top-left-radius: 10px;" class="col l12">
+                            <span style="font-size: 1.64rem; line-height: 40px; ">Order List</span>
+                            <div style="padding-top: 8px;" class="right">
+                                <span style="background-color: #e5e5e5; border-radius: 5px; padding: 4px;" >#FFE@!SE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 style="margin-bottom: 0px;">Order Details</h6>
+                    <div style="height: 400px;" id="order-list" class="order-list">
+                        <div class="emptyorderimg">
+                            <img class="emptyorder" src="/images/emptyorder.jpg">
+                            <h1 style="font-size: 25px; margin: 0px; justify-self: center;" class="mansalva-regular">Waiting for orders...</h1>
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top: 15px;" class="divider"></div>
+                    <h6>Payment Summary</h6>
+                    <div class="payment">
+                        <span class="payment-dtl">Subtotal</span>
+                        <div class="right">
+                            <span id="subtotal">P0.00</span>
+                        </div>
+                    </div>
+    <!--                <div class="payment">-->
+    <!--                    <span class="payment-dtl">Etc</span>-->
+    <!--                    <div class="right">-->
+    <!--                        <span>P0.00</span>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+                    <div style="margin-top: 15px; margin-bottom: 10px;" class="divider"></div>
+                    <div class="totalPayment">
+                        <span  class="payment-dtl">Total</span>
+                        <div class="right">
+                            <span id="total">P0.00</span>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <button class="btn submit-order">
+                            <span style="position: relative; top: 4px;"><i class="material-icons-round">shopping_cart</i></span>
+                            <span style="font-weight: 550">Submit Order</span>
+
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    var collapsibleElem = document.querySelector('.collapsible');
+    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
+
+
+
+    $(document).ready(function() {
+        $('.sidenav').sidenav();
+        $('.modal').modal();
+
+        var subtotal = 0;
+        var etc = 0;
+        var total = 0;
+        var selected = 0;
+
+        var PHP = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP',
+        });
+
+        $(document).on('click', '.add-order', function() {
+            total = 0;
+            subtotal = 0;
+            var productId = $(this).children('p[name^="productId"]').text();
+            var productImg = "/" + productId + "/product_image";
+            var productName = $(this).children('.card-content').children('p[name^="productName"]').text();
+            var productPrice = $(this).children('.card-action').children('span[name^="productPrice"]').text();
+            console.log('name: ' + productName, 'price: ' + productPrice);
+
+            if(!$(this).hasClass('selected')) {
+                selected++;
+                $(this).addClass('selected');
+                $('#order-list').append('<div class="row p'+ productId + '">'
+                + '<div style="margin: 0px; padding: 0px;" class=row><div style="float: right;" class=col l12>'
+                + '<span><i class="material-icons-round delete-order">cancel</i><p class="hiddenId" hidden="hidden">' + productId + '</p></span></div></div>'
+                + '<div class="col l3" style="width: fit-content; height: fit-content;">'
+                + '<img class="productImg" src="' + productImg + '"></div>'
+                + '<div class="col l5 nameprice">'
+                + '<span name="itemName">' + productName + '</span><br><span style="color: gray;">P</span><span class="listPrice" style="color: gray;">' + productPrice + '</span></div>'
+                + '<input hidden="hidden" name="item" value="' + productName + '">'
+                + '<div class="col l4 listPriceTotalCol">'
+                + '<div class="rightSpan" style="float: right;"><span>&#8369;</span><span class="listPriceTotal" style="float: right;">' + productPrice + '</span></div><br>'
+                + '<input hidden="hidden" name="lptotal" value="' + productPrice + '">'
+                + '<div style="float: right;">'
+                + '<button type="button" class="reduce-order-button-list">-</button>'
+                + '<span class="orderQty">1</span>'
+                + '<input hidden="hidden" name="qty" value="1">'
+                + '<button type="button" class="add-order-button-list teal lighten-3">+</button>'
+                + '</div></div></div>');
+
+                $('.listPriceTotal').each(function() {
+                    subtotal += parseFloat($(this).text());
+                })
+                $('#subtotal').text(PHP.format(subtotal));
+
+                $('.listPriceTotal').each(function() {
+                    total += parseFloat($(this).text());
+                })
+                $('#total').text(PHP.format(total));
+            } else {
+                selected--;
+                $(this).removeClass('selected');
+
+                let val = parseFloat($('.p' + productId).children('.listPriceTotalCol').children('.rightSpan').children('.listPriceTotal').text());
+                $('.listPriceTotal').each(function() {
+                    subtotal += parseFloat($(this).text());
+                })
+                $('#subtotal').text(PHP.format(subtotal));
+
+                $('.listPriceTotal').each(function() {
+                    total += parseFloat($(this).text());
+                })
+                console.log("Total: " + total, "Val: " + val);
+                total -= val;
+                subtotal -= val;
+                $('#total').text(PHP.format(total));
+                $('#subtotal').text(PHP.format(subtotal));
+
+                $('.p' + productId).remove();
+            }
+
+            if(selected > 0) {
+                $('.emptyorderimg').attr('hidden', true);
+            } else {
+                $('.emptyorderimg').attr('hidden', false);
+
+            }
+        });
+
+        $(document).on('click', '.add-order-button-list', function() {
+            let listPrice = parseFloat($(this).parent().parent().siblings('.nameprice').children('.listPrice').text());
+            let orderQty = parseFloat($(this).siblings('.orderQty').text());
+            total = 0;
+            subtotal = 0;
+
+            orderQty++;
+            $(this).siblings('.orderQty').text(orderQty);
+            $(this).siblings('input[name^="qty"]').val(orderQty);
+
+            let totalPerProduct = listPrice * orderQty;
+            $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
+
+            $('.listPriceTotal').each(function() {
+                subtotal += parseFloat($(this).text());
+            })
+            $('#subtotal').text(PHP.format(subtotal));
+
+            $('.listPriceTotal').each(function() {
+                total += parseFloat($(this).text());
+            })
+            $('#total').text(PHP.format(total));
+
+        });
+
+        $(document).on('click', '.reduce-order-button-list', function() {
+            let listPrice = parseFloat($(this).parent().parent().siblings('.nameprice').children('.listPrice').text());
+            let orderQty = parseInt($(this).siblings('.orderQty').text());
+            total = 0;
+            subtotal = 0;
+
+            if(orderQty >= 1) {
+                    orderQty--;
+                    $(this).siblings('.orderQty').text(orderQty);
+                    $(this).siblings('input[name^="qty"]').val(orderQty);
+            }
+
+            let totalPerProduct = listPrice * orderQty;
+            $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
+
+            $('.listPriceTotal').each(function() {
+                subtotal += parseFloat($(this).text());
+            })
+            $('#subtotal').text(PHP.format(subtotal));
+
+            $('.listPriceTotal').each(function() {
+                total += parseFloat($(this).text());
+            })
+            $('#total').text(PHP.format(total));
+        });
+
+        $(document).on('click', '.delete-order', function() {
+            let productId = $(this).siblings('.hiddenId').text();
+            $(this).parent().parent().parent().parent().remove();
+            $('#p' + productId).removeClass('selected');
+            let val = parseFloat($(this).parent().parent().parent().siblings('.listPriceTotalCol').children('.rightSpan').children('.listPriceTotal').text());
+            total -= val;
+            subtotal -=val;
+            $('#total').text(PHP.format(total));
+            $('#subtotal').text(PHP.format(subtotal));
+        });
+
+        var filterArray = [];
+        var hasSelected = 0;
+        $(document).on('click', '.filter', function() {
+            let selectedFilter = $(this).text();
+
+            if(!$(this).hasClass('selectedFilter')) {
+                hasSelected++;
+                $(this).addClass('selectedFilter');
+                filterArray.push(selectedFilter);
+            } else {
+                hasSelected--;
+                $(this).removeClass('selectedFilter');
+                let indexToRemove = filterArray.indexOf(selectedFilter)
+                filterArray.splice(indexToRemove);
+            }
+
+            $('.add-order').parent().hide(200);
+
+            for(let i = 0; i < filterArray.length; i++) {
+                $('.add-order[data-category="' + filterArray[i] + '"').parent().show(100);
+            }
+
+            if (hasSelected <= 0) {
+                $('.add-order').parent().show(100);
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>

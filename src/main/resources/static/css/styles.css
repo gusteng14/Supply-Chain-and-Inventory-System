@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #f3f3f3;
     color: black;
     font-family: "Poppins", sans-serif;
 }
@@ -27,7 +27,7 @@ a {
 }
 
 .tabs {
-    background-color: #ffffff;
+    background-color: #f3f3f3;
 }
 
 .tabs .indicator {
@@ -115,13 +115,27 @@ a {
     padding-bottom: 50px;
     padding-left: 320px;
     padding-right: 50px;
-    background-color: #ffffff;
+    background-color: #f3f3f3;
     font-family: "Archivo Narrow", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 /*    overflow-y: auto;*/
 /*    color: black;*/
+}
+
+.main-container-pos {
+    padding-top: 30px;
+    padding-bottom: 0;
+    padding-left: 300px;
+    padding-right: 35px;
+    background-color: #f3f3f3;
+    font-family: "Archivo Narrow", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    /*    overflow-y: auto;*/
+    /*    color: black;*/
 }
 
 
@@ -364,7 +378,7 @@ th {
 
 [aria-label="pagination"] {
     color: black;
-    background-color: white;
+    background-color: #f3f3f3;
     box-shadow: none;
 }
 
@@ -411,8 +425,142 @@ table.highlight>tbody>.rejected:hover {
 
 .pressed:focus {
     background-color: #6e6e6e;
+}
+
+.pos-order {
+    background-color: white;
+    border-radius: 20px;
+    height: 760px;
+    position: fixed;
+    right: 35px !important;
+    top: 100px;
+    bottom: 30px;
 
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.card .card-content {
+    padding: 15px;
+    border-radius: 0 0 2px 2px;
+}
+
+.card .card-action {
+    background-color: inherit;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    position: relative;
+    padding: 15px;
+}
+
+.add-order-button {
+    border-radius: 50%;
+    border: none;
+    width: 22px;
+    height: 22px;
+    padding: 0px;
+    transition: transform .2s;
+}
+
+.add-order-button:hover {
+    transform: scale(1.4);
+}
+
+.reduce-order-button {
+    border-radius: 50%;
+    border: none;
+    width: 22px;
+    height: 22px;
+    padding: 0px;
+    transition: transform .2s;
+    background-color: #dddddd;
+}
+
+.reduce-order-button:hover {
+    transform: scale(1.4);
+}
+
+.add-order-button-list {
+    border-radius: 50%;
+    border: none;
+    width: 22px;
+    height: 22px;
+    padding: 0px;
+    transition: transform .2s;
+}
+
+.add-order-button-list:hover {
+    transform: scale(1.4);
+}
+
+.reduce-order-button-list {
+    border-radius: 50%;
+    border: none;
+    width: 22px;
+    height: 22px;
+    padding: 0px;
+    transition: transform .2s;
+    background-color: #dddddd;
+}
+
+.reduce-order-button-list:hover {
+    transform: scale(1.4);
+}
+
+.selected {
+    border: 3px solid #01cccc;
+}
+
+.order-dtl {
+    padding-left: 10px;
+    font-size: 18px;
+}
+
+.payment-dtl {
+    padding-left: 10px;
+}
+
+.orderQty {
+    padding: 0 5px;
+}
+
+.delete-order {
+    color: #dddddd;
+    font-size: 15px;
+}
+
+.delete-order:hover {
+    color: red;
+    transform: scale(1.3);
+    cursor: pointer;
+}
+
+.order-list{
+    max-height: 500px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.emptyorder {
+    height: 300px;
+    width: auto;
+    filter: grayscale(100%);
+}
+
+.selectedFilter {
+    background-color: #26a69a !important;
+    color: white !important;
+}
+
+.submit-order {
+    border-radius: 10px;
+    position: absolute;
+    width: 300px;
+    height: 60px;
+    bottom: 10px;
+}
+
 
 /*---------- FONTS ----------*/
 
@@ -451,6 +599,11 @@ table.highlight>tbody>.rejected:hover {
     "wdth" 100;
 }
 
+.mansalva-regular {
+    font-family: "Mansalva", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
 
 
 /*----------MEDIUA QUERIES (RESPONSIVE WEB PAGE)----------*/

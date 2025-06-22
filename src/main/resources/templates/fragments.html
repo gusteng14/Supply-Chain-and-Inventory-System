@@ -65,9 +65,12 @@
                         </a>
                     </div>
                 </li>
-                <li><a class="subheader"><i>Inventory</i></a></li>
                 <li>
                     <a style="color: white;" th:href="@{/dashboard}"> <i style="color: white;" class="material-icons-round">dashboard</i> Dashboard </a>
+                </li>
+                <li><a class="subheader"><i>Inventory</i></a></li>
+                <li>
+                    <a style="color: white;" th:href="@{/pos}"> <i style="color: white;" class="material-icons-round">store_mall_directory</i> Point of Sale </a>
                 </li>
                 <li>
                     <a style="color: white;" th:href="@{/product}"><i style="color: white;" class="material-icons-round">inventory_2</i> Products </a>
@@ -112,9 +115,9 @@
                 <li sec:authorize="hasAuthority('RPRT_PERM')">
                     <a style="color: white;" href="#"> Reports </a>
                 </li>
-                <li>
-                    <a style="color: white;" href="#"> Settings </a>
-                </li>
+<!--                <li>-->
+<!--                    <a style="color: white;" href="#"> Settings </a>-->
+<!--                </li>-->
             </ul>
 
 

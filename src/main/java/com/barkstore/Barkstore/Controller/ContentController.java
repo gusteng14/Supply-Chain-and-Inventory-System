@@ -6,6 +6,10 @@ import com.barkstore.Barkstore.Supplier.SupplierRequest;
 import com.barkstore.Barkstore.Supplier.SupplierService;
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
+import com.barkstore.Barkstore.pos.OrderDetailsRepository;
+import com.barkstore.Barkstore.pos.OrderHeader;
+import com.barkstore.Barkstore.pos.OrderHeaderRepository;
+import com.barkstore.Barkstore.pos.POSService;
 import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
@@ -66,6 +70,12 @@ public class ContentController {
     private SupplierRepository supplierRepository;
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private OrderHeaderRepository orderHeaderRepository;
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    private POSService posService;
 
     @GetMapping("/login")
     public String login() {
@@ -401,6 +411,37 @@ public class ContentController {
         supplyChainService.saveDetails(requestHeader, list1, list2, list3);
 
         return "redirect:/request";
+    }
+
+    @GetMapping("/pos")
+    public String getPOS(Model model) {
+        List<Product> products = productRepo.findAll();
+        List<Category> categories = categoryRepo.findAll();
+        model.addAttribute("product", products);
+        model.addAttribute("category", categories);
+
+        return "pos";
+    }
+
+    @PostMapping("/pos")
+    public String submitOrder(@RequestParam("item") String item, @RequestParam("qty") String qty, @RequestParam("lptotal") String listPriceTotal) {
+        System.out.println("Item: " + item);
+        System.out.println("Qty: " + qty);
+        System.out.println("Totals: " + listPriceTotal);
+
+        String[] stringArray1 = item.split(",");
+        List<String> list1 = Arrays.asList(stringArray1);
+        String[] stringArray2 = qty.split(",");
+        List<String> list2 = Arrays.asList(stringArray2);
+        String[] stringArray3 = listPriceTotal.split(",");
+        List<String> list3 = Arrays.asList(stringArray3);
+
+        OrderHeader header = posService.saveHeader();
+        posService.saveDetails(header, list1, list2, list3);
+
+
+
+        return "redirect:/pos";
     }
 
 }

@@ -43,8 +43,8 @@
                 <div class="row">
                     <div class="col l12">
                         <form class="col l12"  id="registerForm" action="#" th:action="@{/request}" method="post">
+                            <h5>Request Header</h5>
                             <div class="row form-setup">
-                                <h5>Request Header</h5>
                                 <div class="input-field col s6">
                                     <input class="archivo-narrow-a" style="color: black;" th:field="${headerDTO.requestName}"  id="name" type="text" required>
                                     <label for="name">Request Title</label>
@@ -54,9 +54,8 @@
                                     <label for="description">Request Description</label>
                                 </div>
                             </div>
+                            <h5>Request Details</h5>
                             <div class="row form-setup">
-                                <h5>Request Details</h5>
-
                                 <button style="margin-bottom: 5px;" type="button" id="add" name="addRow" class="btn right"><i class="material-icons-round left">add</i>Add Request</button>
 
                                 <div class="col l12">

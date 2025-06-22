@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 public class Product implements Serializable {
-
-
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
