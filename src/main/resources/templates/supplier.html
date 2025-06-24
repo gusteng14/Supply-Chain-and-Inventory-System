@@ -73,7 +73,7 @@
                                         <a sec:authorize="hasAuthority('READ_SUPPLIER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/supplier/' + ${supplier.id}}">
                                             View
                                         </a>
-                                        <a sec:authorize="hasAuthority('UPDATE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/supplier/edit(id=${supplier.id})}">
+                                        <a sec:authorize="hasAuthority('UPDATE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/supplier/edit(id=${supplier.id})}">
                                             Update
                                         </a>
                                         <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/supplier/delete/' + ${supplier.id}}" onclick="return confirm('Are you sure you want to delete?')">
@@ -150,6 +150,14 @@
     </main>
 </div>
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -165,7 +173,11 @@
         $('.tabs').tabs();
         $('.modal').modal();
         $('#supplierTable').DataTable({
-
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
         });
         $('select').formSelect();
 

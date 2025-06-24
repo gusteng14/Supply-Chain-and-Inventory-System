@@ -23,6 +23,7 @@ public class Product implements Serializable {
     private Integer itemNo;
     private String name;
     private String description;
+    private int totalQuantitySold = 0;
 
     @CreationTimestamp
     private LocalDateTime createdOn;

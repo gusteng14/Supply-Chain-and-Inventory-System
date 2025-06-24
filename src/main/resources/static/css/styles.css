@@ -70,7 +70,7 @@ a {
 }
 
 .crud {
-    width: 75px;
+    width: 85px;
 }
 
 .bg {
@@ -562,6 +562,8 @@ table.highlight>tbody>.rejected:hover {
 }
 
 
+
+
 /*---------- FONTS ----------*/
 
 
@@ -604,6 +606,19 @@ table.highlight>tbody>.rejected:hover {
     font-weight: 400;
     font-style: normal;
 }
+
+.card-numbers {
+    font-size: 30px;
+    padding-right: 10px;
+}
+
+.card-numbers-icons {
+    position: relative;
+    top: 4px;
+    padding-right: 10px;
+}
+
+
 
 
 /*----------MEDIUA QUERIES (RESPONSIVE WEB PAGE)----------*/

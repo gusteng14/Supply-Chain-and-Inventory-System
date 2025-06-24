@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -23,11 +24,16 @@ public class OrderHeader {
 
     private String orderNo;
 
+    private float total;
+
     @CreationTimestamp
-    private LocalDate createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    private LocalDate lastUpdatedOn;
+    private LocalDateTime lastUpdatedOn;
+
+    @CreationTimestamp
+    private LocalDate createdDate;
 
     @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails;

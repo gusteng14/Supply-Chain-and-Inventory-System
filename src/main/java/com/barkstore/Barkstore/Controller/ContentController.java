@@ -20,6 +20,7 @@ import com.barkstore.Barkstore.requisition.RequestHeader;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -93,7 +96,38 @@ public class ContentController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() throws FileNotFoundException {
+    public String dashboard(Model model) throws FileNotFoundException {
+        float dailySale = posService.dailySale();
+        System.out.println("Daily sale: "+ dailySale);
+        float totalSales = posService.totalSales();
+        String formattedDailySale = String.format("%.2f", dailySale);
+        String formattedTotalSale = String.format("%.2f", totalSales);
+
+        long noOfSuppliers = supplierRepository.count();
+        long noOfProducts = productRepo.count();
+        long noOfLowStockProducts = productRepo.countByStockLessThan(100);
+        long totalOrders = orderHeaderRepository.count();
+
+        String totalSalesWithDate = String.valueOf(String.format("%.02f", posService.totalSalesWithDate(LocalDateTime.now())));
+        String averageSalesWithDate = String.valueOf(String.format("%.02f", posService.averageSalesWithDate(LocalDateTime.now())));
+
+
+        List<Product> top5Products = productService.fiveBestSeller();
+        List<Product> productsToday = productService.newProductsForTheDay();
+        List<Product> productsOfMonth = productService.newProductsForTheMonth();
+
+        model.addAttribute("formattedSale", formattedDailySale);
+        model.addAttribute("totalSales", formattedTotalSale);
+        model.addAttribute("noOfSuppliers", noOfSuppliers);
+        model.addAttribute("noOfProducts", noOfProducts);
+        model.addAttribute("noOfLowStockProducts", noOfLowStockProducts);
+        model.addAttribute("top5Products", top5Products);
+        model.addAttribute("productsToday", productsToday);
+        model.addAttribute("productsOfMonth", productsOfMonth);
+        model.addAttribute("totalOrders", totalOrders);
+        model.addAttribute("totalSalesWithDate", totalSalesWithDate);
+        model.addAttribute("averageSalesWithDate", averageSalesWithDate);
+
         return "dashboard";
     }
 
@@ -141,6 +175,15 @@ public class ContentController {
         System.out.println(file.getOriginalFilename());
 
         productService.createProductLob(productRequest, file);
+
+        return "redirect:/product";
+    }
+
+    @GetMapping("/product/restock/{id}/{qty}")
+    public String restockProduct(@PathVariable("id") Long id, @PathVariable("qty") int qty) {
+        Product product = productRepo.findById(id).get();
+        product.setStock(product.getStock() + qty);
+        productRepo.save(product);
 
         return "redirect:/product";
     }
@@ -424,7 +467,8 @@ public class ContentController {
     }
 
     @PostMapping("/pos")
-    public String submitOrder(@RequestParam("item") String item, @RequestParam("qty") String qty, @RequestParam("lptotal") String listPriceTotal) {
+    public String submitOrder(@RequestParam("item") String item, @RequestParam("qty") String qty,
+                              @RequestParam("lptotal") String listPriceTotal, @RequestParam("total") String total) {
         System.out.println("Item: " + item);
         System.out.println("Qty: " + qty);
         System.out.println("Totals: " + listPriceTotal);
@@ -436,7 +480,7 @@ public class ContentController {
         String[] stringArray3 = listPriceTotal.split(",");
         List<String> list3 = Arrays.asList(stringArray3);
 
-        OrderHeader header = posService.saveHeader();
+        OrderHeader header = posService.saveHeader(total);
         posService.saveDetails(header, list1, list2, list3);
 
 

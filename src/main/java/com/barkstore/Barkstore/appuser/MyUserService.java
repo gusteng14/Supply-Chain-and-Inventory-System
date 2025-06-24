@@ -89,7 +89,7 @@ public class MyUserService implements UserDetailsService {
         user.setVerificationCode(token);
         userRepository.save(user);
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = "www.websike.xyz:8080/api/v1/registration/confirm?token=" + token;
 
         emailSender.send(user.getEmail(), buildEmail(user.getFirstName(), link), "Confirm your email");
         return null;

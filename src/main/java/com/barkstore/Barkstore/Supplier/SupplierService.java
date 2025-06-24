@@ -32,4 +32,5 @@ public class SupplierService {
         supplier.setAgentContactNo(supplierRequest.getAgentContactNo());
         supplierRepository.save(supplier);
     }
+
 }

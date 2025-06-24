@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -164,6 +166,21 @@ public class ProductService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
+    }
+
+    public List<Product> fiveBestSeller() {
+        List<Product> products = repo.findTop5ByOrderByTotalQuantitySoldDesc();
+        return products;
+    }
+
+    public List<Product> newProductsForTheMonth() {
+        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+        return products;
+    }
+
+    public List<Product> newProductsForTheDay() {
+        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now());
+        return products;
     }
 
 }

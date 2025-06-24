@@ -5,12 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 @Transactional
 public interface ProductRepo extends JpaRepository<Product, Long> {
     Optional<Product> findByName(String name);
-
+    long countByStockLessThan(int qty);
+    List<Product> findTop5ByOrderByTotalQuantitySoldDesc();
+    List<Product> findByCreatedOnBetween(LocalDateTime startDate, LocalDateTime endDate);
 
 }

@@ -64,7 +64,7 @@
                                             <a sec:authorize="hasAuthority('READ_CATEGORY_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/category/' + ${category.id}}">
                                                 View
                                             </a>
-                                            <a sec:authorize="hasAuthority('UPDATE_CATEGORY_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/category/edit(id=${category.id})}">
+                                            <a sec:authorize="hasAuthority('UPDATE_CATEGORY_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/category/edit(id=${category.id})}">
                                                 Update
                                             </a>
                                             <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/category/delete/' + ${category.id}}" onclick="return confirm('Are you sure you want to delete?')">
@@ -100,8 +100,16 @@
         </div>
     </main>
 </div>
-<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
 
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
 <script>
 
     // ---------- TABS DESIGN ----------
@@ -134,7 +142,11 @@
     $(document).ready(function() {
         $('.tabs').tabs();
         $('#categoryTable').DataTable({
-
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
         });
         $('select').formSelect();
 

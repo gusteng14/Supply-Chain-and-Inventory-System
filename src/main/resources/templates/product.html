@@ -51,7 +51,7 @@
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
                                 <!--                                <th>Item No</th>-->
-                                <th class="dt-head-left th-csis">Item Photo</th>
+                                <th class="dt-head-left th-csis" data-dt-order="disable">Item Photo</th>
                                 <th class="dt-head-left th-csis">Item Name</th>
                                 <th class="dt-head-left th-csis">Description</th>
                                 <th class="dt-head-left th-csis">Category</th>
@@ -62,14 +62,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-csis-body" th:each="product : ${product}">
+                            <tr class="tr-csis-body"  th:each="product : ${product}" th:classappend="${product.stock < 100} ? 'red lighten-4' : ''">
                                 <td class="dt-body-left td-csis">
                                     <a class="modal-trigger" th:attr="data-target=|modal-${product.id}|"><img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}"></a>
-                                    <div th:id="|modal-${product.id}|" class="modal">
+                                    <div style="border-radius: 10px; background-color: rgb(255 255 255 / 79%);" th:id="|modal-${product.id}|" class="modal">
                                         <div class="modal-content">
                                             <img class="center" id="modal-image" th:src="@{/{productId}/product_image(productId=${product.id})}">
                                         </div>
-                                        <div class="modal-footer">
+                                        <div class="modal-footer teal lighten-2">
                                             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
                                         </div>
                                     </div>
@@ -94,15 +94,36 @@
                                 <td class="dt-body-left td-csis" th:text="'P' + ${product.cost}">z</td>
                                 <td class="dt-body-left td-csis " th:value="${product.id}">
                                     <div class="right">
+                                        <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" th:attr="data-target=|restockmodal-${product.id}|" class="waves-effect waves-light btn-small modal-trigger crud"  href="#modal1">
+                                            Restock
+                                        </a>
                                         <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/product/' + ${product.id}}">
                                             View
                                         </a>
-                                        <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/product/edit(id=${product.id})}">
+                                        <a sec:authorize="hasAuthority('UPDATE_PRODUCT_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/product/edit(id=${product.id})}">
                                             Update
                                         </a>
                                         <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/product/delete/' + ${product.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                             Delete
                                         </a>
+                                    </div>
+                                    <div style="border-radius: 10px; width: 500px;" th:id="|restockmodal-${product.id}|" class="modal">
+                                        <div class="modal-content">
+                                            <h4 th:text="'Restock item: ' + ${product.name}"></h4>
+                                            <div class="row">
+                                                <div class="col l2"></div>
+                                                <div class="input-field col l8">
+                                                    <i class="material-icons-round prefix">add_circle</i>
+                                                    <input th:attr="data-id=${product.id}" class="rQty" th:id="${#ids.seq('rQty')}" type="number" min="0" name="rQty">
+                                                    <label>Restock Quantity</label>
+                                                </div>
+                                                <div class="col l2"></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer teal">
+                                            <a id="restockBtn" href="" class="modal-close waves-effect waves-green btn-flat" >Confirm</a>
+                                        </div>
                                     </div>
                                 </td>
 
@@ -180,21 +201,19 @@
 </div>
 
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+
 <script>
 
     const tabs = document.querySelectorAll('.tab_btn');
     const all_content = document.querySelectorAll('.content');
-
-//    var productImg = document.getElementById("test");
-//    var modal = document.getElementById("modal");
-//    var modalImage = document.getElementById("modal-image");
-//
-//    productImg.onclick = function (e) {
-//        var src = e.srcElement.src;
-//        alert(src);
-//        modalImage.src = src;
-//    };
-
 
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
@@ -208,7 +227,11 @@
         $('.sidenav').sidenav();
         $('.tabs').tabs();
         $('#productsTable').DataTable({
-
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
         });
         $('select').formSelect();
         $('.modal').modal();
@@ -222,13 +245,20 @@
             }
             reader.readAsDataURL(file);
         })
+
+        $(document).on('change', '.rQty', function() {
+            let qty = $(this).val();
+            let id = $(this).attr('data-id');
+
+            if (qty >= 0) {
+                $(this).parent().parent().parent().siblings('.modal-footer').children('#restockBtn').attr('href', 'product/restock/' + id + '/' + qty);
+            } else {
+                $('#restockBtn').on('click', function() {
+                    alert('Negative values are not allowed.');
+                });
+            }
+        });
     });
-
-    function showThumbnail(fileInput) {
-
-
-
-    }
 
 //    $(document).ready(function() {
 //        $("#registerForm").submit(function(event) {

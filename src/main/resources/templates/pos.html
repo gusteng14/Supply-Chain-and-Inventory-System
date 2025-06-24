@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div style="margin-right: -75px;"class="row">
-                    <div class="col l3" th:each="product : ${product}">
+                    <div class="col l3" th:each="product : ${product}" th:if="${product.stock} > 0">
                         <th:block th:each="ctg : ${product.category}">
 
                         <div th:id="'p' + ${product.id}" style="border-radius:15px;" th:attr="data-category=${ctg.name}" class="card small hoverable add-order">
@@ -58,6 +58,10 @@
                             <div style="border-bottom-left-radius:15px; border-bottom-right-radius: 15px;" class="card-action">
                                 <span>&#8369;</span>
                                 <span name="productPrice" th:text="${product.cost}"></span>
+                                <div class="right">
+                                    <span style="color: gray; font-style: italic;">Stock: </span>
+                                    <span class="stock" style="color: gray; font-style: italic;" th:text="${product.stock}">Stock: 999</span>
+                                </div>
                             </div>
                         </div>
                         </th:block>
@@ -70,9 +74,9 @@
                     <div style="border-top-right-radius: 10px; border-top-left-radius: 10px;" class="row">
                         <div style="border-bottom: 1px solid black; padding: 12px; background-color: #e5e5e5; border-top-right-radius: 10px; border-top-left-radius: 10px;" class="col l12">
                             <span style="font-size: 1.64rem; line-height: 40px; ">Order List</span>
-                            <div style="padding-top: 8px;" class="right">
-                                <span style="background-color: #e5e5e5; border-radius: 5px; padding: 4px;" >#FFE@!SE</span>
-                            </div>
+<!--                            <div style="padding-top: 8px;" class="right">-->
+<!--                                <span style="background-color: #e5e5e5; border-radius: 5px; padding: 4px;" >#FFE@!SE</span>-->
+<!--                            </div>-->
                         </div>
                     </div>
                     <h6 style="margin-bottom: 0px;">Order Details</h6>
@@ -104,6 +108,7 @@
                         <span  class="payment-dtl">Total</span>
                         <div class="right">
                             <span id="total">P0.00</span>
+                            <input hidden="hidden" name="total" value="0">
                         </div>
                     </div>
 
@@ -159,7 +164,7 @@
             if(!$(this).hasClass('selected')) {
                 selected++;
                 $(this).addClass('selected');
-                $('#order-list').append('<div class="row p'+ productId + '">'
+                $('#order-list').append('<div class="row p'+ productId + '" data-id="' + productId +'" >'
                 + '<div style="margin: 0px; padding: 0px;" class=row><div style="float: right;" class=col l12>'
                 + '<span><i class="material-icons-round delete-order">cancel</i><p class="hiddenId" hidden="hidden">' + productId + '</p></span></div></div>'
                 + '<div class="col l3" style="width: fit-content; height: fit-content;">'
@@ -186,6 +191,9 @@
                     total += parseFloat($(this).text());
                 })
                 $('#total').text(PHP.format(total));
+                $('#total').siblings('input[name^="total"]').val(total);
+
+
             } else {
                 selected--;
                 $(this).removeClass('selected');
@@ -204,6 +212,8 @@
                 subtotal -= val;
                 $('#total').text(PHP.format(total));
                 $('#subtotal').text(PHP.format(subtotal));
+                $('#total').siblings('input[name^="total"]').val(total);
+
 
                 $('.p' + productId).remove();
             }
@@ -217,28 +227,32 @@
         });
 
         $(document).on('click', '.add-order-button-list', function() {
+            let dataId = $(this).parent().parent().parent().attr('data-id');
+            let itemStock = parseInt($('#p'+dataId).children('.card-action').children('.right').children('.stock').text());
             let listPrice = parseFloat($(this).parent().parent().siblings('.nameprice').children('.listPrice').text());
             let orderQty = parseFloat($(this).siblings('.orderQty').text());
             total = 0;
             subtotal = 0;
+            if(orderQty < itemStock) {
+                orderQty++;
+                $(this).siblings('.orderQty').text(orderQty);
+                $(this).siblings('input[name^="qty"]').val(orderQty);
 
-            orderQty++;
-            $(this).siblings('.orderQty').text(orderQty);
-            $(this).siblings('input[name^="qty"]').val(orderQty);
 
-            let totalPerProduct = listPrice * orderQty;
-            $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
+                let totalPerProduct = listPrice * orderQty;
+                $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
 
-            $('.listPriceTotal').each(function() {
-                subtotal += parseFloat($(this).text());
-            })
-            $('#subtotal').text(PHP.format(subtotal));
+                $('.listPriceTotal').each(function() {
+                    subtotal += parseFloat($(this).text());
+                })
+                $('#subtotal').text(PHP.format(subtotal));
 
-            $('.listPriceTotal').each(function() {
-                total += parseFloat($(this).text());
-            })
-            $('#total').text(PHP.format(total));
-
+                $('.listPriceTotal').each(function() {
+                    total += parseFloat($(this).text());
+                })
+                $('#total').text(PHP.format(total));
+                $('#total').siblings('input[name^="total"]').val(total);
+            }
         });
 
         $(document).on('click', '.reduce-order-button-list', function() {
@@ -265,6 +279,8 @@
                 total += parseFloat($(this).text());
             })
             $('#total').text(PHP.format(total));
+            $('#total').siblings('input[name^="total"]').val(total);
+
         });
 
         $(document).on('click', '.delete-order', function() {
