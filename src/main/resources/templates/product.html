@@ -209,106 +209,21 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+<script type="text/javascript" th:src="@{js/product.js}"></script>
 
 <script>
-
-    const tabs = document.querySelectorAll('.tab_btn');
-    const all_content = document.querySelectorAll('.content');
-
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
     });
 
-    var collapsibleElem = document.querySelector('.collapsible');
-    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
     $(document).ready(function() {
         $('.sidenav').sidenav();
         $('.tabs').tabs();
-        $('#productsTable').DataTable({
-            layout: {
-                topStart: {
-                    buttons: ['csv', 'excel', 'pdf', 'print']
-                }
-            }
-        });
         $('select').formSelect();
         $('.modal').modal();
-        $('#image').on('change', function() {
-
-            //console.log(this.files);
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#thumbnail').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(file);
-        })
-
-        $(document).on('change', '.rQty', function() {
-            let qty = $(this).val();
-            let id = $(this).attr('data-id');
-
-            if (qty >= 0) {
-                $(this).parent().parent().parent().siblings('.modal-footer').children('#restockBtn').attr('href', 'product/restock/' + id + '/' + qty);
-            } else {
-                $('#restockBtn').on('click', function() {
-                    alert('Negative values are not allowed.');
-                });
-            }
-        });
-    });
-
-//    $(document).ready(function() {
-//        $("#registerForm").submit(function(event) {
-////            event.preventDefault();
-////            ajaxPost();
-//            refreshForm();
-//        });
-//
-//        function refreshForm() {
-//            $("#name").val("");
-//            $("#description").val("");
-//            $("#cost").val("");
-//        }
-//
-//        function ajaxPost() {
-//            var formData = {
-//                name : $("#name").val(),
-//                description : $("#description").val(),
-//                cost : $("#cost").val(),
-//            }
-//
-//            $.ajax({
-//                type: "POST",
-//                contentType : "application/json",
-//                url: "product/create",
-//                data: JSON.stringify(formData),
-//                dataType: 'text',
-//                success : function(data, textStatus, xhr) {
-//                    if (xhr.status == 200) {
-//                        M.toast({html: 'Item Added!!'});
-//                    } else {
-//                        M.toast({html: ' Something went wrong.'});
-//                    }
-//                },
-//                error: function(e) {
-//                    console.log(e)
-//
-//                }
-//            })
-//        }
-//
-//        //                function ajaxGet() {
-//        //                    $.ajax({
-//        //                        type: "GET",
-//        //                        url:
-//        //                    })
-//        //                }
-//
-//
-//    });
+        $('.collapsible').collapsible();
+    })
 </script>
 
 </body>

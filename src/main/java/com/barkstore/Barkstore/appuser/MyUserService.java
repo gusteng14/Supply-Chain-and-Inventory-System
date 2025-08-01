@@ -82,8 +82,6 @@ public class MyUserService implements UserDetailsService {
         Role roles = roleRepository.findByName(user.getRoleRequest()).get();
         user.setRoles(Collections.singleton(roles));
 
-
-
         String token = UUID.randomUUID().toString();
         System.out.println("Token: " + token);
         user.setVerificationCode(token);

@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.Set;
 
@@ -33,9 +34,17 @@ public class ItemType implements Serializable {
     @OneToMany(mappedBy="itemType")
     private Set<Product> products;
 
-    @CreationTimestamp
-    private Instant createdOn;
+//    @CreationTimestamp
+//    private Instant createdOn;
+//
+//    @UpdateTimestamp
+//    private Instant lastUpdatedOn;
 
-    @UpdateTimestamp
-    private Instant lastUpdatedOn;
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    private Date createdOn;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    private Date lastUpdatedOn;
 }

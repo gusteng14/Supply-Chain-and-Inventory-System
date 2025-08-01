@@ -237,9 +237,6 @@
         var instances = M.Sidenav.init(elems);
     });
 
-    var collapsibleElem = document.querySelector('.collapsible');
-    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
     $(document).ready(function() {
         $('.tabs').tabs();
         $('#authTable').DataTable({
@@ -257,72 +254,8 @@
             }
         });
         $('select').formSelect();
-
-
-
-
-        //        $("#registerForm").submit(function(event) {
-//            event.preventDefault();
-//            alert($("input[name='authority[]']:checked").val());
-////            $("input").attr("name").each(function() {
-////
-////            });
-//        });
-
+        $('.collapsible').collapsible();
     });
-    // ---------- ---------- ----------
-
-
-
-    //    $(document).ready(function() {
-    //        $("#registerForm").submit(function(event) {
-    ////            event.preventDefault();
-    ////            ajaxPost();
-    //            refreshForm();
-    //        });
-    //
-    //        function refreshForm() {
-    //            $("#name").val("");
-    //            $("#description").val("");
-    //            $("#cost").val("");
-    //        }
-    //
-    //        function ajaxPost() {
-    //            var formData = {
-    //                name : $("#name").val(),
-    //                description : $("#description").val(),
-    //                cost : $("#cost").val(),
-    //            }
-    //
-    //            $.ajax({
-    //                type: "POST",
-    //                contentType : "application/json",
-    //                url: "product/create",
-    //                data: JSON.stringify(formData),
-    //                dataType: 'text',
-    //                success : function(data, textStatus, xhr) {
-    //                    if (xhr.status == 200) {
-    //                        M.toast({html: 'Item Added!!'});
-    //                    } else {
-    //                        M.toast({html: ' Something went wrong.'});
-    //                    }
-    //                },
-    //                error: function(e) {
-    //                    console.log(e)
-    //
-    //                }
-    //            })
-    //        }
-    //
-    //        //                function ajaxGet() {
-    //        //                    $.ajax({
-    //        //                        type: "GET",
-    //        //                        url:
-    //        //                    })
-    //        //                }
-    //
-    //
-    //    });
 </script>
 
 </body>

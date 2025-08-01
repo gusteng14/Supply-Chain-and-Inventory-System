@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -173,15 +174,16 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> newProductsForTheMonth() {
-        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusMonths(1), LocalDateTime.now());
-        return products;
-    }
-
-    public List<Product> newProductsForTheDay() {
-        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now());
-        return products;
-    }
+//    public List<Product> newProductsForTheMonth() {
+//        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+//
+//        return products;
+//    }
+//
+//    public List<Product> newProductsForTheDay() {
+//        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now());
+//        return products;
+//    }
 
 }
 

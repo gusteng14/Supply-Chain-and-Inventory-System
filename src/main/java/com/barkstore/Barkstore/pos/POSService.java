@@ -8,8 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +31,7 @@ public class POSService {
 
     public OrderHeader saveHeader(String total) {
         OrderHeader header = new OrderHeader();
-        header.setOrderNo("ORD" + UUID.randomUUID().toString().substring(0, 5));
+        header.setOrderNo("O#" + UUID.randomUUID().toString().substring(0, 5));
         header.setTotal(Float.parseFloat(total));
         headerRepository.save(header);
 
@@ -50,15 +56,15 @@ public class POSService {
         }
     }
 
-    public float dailySale() {
-        List<OrderHeader> orders = headerRepository.findByCreatedDate(LocalDate.now());
-        float totalSaleForToday = 0;
+    public float dailySales() {
+        List<OrderHeader> ordersToday = headerRepository.findByCreatedOn(LocalDate.now());
+        float sales = 0;
 
-        for (OrderHeader order : orders) {
-            totalSaleForToday += order.getTotal();
+        for (OrderHeader ord : ordersToday) {
+            sales += ord.getTotal();
         }
 
-        return totalSaleForToday;
+        return sales;
     }
 
     public float totalSales() {
@@ -72,44 +78,25 @@ public class POSService {
         return totalSales;
     }
 
-    public long totalOrdersWithDate(LocalDateTime date) {
-        List<OrderHeader> orders = headerRepository.findByCreatedOn(date);
-        long totalOrders = 0;
+    public int totalOrders(String date) throws ParseException {
+        LocalDate localDate = LocalDate.parse(date);
+        System.out.println("Parsed: " + localDate);
+        List<OrderHeader> orders = headerRepository.findByCreatedOn(localDate);
+        int count = orders.size();
 
-        for (OrderHeader ord : orders) {
-            totalOrders ++;
-        }
-
-        return totalOrders;
+        return count;
     }
 
-    public float totalSalesWithDate(LocalDateTime date) {
-        List<OrderHeader> orders = headerRepository.findByCreatedOn(date);
-        float totalSales = 0;
-
-        for (OrderHeader ord : orders) {
-            totalSales += ord.getTotal();
-        }
-
-        return totalSales;
+    public List<OrderHeader> getOrdersByMonth(int year, int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate firstDayOfMonth = yearMonth.atDay(1);
+        LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
+        return headerRepository.findByCreatedOnBetween(firstDayOfMonth, lastDayOfMonth);
     }
 
-    public float averageSalesWithDate(LocalDateTime date) {
-        List<OrderHeader> orders = headerRepository.findByCreatedOn(date);
-        float averageSales = 0;
-        float totalSales = 0;
-        float orderCount = 0;
-
-        for (OrderHeader ord : orders) {
-            totalSales += ord.getTotal();
-            orderCount++;
-        }
-
-        averageSales = totalSales / orderCount;
-        System.out.println("Ave: " + averageSales);
-        return averageSales;
+    public List<OrderHeader> getOrdersByYear(int year) {
+        LocalDate firstDayOfYear = LocalDate.ofYearDay(year, 1);
+        LocalDate lastDayOfYear = LocalDate.ofYearDay(year, 365);
+        return headerRepository.findByCreatedOnBetween(firstDayOfYear, lastDayOfYear);
     }
-
-
-
 }

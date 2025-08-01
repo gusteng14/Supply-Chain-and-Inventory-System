@@ -61,10 +61,10 @@
                         <a href="#name"><span th:text="${#authentication.getPrincipal().getFullName()}" class="white-text name"></span></a>
                         <a href="#email">
                             <span th:text="${#authentication.principal.getRole()}"></span>
-
                         </a>
                     </div>
                 </li>
+                <div style="height: 650px; overflow: auto;">
                 <li>
                     <a style="color: white;" th:href="@{/dashboard}"> <i style="color: white;" class="material-icons-round">dashboard</i> Dashboard </a>
                 </li>
@@ -112,9 +112,13 @@
                 <li sec:authorize="hasAuthority('READ_SUPPLIER_PERM')">
                     <a style="color: white;" th:href="@{/supplier}"> Suppliers </a>
                 </li>
+                <li sec:authorize="hasAuthority('READ_SUPPLIER_PERM')">
+                    <a style="color: white;" th:href="@{/transactions}"> Transactions </a>
+                </li>
                 <li sec:authorize="hasAuthority('RPRT_PERM')">
                     <a style="color: white;" href="#"> Reports </a>
                 </li>
+                </div>
 <!--                <li>-->
 <!--                    <a style="color: white;" href="#"> Settings </a>-->
 <!--                </li>-->
@@ -126,16 +130,9 @@
         </aside>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems, {});
-    });
-
-     var collapsibleElem = document.querySelector('.collapsible');
-     var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
     $(document).ready(function () {
         $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
     });
 </script>
 </body>

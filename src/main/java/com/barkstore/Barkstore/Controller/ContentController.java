@@ -19,6 +19,7 @@ import com.barkstore.Barkstore.requisition.*;
 import com.barkstore.Barkstore.requisition.RequestHeader;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.repository.query.Param;
@@ -36,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -97,10 +99,8 @@ public class ContentController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) throws FileNotFoundException {
-        float dailySale = posService.dailySale();
-        System.out.println("Daily sale: "+ dailySale);
+
         float totalSales = posService.totalSales();
-        String formattedDailySale = String.format("%.2f", dailySale);
         String formattedTotalSale = String.format("%.2f", totalSales);
 
         long noOfSuppliers = supplierRepository.count();
@@ -108,26 +108,24 @@ public class ContentController {
         long noOfLowStockProducts = productRepo.countByStockLessThan(100);
         long totalOrders = orderHeaderRepository.count();
 
-        String totalSalesWithDate = String.valueOf(String.format("%.02f", posService.totalSalesWithDate(LocalDateTime.now())));
-        String averageSalesWithDate = String.valueOf(String.format("%.02f", posService.averageSalesWithDate(LocalDateTime.now())));
 
 
         List<Product> top5Products = productService.fiveBestSeller();
-        List<Product> productsToday = productService.newProductsForTheDay();
-        List<Product> productsOfMonth = productService.newProductsForTheMonth();
+//        List<Product> productsToday = productService.newProductsForTheDay();
+//        List<Product> productsOfMonth = productService.newProductsForTheMonth();
 
-        model.addAttribute("formattedSale", formattedDailySale);
         model.addAttribute("totalSales", formattedTotalSale);
         model.addAttribute("noOfSuppliers", noOfSuppliers);
         model.addAttribute("noOfProducts", noOfProducts);
         model.addAttribute("noOfLowStockProducts", noOfLowStockProducts);
         model.addAttribute("top5Products", top5Products);
-        model.addAttribute("productsToday", productsToday);
-        model.addAttribute("productsOfMonth", productsOfMonth);
+//        model.addAttribute("productsToday", productsToday);
+//        model.addAttribute("productsOfMonth", productsOfMonth);
         model.addAttribute("totalOrders", totalOrders);
-        model.addAttribute("totalSalesWithDate", totalSalesWithDate);
-        model.addAttribute("averageSalesWithDate", averageSalesWithDate);
 
+
+        LocalDate test = LocalDate.now().minusMonths(1);
+        System.out.println(test);
         return "dashboard";
     }
 
@@ -149,7 +147,6 @@ public class ContentController {
     public String viewProduct(@PathVariable Long id, Model model) {
         Product product = productRepo.findById(id).get();
         model.addAttribute("product", product);
-
 
         return "viewProduct";
     }
@@ -460,8 +457,11 @@ public class ContentController {
     public String getPOS(Model model) {
         List<Product> products = productRepo.findAll();
         List<Category> categories = categoryRepo.findAll();
+        List<OrderHeader> orders = orderHeaderRepository.findByCreatedOn(LocalDate.now());
+
         model.addAttribute("product", products);
         model.addAttribute("category", categories);
+        model.addAttribute("orders", orders);
 
         return "pos";
     }

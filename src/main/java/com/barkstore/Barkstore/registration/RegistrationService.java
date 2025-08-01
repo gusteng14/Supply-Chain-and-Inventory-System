@@ -28,6 +28,7 @@ public class RegistrationService {
    //  ADMIN CREATING AN EMPLOYEE ACCOUNT (DEFAULT ROLE IS USER ONLY)
     public String register(RegistrationRequest request) throws IOException {
         boolean isValidEmail = emailValidator.test(request.getEmail());
+
         if (userRepository.findByUsername(request.getUsername()) != null) {
             throw new UsernameNotFoundException(String.format("User %s is invalid!", request.getUsername()));
         }
@@ -35,6 +36,7 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new IllegalStateException("email not valid");
         }
+
         userService.signUpUser(
                 new MyUser(
                         request.getFirstName(),

@@ -160,17 +160,10 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems);
-    });
-
-    var collapsibleElem = document.querySelector('.collapsible');
-    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
 
     $(document).ready(function() {
         $('.tabs').tabs();
+        $('.collapsible').collapsible();
         $('.modal').modal();
         $('#supplierTable').DataTable({
             layout: {

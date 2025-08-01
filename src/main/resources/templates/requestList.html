@@ -96,16 +96,13 @@
         var instances = M.Sidenav.init(elems);
     });
 
-    var collapsibleElem = document.querySelector('.collapsible');
-    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
     $(document).ready(function() {
         $('.sidenav').sidenav();
         $('.tabs').tabs();
         $('select').formSelect();
         $('.modal').modal();
         $('#requestTable').DataTable();
-
+        $('.collapsible').collapsible();
         $('select').formSelect();
 
 

@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -26,10 +27,19 @@ public class Product implements Serializable {
     private int totalQuantitySold = 0;
 
     @CreationTimestamp
-    private LocalDateTime createdOn;
+    @Temporal(TemporalType.DATE)
+    private Date createdOn;
 
     @UpdateTimestamp
-    private LocalDateTime lastUpdatedOn;
+    @Temporal(TemporalType.DATE)
+    private Date lastUpdatedOn;
+
+//    @CreationTimestamp
+//    private LocalDateTime createdOn;
+//
+//    @UpdateTimestamp
+//    private LocalDateTime lastUpdatedOn;
+
 
 
 //    @AUDITING

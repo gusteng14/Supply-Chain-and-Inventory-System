@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -27,13 +28,14 @@ public class OrderHeader {
     private float total;
 
     @CreationTimestamp
-    private LocalDateTime createdOn;
+    private LocalDate createdOn;
 
     @UpdateTimestamp
-    private LocalDateTime lastUpdatedOn;
+    private LocalDate lastUpdatedOn;
 
     @CreationTimestamp
-    private LocalDate createdDate;
+    @Temporal(TemporalType.TIME)
+    private Date createdAt;
 
     @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails;

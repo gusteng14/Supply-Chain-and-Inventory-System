@@ -111,33 +111,10 @@
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
 <script>
-
-    // ---------- TABS DESIGN ----------
-    const tabs = document.querySelectorAll('.tab_btn');
-    const all_content = document.querySelectorAll('.content');
-
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         var instances = M.Sidenav.init(elems);
     });
-
-    var collapsibleElem = document.querySelector('.collapsible');
-    var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
-
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', (e)=> {
-            tabs.forEach(tab=>{tab.classList.remove('active')})
-            tab.classList.add('active');
-
-            var line = document.querySelector('.line');
-            line.style.width = e.target.offsetWidth + "px";
-            line.style.left = e.target.offsetLeft + "px";
-
-            all_content.forEach(content=>{content.classList.remove('active')})
-            all_content[index].classList.add('active');
-        })
-    })
 
     $(document).ready(function() {
         $('.tabs').tabs();
@@ -149,7 +126,7 @@
             }
         });
         $('select').formSelect();
-
+        $('.collapsible').collapsible();
     })
 
 </script>

@@ -38,15 +38,15 @@
             <main class="main-container">
                 <div class="row">
                     <div class="col l3">
-                        <div class="card vs">
+                        <div class="card vs bluec">
                             <div class="card-content">
                                 <span style="font-size: 18px; font-weight: 300;" class="card-title">Today's Sales</span>
-                                <span class="card-numbers">&#x20B1;</span><span class="card-numbers" th:text="${formattedSale}"></span>
+                                <span class="card-numbers">&#x20B1;</span><span id="salesToday" class="card-numbers"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col l3">
-                        <div class="card vs">
+                        <div class="card vs greenc">
                             <div class="card-content">
                                 <span style="font-size: 18px; font-weight: 300;" class="card-title">Suppliers</span>
                                 <span style="font-size: 30px;" class="material-icons-outlined card-numbers-icons ">groups_3</span>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="col l3">
-                        <div class="card vs">
+                        <div class="card vs yellowc">
                             <div class="card-content">
                                 <span style="font-size: 18px; font-weight: 300;" class="card-title"> Total Products</span>
                                 <span style="font-size: 30px;" class="material-icons-outlined card-numbers-icons ">inventory_2</span>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="col l3">
-                        <div class="card vs">
+                        <div class="card vs redc">
                             <div class="card-content">
                                 <span style="font-size: 18px; font-weight: 300;" class="card-title">Low Stock Products</span>
                                 <span style="font-size: 30px;" class="material-icons-outlined card-numbers-icons ">inventory_2</span>
@@ -86,346 +86,103 @@
                     </div>
 
                     <div class="row">
-                        <div style="height: 420px;" class="col l6">
-                            <div style="max-height: 420px; overflow: scroll; overflow-x: hidden;" class="card">
-                                <div class="card-content row">
-                                    <span class="card-title col l12">New Products Released This Month</span>
-                                    <div style="border-radius: 15px; height: 180px; width: 162px; margin: 7px;" th:each="productsThisMonth : ${productsOfMonth}" class="card small hoverable col l3">
-                                        <div style="border-top-left-radius:15px; border-top-right-radius: 15px;" class="card-image">
-                                            <a class="modal-trigger" th:attr="data-target=|modal-${productsThisMonth.id}|">
-                                                <img th:src="@{/{productId}/product_image(productId=${productsThisMonth.id})}">
-                                            </a>
-                                        </div>
-                                        <div style="padding: 5px; border-top: 1px solid gray;" class="card-content">
-                                            <p name="productName" class="bold" th:text="${productsThisMonth.name}"></p>
-                                            <p th:text="${productsThisMonth.description}"></p>
-                                        </div>
-                                        <div style="border-radius: 10px; background-color: #8080806c;" th:id="|modal-${productsThisMonth.id}|" class="modal">
-                                            <div class="modal-content">
-                                                <img class="center" id="modal-image" th:src="@{/{productId}/product_image(productId=${productsThisMonth.id})}">
-                                            </div>
-                                            <div class="modal-footer teal lighten-2">
-                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-<!--                    <div class="col l7">-->
-<!--                        <div style="height: 420px;" class="card">-->
-<!--                            <div class="card-content row">-->
-<!--                                <div class="col l12">-->
-<!--                                    <span style="display: inline-block;" class="card-title">Sales Summary</span>-->
-<!--                                    <span class="right"><button id="triggerDate" style="background-color: white; color: black;" type="button" class="btn">Time Period</button></span>-->
-<!--                                    <input id="date" name="date" hidden="hidden" type="text" class="datepicker">-->
+<!--                        <div style="height: 420px;" class="col l6">-->
+<!--                            <div style="max-height: 420px; overflow: scroll; overflow-x: hidden;" class="card">-->
+<!--                                <div class="card-content row">-->
+<!--                                    <span class="card-title col l12">New Products Released This Month</span>-->
+<!--                                    <div style="border-radius: 15px; height: 180px; width: 162px; margin: 7px;" th:each="productsThisMonth : ${productsOfMonth}" class="card small hoverable col l3">-->
+<!--                                        <div style="border-top-left-radius:15px; border-top-right-radius: 15px;" class="card-image">-->
+<!--                                            <a class="modal-trigger" th:attr="data-target=|modal-${productsThisMonth.id}|">-->
+<!--                                                <img th:src="@{/{productId}/product_image(productId=${productsThisMonth.id})}">-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                        <div style="padding: 5px; border-top: 1px solid gray;" class="card-content">-->
+<!--                                            <p name="productName" class="bold" th:text="${productsThisMonth.name}"></p>-->
+<!--                                            <p th:text="${productsThisMonth.description}"></p>-->
+<!--                                        </div>-->
+<!--                                        <div style="border-radius: 10px; background-color: #8080806c;" th:id="|modal-${productsThisMonth.id}|" class="modal">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <img class="center" id="modal-image" th:src="@{/{productId}/product_image(productId=${productsThisMonth.id})}">-->
+<!--                                            </div>-->
+<!--                                            <div class="modal-footer teal lighten-2">-->
+<!--                                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 <!--                                </div>-->
-
-<!--&lt;!&ndash;                                <div id="radial-chart1" class="col l4"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div id="radial-chart2" class="col l4"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div id="radial-chart3" class="col l4"></div>&ndash;&gt;-->
 <!--                            </div>-->
 <!--                        </div>-->
-<!--                    </div>-->
-                </div>
-
-
 
                     <div class="col l6">
-                        <div style="max-height: 400px; overflow: scroll; overflow-x: hidden;" class="card">
+                        <div style="height: 420px;" class="card">
                             <div class="card-content row">
-                                <span class="card-title col l12">New Products Released Today</span>
-                                <div style="border-radius: 15px; height: 180px; width: 162px; margin: 7px;" th:each="productsToday : ${productsToday}" class="card small hoverable col l3">
-                                    <div style="border-top-left-radius:15px; border-top-right-radius: 15px;" class="card-image">
-                                        <a class="modal-trigger" th:attr="data-target=|modal-${productsToday.id}|">
-                                            <img th:src="@{/{productId}/product_image(productId=${productsToday.id})}">
-                                        </a>
-                                    </div>
-                                    <div style="padding: 5px; overflow-y: hidden; border-top: 1px solid gray;" class="card-content">
-                                        <p name="productName" class="bold" th:text="${productsToday.name}"></p>
-                                        <p th:text="${productsToday.description}"></p>
-                                    </div>
-                                    <div style="border-radius: 10px; background-color: rgb(255 255 255 / 79%);" th:id="|modal-${productsToday.id}|" class="modal">
-                                        <div class="modal-content">
-                                            <img class="center" id="modal-imagez" th:src="@{/{productId}/product_image(productId=${productsToday.id})}">
-                                        </div>
-                                        <div class="modal-footer teal lighten-2">
-                                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-                                        </div>
-                                    </div>
+                                <div class="col l12">
+                                    <span style="display: inline-block;" class="card-title">Sales Summary</span>
+                                    <span class="right">
+                                        <select id="date" class="btn browser-default">
+                                            <option disabled selected>Time period</option>
+                                            <option value="TODAY">Today</option>
+                                            <option value="WEEK">This Week</option>
+                                            <option value="MONTH">This Month</option>
+                                            <option value="YEAR">This Year</option>
+                                            <option value="">Custom</option>
+                                        </select>
+                                    </span>
                                 </div>
+
+                                <div id="radial-chart1" class="col l4"></div>
+                                <div id="radial-chart2" class="col l4"></div>
+                                <div id="radial-chart3" class="col l4"></div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
+<!--                    <div class="col l6">-->
+<!--                        <div style="max-height: 400px; overflow: scroll; overflow-x: hidden;" class="card">-->
+<!--                            <div class="card-content row">-->
+<!--                                <span class="card-title col l12">New Products Released Today</span>-->
+<!--                                <div style="border-radius: 15px; height: 180px; width: 162px; margin: 7px;" th:each="productsToday : ${productsToday}" class="card small hoverable col l3">-->
+<!--                                    <div style="border-top-left-radius:15px; border-top-right-radius: 15px;" class="card-image">-->
+<!--                                        <a class="modal-trigger" th:attr="data-target=|modal-${productsToday.id}|">-->
+<!--                                            <img th:src="@{/{productId}/product_image(productId=${productsToday.id})}">-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div style="padding: 5px; overflow-y: hidden; border-top: 1px solid gray;" class="card-content">-->
+<!--                                        <p name="productName" class="bold" th:text="${productsToday.name}"></p>-->
+<!--                                        <p th:text="${productsToday.description}"></p>-->
+<!--                                    </div>-->
+<!--                                    <div style="border-radius: 10px; background-color: rgb(255 255 255 / 79%);" th:id="|modal-${productsToday.id}|" class="modal">-->
+<!--                                        <div class="modal-content">-->
+<!--                                            <img class="center" id="modal-imagez" th:src="@{/{productId}/product_image(productId=${productsToday.id})}">-->
+<!--                                        </div>-->
+<!--                                        <div class="modal-footer teal lighten-2">-->
+<!--                                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
             </main>
-            <th:block th:each="top5 : ${top5Products}">
-                <p hidden="hidden" name="top5products" th:text="${top5.name}"></p>
-                <p hidden="hidden" name="top5productsQtySold" th:text="${top5.totalQuantitySold}"></p>
-            </th:block>
-            <p hidden="hidden" id="totalOrders" th:text="${totalOrders}"></p>
-            <p hidden="hidden" id="totalSales" th:text="${totalSalesWithDate}"></p>
-            <p hidden="hidden" id="averageSales" th:text="${averageSalesWithDate}"></p>
-
-            <p name="radialchartvalues0"></p>
-            <p name="radialchartvalues1"></p>
-            <p name="radialchartvalues2"></p>
-
         </div>
 
 
         <!-- SCRIPTS -->
         <script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
         <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.sidenav');
-            var instances = M.Sidenav.init(elems);
-        });
-
-        var collapsibleElem = document.querySelector('.collapsible');
-        var collapsibleInstance = M.Collapsible.init(collapsibleElem, {});
-
-        $(document).ready(function () {
-            $('.sidenav').sidenav();
-            $('.modal').modal();
-            $('.dropdown-trigger').dropdown();
-            $('select').formSelect();
-
-            let cDate = new Date();
-            $('.datepicker').datepicker({
-                format: "yyyy-mm-dd",
-                setDefaultDate: true,
-                maxDate: cDate
+        <script type="text/javascript" th:src="@{js/dashboard.js}"></script>
+        <script>
+            $(document).ready(function() {
+                $('.sidenav').sidenav();
+                $('.modal').modal();
+                $('.dropdown-trigger').dropdown();
+                $('select').formSelect();
+                $('.collapsible').collapsible();
             });
-
-
-            $('#triggerDate').on('click', function() {
-                $('#date').trigger('click');
-            })
-
-            $('#date').on('change', function() {
-                var date = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: "/getDate",
-                    data: {date: date},
-                    success: function(response) {
-                        console.log("Data received:", response);
-
-                        response.forEach(function(item,index) {
-                            $('p[name="radialchartvalues'+index+'"]').text(item);
-                        })
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error:", error);
-                    }
-                });
-            })
-        });
-
-    </script>
-    <script>
-
-        $(document).ready(function () {
-            var products = [];
-            var productsQtySold = [];
-            $('p[name="top5products"]').each(function(index) {
-                products.push($(this).text());
-            });
-
-            $('p[name="top5productsQtySold"]').each(function(index) {
-                productsQtySold.push($(this).text());
-            });
-
-            var barChartOptions = {
-                series: [{
-                    data: productsQtySold,
-                    name: "Quantity Sold",
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 350
-                },
-                plotOptions: {
-                    bar: {
-                        borderRadius: 4,
-                        borderRadiusApplication: 'end',
-                        horizontal: true,
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                xaxis: {
-                    categories: products,
-                }
-            };
-
-            var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
-            barChart.render();
-
-            //RADIAL CHART
-//            let x1 = $('#totalOrders').text();
-//            let x2 = $('#totalSales').text();
-//            let x3 = $('#averageSales').text();
-//
-//            var radialChartOptions1 = {
-//                chart: {
-//                    height: 280,
-//                    type: "radialBar"
-//                },
-//
-//                series: [x1],
-//
-//                plotOptions: {
-//                    radialBar: {
-//                        hollow: {
-//                            margin: 15,
-//                            size: "70%"
-//                        },
-//
-//                        dataLabels: {
-//                            showOn: "always",
-//                            name: {
-//                                offsetY: -10,
-//                                show: true,
-//                                color: "#888",
-//                                fontSize: "13px"
-//                            },
-//                            value: {
-//                                color: "#111",
-//                                fontSize: "30px",
-//                                show: true,
-//                                formatter: function (val, opts) {
-//                                    return val
-//                                }
-//                            }
-//                        }
-//                    }
-//                },
-//
-//                stroke: {
-//                    lineCap: "round",
-//                },
-//                labels: ["Orders"]
-//            };
-//
-//            var radialChartOptions2 = {
-//                chart: {
-//                    height: 350,
-//                    type: "radialBar"
-//                },
-//
-//                series: [x2],
-//
-//                plotOptions: {
-//                    radialBar: {
-//                        hollow: {
-//                            margin: 15,
-//                            size: "70%"
-//                        },
-//
-//                        dataLabels: {
-//                            showOn: "always",
-//                            name: {
-//                                offsetY: -10,
-//                                show: true,
-//                                color: "#888",
-//                                fontSize: "13px"
-//                            },
-//                            value: {
-//                                color: "#111",
-//                                fontSize: "30px",
-//                                show: true,
-//                                formatter: function (val, opts) {
-//                                    return val
-//                                }
-//
-//                            }
-//                        }
-//                    }
-//                },
-//
-//                stroke: {
-//                    lineCap: "round",
-//                },
-//                labels: ["Net Sales"]
-//            };
-//
-//            var radialChartOptions3 = {
-//                chart: {
-//                    height: 280,
-//                    type: "radialBar"
-//                },
-//
-//                series: [x3],
-//
-//                plotOptions: {
-//                    radialBar: {
-//                        hollow: {
-//                            margin: 15,
-//                            size: "70%"
-//                        },
-//
-//                        dataLabels: {
-//                            showOn: "always",
-//                            name: {
-//                                offsetY: -10,
-//                                show: true,
-//                                color: "#888",
-//                                fontSize: "13px"
-//                            },
-//                            value: {
-//                                color: "#111",
-//                                fontSize: "18px",
-//                                show: true,
-//                                formatter: function (val, opts) {
-//                                    return val
-//                                }
-//                            }
-//                        }
-//                    }
-//                },
-//
-//                stroke: {
-//                    lineCap: "round",
-//                },
-//                labels: ["Average Sales"]
-//            };
-//
-//            var radialChart1 = new ApexCharts(document.querySelector("#radial-chart1"), radialChartOptions1);
-//            radialChart1.render();
-//
-//            var radialChart2 = new ApexCharts(document.querySelector("#radial-chart2"), radialChartOptions2);
-//            radialChart2.render();
-//
-//            var radialChart3 = new ApexCharts(document.querySelector("#radial-chart3"), radialChartOptions3);
-//            radialChart3.render();
-
-//            $('#date').on('change', function() {
-//                var totalOrders = $('p[name="radialchartvalues0"]').text();
-//                var totalSales = $('p[name="radialchartvalues2"]').text();
-//                var averageSales = $('p[name="radialchartvalues3"]').text();
-//
-//                radialChart1.updateSeries([
-//                    [totalOrders]
-//                ]);
-//
-//                radialChart2.updateSeries([
-//                    ["₱" + totalSales]
-//                ]);
-//
-//                radialChart3.updateSeries([
-//                    ["₱" + averageSales]
-//                ])
-//            });
-
-
-        });
-
-    </script>
+        </script>
     </body>
 </html>
