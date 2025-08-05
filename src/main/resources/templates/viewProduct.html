@@ -88,6 +88,18 @@
                         <input class="archivo-narrow-a" readonly id="description" type="text" th:value="${product.description}">
                         <label for="description">Description</label>
                     </div>
+                    <div class="input-field col s6">
+                        <!--                        <i class="material-icons prefix">account_circle</i>-->
+                        <input class="archivo-narrow-a" readonly id="reorderPoint" type="text" th:value="${product.reorderPoint}">
+                        <label for="reorderPoint">Reorder Point</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <!--                        <i class="material-icons prefix">account_circle</i>-->
+                        <input class="archivo-narrow-a" readonly id="defaultRestockQuantity" type="text" th:value="${product.defaultRestockQuantity}">
+                        <label for="defaultRestockQuantity">Default Restock Quantity</label>
+                    </div>
                 </div>
             </div>
             <div class="col l5">

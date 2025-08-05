@@ -15,10 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
@@ -46,6 +43,14 @@ public class ProductService {
         product.setDescription(productRequest.getDescription());
         product.setStock(productRequest.getStock());
         product.setCost(productRequest.getCost());
+        product.setReorderPoint(productRequest.getReorderPoint());
+        product.setDefaultRestockQuantity(productRequest.getDefaultRestockQuantity());
+
+        if(product.getStock() <= product.getReorderPoint()) {
+            product.setIsLowStock(true);
+        } else {
+            product.setIsLowStock(false);
+        }
 
         Category category = categoryRepo.findByName(productRequest.getCategory()).get();
         product.setCategory(category);
@@ -73,28 +78,37 @@ public class ProductService {
         }
     }
 
-//    public Product createProduct(ProductRequest productRequest) {
-//        Product product = new Product();
-//        product.setName(productRequest.getName());
-//        product.setDescription(productRequest.getDescription());
-//        product.setStock(productRequest.getStock());
-//        product.setCost(productRequest.getCost());
-//        System.out.println("prodReq photo: " + productRequest.getPhoto());
-//        product.setPhoto(productRequest.getPhoto());
-//        repo.save(product);
-//        return product;
-//    }
+    public List<Product> getLowStockProducts() {
+        List<Product> products = repo.findAll();
+        List<Product> lowStockProducts = new ArrayList<>();
 
-//    public void initProductDB() {
-//        List<Product> products = IntStream.rangeClosed(1, 200)
-//                .mapToObj(i -> new Product("product" + i, new Random().nextInt(100)))
-//    }
+        for (Product product : products) {
+            if (product.getStock() < product.getReorderPoint()) {
+                lowStockProducts.add(product);
+            }
+        }
+
+        return lowStockProducts;
+    }
+
+    public long getCountOfLowStockProducts() {
+        List<Product> products = repo.findAll();
+        long count = 0;
+
+        for (Product product : products) {
+            if (product.getStock() < product.getReorderPoint()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 
     public String lowInventoryNotif (Product product) {
         int stock = product.getStock();
         String item = product.getName();
 
-        if (stock < 25) {
+        if (stock < product.getReorderPoint()) {
             emailSender.send("gusteng14@gmail.com", buildEmail("Augustine", item, stock), "Low Inventory Notice");
         }
         return "Stock: ";

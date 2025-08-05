@@ -52,7 +52,21 @@
                                 <label for="description">Category Description</label>
                             </div>
                         </div>
-                        <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                        <button id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Save</button>
+                        <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                            <div class="row modal-content" style="margin: 0px;">
+                                <div class="col l3">
+                                    <img style="height:auto; width: 100px;" th:src="@{../images/warning.jpg}">
+                                </div>
+                                <div class="col l9">
+                                    <h6 style="line-height: 5;">Save changes?</h6>
+                                </div>
+                            </div>
+                            <div style="margin: 0px;" class="row modal-footer teal">
+                                <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Save</button>
+                                <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -73,6 +87,8 @@
     $(document).ready(function() {
         $('.tabs').tabs();
         $('.collapsible').collapsible();
+        $('.modal').modal();
+
         $('#image').on('change', function() {
 
             //console.log(this.files);

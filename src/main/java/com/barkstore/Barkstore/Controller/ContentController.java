@@ -6,10 +6,7 @@ import com.barkstore.Barkstore.Supplier.SupplierRequest;
 import com.barkstore.Barkstore.Supplier.SupplierService;
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
-import com.barkstore.Barkstore.pos.OrderDetailsRepository;
-import com.barkstore.Barkstore.pos.OrderHeader;
-import com.barkstore.Barkstore.pos.OrderHeaderRepository;
-import com.barkstore.Barkstore.pos.POSService;
+import com.barkstore.Barkstore.pos.*;
 import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
@@ -105,8 +102,9 @@ public class ContentController {
 
         long noOfSuppliers = supplierRepository.count();
         long noOfProducts = productRepo.count();
-        long noOfLowStockProducts = productRepo.countByStockLessThan(100);
+        long noOfLowStockProducts = productService.getCountOfLowStockProducts();
         long totalOrders = orderHeaderRepository.count();
+        List<Product> lowStockProducts = productService.getLowStockProducts();
 
 
 
@@ -122,6 +120,7 @@ public class ContentController {
 //        model.addAttribute("productsToday", productsToday);
 //        model.addAttribute("productsOfMonth", productsOfMonth);
         model.addAttribute("totalOrders", totalOrders);
+        model.addAttribute("lowStockProducts", lowStockProducts);
 
 
         LocalDate test = LocalDate.now().minusMonths(1);
@@ -171,6 +170,11 @@ public class ContentController {
         System.out.println("Create Product (Controller): ");
         System.out.println(file.getOriginalFilename());
 
+        if (productRequest.getStock() <= productRequest.getReorderPoint()) {
+            productRequest.setIsLowStock(true);
+        } else {
+            productRequest.setIsLowStock(false);
+        }
         productService.createProductLob(productRequest, file);
 
         return "redirect:/product";
@@ -195,6 +199,8 @@ public class ContentController {
         productRequest.setDescription(product.getDescription());
         productRequest.setStock(product.getStock());
         productRequest.setCost(product.getCost());
+        productRequest.setReorderPoint(product.getReorderPoint());
+        productRequest.setDefaultRestockQuantity(product.getDefaultRestockQuantity());
 
 
         model.addAttribute("productRequest", productRequest);
@@ -210,6 +216,13 @@ public class ContentController {
         product.setDescription(productRequest.getDescription());
         product.setStock(productRequest.getStock());
         product.setCost(productRequest.getCost());
+        product.setReorderPoint(productRequest.getReorderPoint());
+        product.setDefaultRestockQuantity(productRequest.getDefaultRestockQuantity());
+        if (productRequest.getStock() <= productRequest.getReorderPoint()) {
+            product.setIsLowStock(true);
+        } else {
+            product.setIsLowStock(false);
+        }
 
 
         productRepo.save(product);
@@ -297,6 +310,39 @@ public class ContentController {
         categoryRepo.deleteById(id);
         return "redirect:/category";
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @GetMapping("/transaction")
+    public String getTransactions(Model model) {
+//        model.addAttribute("categoryRequest", new CategoryRequest());
+        List<OrderHeader> transactions = orderHeaderRepository.findAll();
+        List<OrderDetail> details = orderDetailsRepository.findAll();
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("details", details);
+        return "transaction";
+    }
+
+    @GetMapping("/transaction/{id}")
+    public String viewTransaction(@PathVariable Long id, Model model) {
+        OrderHeader orderHeader = orderHeaderRepository.findById(id).get();
+        List<OrderDetail> orderDetails = orderDetailsRepository.findByHeaderId_Id(id);
+        model.addAttribute("orderHeader", orderHeader);
+        model.addAttribute("orderDetails", orderDetails);
+
+        return "viewTransaction";
+    }
+
+//
+//    @GetMapping("/category/delete/{id}")
+//    public String deleteCategoryById(@PathVariable(name="id") Long id) {
+//        System.out.println("C ID IS: " + id);
+//        categoryRepo.deleteById(id);
+//        return "redirect:/category";
+//    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     @GetMapping("/itemType")
     public String viewItemType(Model model) {
@@ -437,6 +483,15 @@ public class ContentController {
         return "requisitionPage";
     }
 
+    @GetMapping("/requestLowStock")
+    public String createLowStockRequest(Model model, @ModelAttribute HeaderDTO headerDTO, @ModelAttribute DetailsDTO detailsDTO) {
+        List<Product> product = productRepo.findAll();
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("product", product);
+        model.addAttribute("lowStockProducts", lowStockProducts);
+        return "requisitionPage2";
+    }
+
     @PostMapping("/request")
     public String sendRequest(@RequestParam("qty") String qty, @RequestParam("itemList") String itemList, @RequestParam("total") String total,
                               @ModelAttribute HeaderDTO headerDTO, @ModelAttribute DetailsDTO detailsDTO) {
@@ -446,6 +501,10 @@ public class ContentController {
         List<String> list2 = Arrays.asList(stringArray2);
         String[] stringArray3 = total.split(",");
         List<String> list3 = Arrays.asList(stringArray3);
+
+        System.out.println(list1);
+        System.out.println(list2);
+        System.out.println(list3);
 
         RequestHeader requestHeader = supplyChainService.saveHeader(headerDTO);
         supplyChainService.saveDetails(requestHeader, list1, list2, list3);
@@ -467,7 +526,7 @@ public class ContentController {
     }
 
     @PostMapping("/pos")
-    public String submitOrder(@RequestParam("item") String item, @RequestParam("qty") String qty,
+    public String submitOrder(@RequestParam("item") String item, @RequestParam("qty") String qty, @RequestParam("unitPrice") String unitPrice,
                               @RequestParam("lptotal") String listPriceTotal, @RequestParam("total") String total) {
         System.out.println("Item: " + item);
         System.out.println("Qty: " + qty);
@@ -479,11 +538,11 @@ public class ContentController {
         List<String> list2 = Arrays.asList(stringArray2);
         String[] stringArray3 = listPriceTotal.split(",");
         List<String> list3 = Arrays.asList(stringArray3);
+        String[] stringArray4 = unitPrice.split(",");
+        List<String> list4 = Arrays.asList(stringArray3);
 
         OrderHeader header = posService.saveHeader(total);
-        posService.saveDetails(header, list1, list2, list3);
-
-
+        posService.saveDetails(header, list1, list2, list3, list4);
 
         return "redirect:/pos";
     }

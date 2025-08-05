@@ -21,6 +21,7 @@ public class OrderDetail {
     private Long id;
     private String itemName;
     private int quantity;
+    private float unitPrice;
     private float total;
 
     @CreationTimestamp

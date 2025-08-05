@@ -25,6 +25,8 @@ public class OrderHeader {
 
     private String orderNo;
 
+    private float subtotal;
+    private float etc;
     private float total;
 
     @CreationTimestamp

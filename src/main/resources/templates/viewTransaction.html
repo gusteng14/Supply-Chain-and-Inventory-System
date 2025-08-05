@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>View Transaction</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+    <!-- CSS -->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="col l1"></div>
+            <div class="col l10">
+                <h2>SALES RECEIPT</h2>
+            </div>
+            <div class="col l1"></div>
+        </div>
+        <div class="row">
+            <div class="col l1"></div>
+            <div class="col l10">
+                <table>
+                    <tbody>
+                        <tr class="tr-csis-body" style="border-bottom: 1px solid white;">
+                            <td class="td-csis" style="font-weight: bold; width: 150px;">Transaction No.: </td>
+                            <td class="td-csis" th:text="${orderHeader.orderNo}">z</td>
+                        </tr>
+                        <tr class="tr-csis-body">
+                            <td class="td-csis" style="font-weight: bold; width: 150px;">Transaction Date: </td>
+                            <td class="td-csis" th:text="${orderHeader.createdOn}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col l1"></div>
+        </div>
+        <div class="row">
+            <div class="col l1"></div>
+            <div class="col l10">
+                <table id="table-csis" class="responsive-table highlight z-depth-1">
+                    <thead class="teal" style="color: white;">
+                        <tr class="tr-csis">
+                            <th style="padding-right: 0px; width: 1px;" class="th-csis">Quantity</th>
+                            <th class="th-csis">Item Name</th>
+                            <th style="text-align: right;" class="th-csis">Unit Price</th>
+                            <th style="text-align: right;" class="th-csis">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-csis-body" th:each="dtl : ${orderDetails}">
+                            <td style="text-align: right; padding-right: 5px;" class="td-csis" th:text="${dtl.quantity}">z</td>
+                            <td class="td-csis" th:text="${dtl.itemName}">z</td>
+                            <td name="unitPrice"style="text-align: right;" class="td-csis" th:text="${dtl.unitPrice}">z</td>
+                            <td name="totalPerItem" style="text-align: right;" class="td-csis" th:text="${dtl.total}">z</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col l1"></div>
+        </div>
+        <div class="row">
+            <div class="col l7"></div>
+            <div class="col l4">
+                <table>
+                    <tbody>
+                        <tr class="tr-csis-body" style="border-bottom: 1px solid white;">
+                            <td class="td-csis" style="border-style: none !important;">Subtotal</td>
+                            <td id="subtotal" class="td-csis" style="text-align: right;" th:text="${orderHeader.total}"></td>
+                        </tr>
+                        <tr class="tr-csis-body" style="border-bottom: 1px solid black;">
+                            <td class="td-csis">Etc</td>
+                            <td class="td-csis" style="text-align: right;">0</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid black; background-color: #00808038;">
+                            <td style="font-weight: bold;">Total (&#8369;)</td>
+                            <td id="total" style="text-align: right; font-weight: bold;" th:text="${orderHeader.total}">z</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col l1"></div>
+        </div>
+
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script>
+    $(document).ready(function() {
+        $('.sidenav').sidenav();
+        $('.tabs').tabs();
+        $('select').formSelect();
+        $('.modal').modal();
+        $('.collapsible').collapsible();
+
+        let PHP = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP',
+        });
+
+        $('td[name^="totalPerItem"]').each(function() {
+            $(this).html(PHP.format($(this).text()));
+        });
+
+        $('td[name^="unitPrice"]').each(function() {
+            $(this).html(PHP.format($(this).text()));
+        });
+
+        var total = $('#total').text();
+        var subtotal = $('#subtotal').text();
+        $('#total').html(PHP.format(total));
+        $('#subtotal').html(PHP.format(subtotal));
+    });
+</script>
+
+</body>
+
+</html>

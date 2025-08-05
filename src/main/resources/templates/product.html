@@ -58,11 +58,12 @@
                                 <th class="dt-head-left th-csis">Item Type</th>
                                 <th class="dt-head-left th-csis">Stock</th>
                                 <th class="dt-head-left th-csis">Cost</th>
+                                <th class="dt-head-left th-csis">Created On</th>
                                 <th class="dt-head-right th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-csis-body"  th:each="product : ${product}" th:classappend="${product.stock < 100} ? 'red lighten-4' : ''">
+                            <tr class="tr-csis-body"  th:each="product : ${product}" th:classappend="${product.stock <= product.reorderPoint} ? 'red lighten-4' : ''">
                                 <td class="dt-body-left td-csis">
                                     <a class="modal-trigger" th:attr="data-target=|modal-${product.id}|"><img class="productImg" th:src="@{/{productId}/product_image(productId=${product.id})}"></a>
                                     <div style="border-radius: 10px; background-color: rgb(255 255 255 / 79%);" th:id="|modal-${product.id}|" class="modal">
@@ -92,6 +93,7 @@
 <!--                                <td class="product-td" th:each="itemType : ${product.itemType}" th:text="${itemType.getName()}">z</td>-->
                                 <td class="dt-body-left td-csis" th:text="${product.stock}">z</td>
                                 <td class="dt-body-left td-csis" th:text="'P' + ${product.cost}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${product.createdOn}">z</td>
                                 <td class="dt-body-left td-csis " th:value="${product.id}">
                                     <div class="right">
                                         <a sec:authorize="hasAuthority('READ_PRODUCT_PERM')" th:attr="data-target=|restockmodal-${product.id}|" class="waves-effect waves-light btn-small modal-trigger crud"  href="#modal1">
@@ -162,7 +164,7 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <i class="material-icons-round prefix">manage_accounts</i>
+                                    <i class="material-icons-round prefix">settings</i>
                                     <select class="archivo-narrow-a" th:field="*{itemType}" id="itemType" name="itemType" required>
                                         <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
                                         <option class="archivo-narrow-a" th:each="itemType : ${itemType} " th:value="${itemType.name}" th:text="${itemType.name}"></option>
@@ -170,12 +172,24 @@
                                     <label>Item Type</label>
                                 </div>
                                 <div class="input-field col s6">
-                                    <i class="material-icons-round prefix">manage_accounts</i>
+                                    <i class="material-icons-round prefix">settings</i>
                                     <select class="archivo-narrow-a" th:field="*{category}" id="category" name="category" required>
                                         <option class="archivo-narrow-a" value="" disabled selected>Choose your option</option>
                                         <option class="archivo-narrow-a" th:each="category : ${category} " th:value="${category.name}" th:text="${category.name}"></option>
                                     </select>
                                     <label>Category</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">add_shopping_cart</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{reorderPoint}" id="reorderPoint" type="number" required>
+                                    <label for="reorderPoint">Reorder Point</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <i class="material-icons-round prefix">add_circle</i>
+                                    <input class="archivo-narrow-a" style="color: black;" th:field="*{defaultRestockQuantity}" id="defaultRestockQuantity" type="number" required>
+                                    <label for="defaultRestockQuantity">Default Restock Quantity</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -185,14 +199,28 @@
                                         <input class="archivo-narrow-a" type="file" id="image" name="image" accept="image/*" required>
                                     </div>
                                     <div class="file-path-wrapper">
-                                        <input class="file-path validate archivo-narrow-a" type="text">
+                                        <input id="img" class="file-path validate archivo-narrow-a" type="text">
                                     </div>
                                 </div>
                                 <div>
                                     <img style="padding-left: 100px;" class="productThumbnail" th:src="@{/images/default-thumbnail.jpg}" id="thumbnail"  alt="preview_image">
                                 </div>
                             </div>
-                            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                            <button disabled="disabled" id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
+                            <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                                <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                    <div class="col l3">
+                                        <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                    </div>
+                                    <div class="col l9 ">
+                                        <h6 >Do you want to save this product in the system?</h6>
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row modal-footer teal">
+                                    <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                    <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                                </div>
+                            </div>
                         </form>
                 </div>
             </div>
@@ -223,6 +251,23 @@
         $('select').formSelect();
         $('.modal').modal();
         $('.collapsible').collapsible();
+
+        $('#registerForm').on('change', function() {
+            var field1 = $('#name').val().length;
+            var field2 = $('#description').val().length;
+            var field3 = $('#stock').val().length;
+            var field4 = $('#cost').val().length;
+            var field5 = $('#reorderPoint').val().length;
+            var field6 = $('#defaultRestockQuantity').val().length;
+            var field7 = $('#img').val().length;
+
+            if(field1 < 1 || field2 < 1 || field3 < 1 || field4 < 1 || field5 < 1 || field6 < 1 || field7 < 1) {
+                $('#modalTrigger').prop("disabled", true);
+            } else {
+                $('#modalTrigger').prop("disabled", false);
+
+            }
+        });
     })
 </script>
 

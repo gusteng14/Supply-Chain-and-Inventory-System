@@ -49,7 +49,7 @@
                     <table id="supplierTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
-                                <th class="dt-head-left th-csis">#</th>
+                                <th class="dt-head-left th-csis">Id</th>
                                 <th class="dt-head-left th-csis">Name</th>
                                 <th class="dt-head-left th-csis">Email</th>
                                 <th class="dt-head-left th-csis">Contact No</th>
@@ -131,16 +131,19 @@
 
                             </div>
                         </div>
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <button style="display: none;" id="modal-trigger" data-target="modal1" class="btn modal-trigger">Modal</button>
-
-                        <div id="modal1" class="modal">
-                            <div class="modal-content">
-                                <h4>Tool Tip</h4>
-                                <p>Item Type created successfully.</p>
+                        <button disabled="disabled" id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
+                        <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                            <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                <div class="col l3">
+                                    <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                </div>
+                                <div class="col l9 ">
+                                    <h6 >Do you want to save this supplier in the system?</h6>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <a id="close-modal" href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                            <div style="margin: 0px;" class="row modal-footer teal">
+                                <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
                             </div>
                         </div>
                     </form>
@@ -166,6 +169,7 @@
         $('.collapsible').collapsible();
         $('.modal').modal();
         $('#supplierTable').DataTable({
+            columns: [{ width: '5%' }, null, null, null,null, null, null, null],
             layout: {
                 topStart: {
                     buttons: ['csv', 'excel', 'pdf', 'print']
@@ -197,6 +201,23 @@
             } else {
                 $('#agentContactNo-message').html('')
                 $("#submit").prop('disabled', false);
+            }
+        });
+
+        $('#registerForm').on('change', function() {
+            var field1 = $('#name').val().length;
+            var field2 = $('#contactNo').val().length;
+            var field3 = $('#email').val().length;
+            var field4 = $('#address1').val().length;
+            var field5 = $('#address2').val().length;
+            var field6 = $('#address3').val().length;
+            var field7 = $('#agentName').val().length;
+            var field8 = $('#agentContactNo').val().length;
+
+            if(field1 < 1 || field2 < 1 || field3 < 1 || field4 < 1 || field5 < 1 || field6 < 1 || field7 < 1 || field8 < 1) {
+                $('#modalTrigger').prop("disabled", true);
+            } else {
+                $('#modalTrigger').prop("disabled", false);
             }
         });
 

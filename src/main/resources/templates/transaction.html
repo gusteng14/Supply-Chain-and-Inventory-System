@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Cherry+Bomb+One&family=DynaPuff:wght@400..700&family=Modak&display=swap" rel="stylesheet">
+
+    <!-- MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- CSS -->
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.2/datatables.min.css" rel="stylesheet" integrity="sha384-d76uxpdVr9QyCSR9vVSYdOAZeRzNUN8A4JVqUHBVXyGxZ+oOfrZVHC/1Y58mhyNg" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.css}"  media="screen,projection"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js" integrity="sha384-YDIK5P2Wq/2RyB+U8Zt970p1L/fEftZwbF3e22rV/bPMW+m8z+JjycMAr96s7LAz" crossorigin="anonymous"></script>
+
+
+
+</head>
+<body>
+<div class="grid-container">
+    <header class="header" th:replace="~{fragments :: header-main}"></header>
+    <aside th:replace="~{fragments :: sidebar}"></aside>
+
+    <main class="main-container">
+        <div class="row">
+            <div class="col s12">
+                <h4 class="page-header">Transaction History</h4>
+                <div id="view-category-tab">
+                    <table id="transactionTable" class="z-depth-1 display table-csis">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                            <tr class="tr-csis">
+                                <th class="dt-head-left th-csis">Id</th>
+                                <th class="dt-head-left th-csis">Order No</th>
+                                <th class="dt-head-left th-csis">Transaction Date</th>
+                                <th class="dt-head-left th-csis">Amount</th>
+<!--                                <th class="dt-head-left th-csis" data-dt-order="disable"></th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr-csis-body" th:each="transaction : ${transactions}">
+                                <td class="dt-body-left td-csis id" th:text="${transaction.id}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${transaction.orderNo}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${transaction.createdOn}">z</td>
+                                <td name="total" class="dt-body-left td-csis" th:text="${transaction.total}">z</td>
+<!--                                <td class="dt-body-left td-csis" th:value="${transaction.id}">-->
+<!--                                    <div class="right">-->
+<!--                                        <a sec:authorize="hasAuthority('READ_TRANSACTION_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/transaction/' + ${transaction.id}}">-->
+<!--                                            View-->
+<!--                                        </a>-->
+<!--                                        <a sec:authorize="hasAuthority('UPDATE_TRANSACTION_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/transaction/edit(id=${transaction.id})}">-->
+<!--                                            Update-->
+<!--                                        </a>-->
+<!--                                        <a sec:authorize="hasAuthority('DELETE_TRANSACTION_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/transaction/delete/' + ${transaction.id}}" onclick="return confirm('Are you sure you want to delete?')">-->
+<!--                                            Delete-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+
+    $(document).ready(function() {
+        $('.tabs').tabs();
+        $('#transactionTable').DataTable({
+            columns: [{ width: '5%' }, null, null, null],
+            order: [2, 'desc'],
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
+        $('select').formSelect();
+        $('.collapsible').collapsible();
+
+        let PHP = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP',
+        });
+
+        $('td[name^="total"]').each(function() {
+            $(this).html(PHP.format($(this).text()));
+        });
+
+        $('.tr-csis-body').on('click', function() {
+            let id = $(this).children('.id').text();
+            console.log(id);
+            $(location).prop('href', '/transaction/' + id);
+        });
+    })
+
+</script>
+
+</body>
+
+</html>

@@ -82,7 +82,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr id="requestDetail" class="" th:each="dtl : ${dtl}">
+                                        <tr id="requestDetail" class="tblRow" th:each="dtl : ${dtl}">
                                             <input hidden="hidden" name="count[]" th:value="${dtlStat.count}">
                                             <td style="padding-right: 0px; margin-right: 0px;">
                                                 <a><img class="productImg" id="product-image" th:src="${dtl.imgUrl}"></a>
@@ -93,7 +93,7 @@
                                             <td class="quantity">
                                                 <p class="archivo-narrow-a" th:text="${dtl.quantity}" id="qty"></p>
                                             </td>
-                                            <td>
+                                            <td class="total">
                                                 <p class="archivo-narrow-a" th:text="${dtl.total}" id="total" name="total[]"></p>
                                             </td>
                                             <td class="reqStatus">
@@ -147,7 +147,22 @@
                                 </button>
                             </div>
                             <div th:if="${hdr.status == 'Pending'}">
-                                <button id="submit" name="status" class="btn" value="1">Submit</button>
+<!--                                <button id="submit" name="status" class="btn" value="1">Submit</button>-->
+                                <button id="modalTrigger" type="button" value="1" data-target="modal" class="btn modal-trigger">Submit</button>
+                                <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                                    <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                        <div class="col l3">
+                                            <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                        </div>
+                                        <div class="col l9 ">
+                                            <h6>Are you done assessing the request?</h6>
+                                        </div>
+                                    </div>
+                                    <div style="margin: 0px;" class="row modal-footer teal">
+                                        <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                        <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                                    </div>
+                                </div>
                             </div>
 
                             <button th:if="${hdr.status == 'Approved'}" id="generate" type="button" class="btn">Generate Purchase Order</button>
@@ -212,9 +227,18 @@
                 $('#registerForm').append('<p hidden="hidden" name="quantity[]"></p');
                 $('p[name^="quantity"]').eq(approvedCount-1).text($(this).parent().siblings('.quantity').children('p').text());
             }
-            var value = parseInt($(this).text());
+//            var value = parseInt($(this).text());
+//            grandTotal += value;
+        });
+
+        $('.tblRow').each(function() {
+           if ($(this).hasClass('rejected')) {
+               return;
+           }
+            var value = parseInt($(this).children('.total').children().text());
             grandTotal += value;
         });
+
 
         $('#grandTotal').html(PHP.format(grandTotal));
         $('#submit').val(approvedCount);

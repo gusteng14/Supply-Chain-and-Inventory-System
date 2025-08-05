@@ -48,17 +48,21 @@
                     <table id="categoryTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
-                                <th class="dt-head-left th-csis">Category Id</th>
+                                <th class="dt-head-left th-csis">Id</th>
                                 <th class="dt-head-left th-csis">Category Name</th>
                                 <th class="dt-head-left th-csis">Description</th>
+                                <th class="dt-head-left th-csis">Created On</th>
+                                <th class="dt-head-left th-csis">Last Updated</th>
                                 <th class="dt-head-left th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
                             <tbody>
                                 <tr class="tr-csis-body" th:each="category : ${category}">
-                                    <td class="dt-body-left td-csis" th:text="${category.id}">z</td>
+                                    <td class="dt-body-left td-csis"  th:text="${category.id}">z</td>
                                     <td class="dt-body-left td-csis" th:text="${category.name}">z</td>
                                     <td class="dt-body-left td-csis" th:text="${category.description}">z</td>
+                                    <td class="dt-body-left td-csis" th:text="${category.createdOn}">z</td>
+                                    <td class="dt-body-left td-csis" th:text="${category.lastUpdatedOn}">z</td>
                                     <td class="dt-body-left td-csis" th:value="${category.id}">
                                         <div class="right">
                                             <a sec:authorize="hasAuthority('READ_CATEGORY_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/category/' + ${category.id}}">
@@ -93,7 +97,21 @@
                                 <label for="description">Category Description</label>
                             </div>
                         </div>
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <button disabled="disabled" id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
+                        <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                            <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                <div class="col l3">
+                                    <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                </div>
+                                <div class="col l9 ">
+                                    <h6 >Do you want to save this category in the system?</h6>
+                                </div>
+                            </div>
+                            <div style="margin: 0px;" class="row modal-footer teal">
+                                <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -119,6 +137,9 @@
     $(document).ready(function() {
         $('.tabs').tabs();
         $('#categoryTable').DataTable({
+            autoWidth: false,
+            columns: [{ width: '5%' }, null, null, null, null, null],
+            order: [3, 'desc'],
             layout: {
                 topStart: {
                     buttons: ['csv', 'excel', 'pdf', 'print']
@@ -127,6 +148,21 @@
         });
         $('select').formSelect();
         $('.collapsible').collapsible();
+        $('.modal').modal();
+
+        $('#registerForm').on('change', function() {
+            var field1 = $('#name').val().length;
+            var field2 = $('#description').val().length;
+
+            if(field1 < 1 || field2 < 1) {
+                $('#modalTrigger').prop("disabled", true);
+            } else {
+                $('#modalTrigger').prop("disabled", false);
+
+            }
+        });
+
+
     })
 
 </script>

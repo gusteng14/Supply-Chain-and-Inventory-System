@@ -18,5 +18,6 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     long countByStockLessThan(int qty);
     List<Product> findTop5ByOrderByTotalQuantitySoldDesc();
     List<Product> findByCreatedOnBetween(Date startDate, Date endDate);
+    List<Product> findByStockLessThan(int qty);
 
 }

@@ -49,8 +49,10 @@
                     <table id="itemTypeTable" class="z-depth-1 display table-csis">
                         <thead style="background-color: rgba(234,233,233,0.5);">
                             <tr class="tr-csis">
-                                <th class="dt-head-left th-csis">Item Type Id</th>
+                                <th class="dt-head-left th-csis">Id</th>
                                 <th class=" dt-head-left th-csis">Item Type Name</th>
+                                <th class=" dt-head-left th-csis">Created On</th>
+                                <th class=" dt-head-left th-csis">Last Updated</th>
                                 <th class="dt-head-right th-csis" data-dt-order="disable"></th>
                             </tr>
                         </thead>
@@ -58,6 +60,8 @@
                             <tr class="tr-csis-body" th:each="itemType : ${itemType}">
                                 <td class="dt-body-left td-csis" th:text="${itemType.id}">z</td>
                                 <td class="dt-body-left td-csis" th:text="${itemType.name}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${itemType.createdOn}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${itemType.lastUpdatedOn}">z</td>
                                 <td class="dt-body-left td-csis" th:value="${itemType.id}">
                                     <div class="right">
                                         <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/itemType/' + ${itemType.id}}">
@@ -87,16 +91,20 @@
                             </div>
 
                         </div>
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <button style="display: none;" id="modal-trigger" data-target="modal1" class="btn modal-trigger">Modal</button>
 
-                        <div id="modal1" class="modal">
-                            <div class="modal-content">
-                                <h4>Tool Tip</h4>
-                                <p>Item Type created successfully.</p>
+                        <button disabled="disabled" id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
+                        <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                            <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                <div class="col l3">
+                                    <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                </div>
+                                <div class="col l9">
+                                    <h6>Do you want to save this item type in the system?</h6>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <a id="close-modal" href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                            <div style="margin: 0px;" class="row modal-footer teal">
+                                <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
                             </div>
                         </div>
                     </form>
@@ -122,6 +130,8 @@
         $('.modal').modal();
         $('.collapsible').collapsible();
         $('#itemTypeTable').DataTable({
+            columns: [{ width: '5%' }, null, null, null, null],
+            order: [2, 'desc'],
             layout: {
                 topStart: {
                     buttons: ['csv', 'excel', 'pdf', 'print']
@@ -129,6 +139,16 @@
             }
         });
         $('select').formSelect();
+
+        $('#registerForm').on('change', function() {
+            var field1 = $('#name').val().length;
+
+            if(field1 < 1) {
+                $('#modalTrigger').prop("disabled", true);
+            } else {
+                $('#modalTrigger').prop("disabled", false);
+            }
+        });
 
     });
 

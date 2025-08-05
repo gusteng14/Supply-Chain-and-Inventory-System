@@ -25,6 +25,9 @@ public class Product implements Serializable {
     private String name;
     private String description;
     private int totalQuantitySold = 0;
+    private Boolean isLowStock;
+    private Integer reorderPoint;
+    private Integer defaultRestockQuantity;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)

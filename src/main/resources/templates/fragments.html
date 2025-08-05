@@ -112,8 +112,8 @@
                 <li sec:authorize="hasAuthority('READ_SUPPLIER_PERM')">
                     <a style="color: white;" th:href="@{/supplier}"> Suppliers </a>
                 </li>
-                <li sec:authorize="hasAuthority('READ_SUPPLIER_PERM')">
-                    <a style="color: white;" th:href="@{/transactions}"> Transactions </a>
+                <li sec:authorize="hasAuthority('READ_TRANSACTION_PERM')">
+                    <a style="color: white;" th:href="@{/transaction}"> Transactions </a>
                 </li>
                 <li sec:authorize="hasAuthority('RPRT_PERM')">
                     <a style="color: white;" href="#"> Reports </a>

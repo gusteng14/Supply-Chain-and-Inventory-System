@@ -38,19 +38,27 @@ public class POSService {
         return header;
     }
 
-    public void saveDetails(OrderHeader header, List<String> itemList, List<String> qtyList, List<String> totalList) {
+    public void saveDetails(OrderHeader header, List<String> itemList, List<String> qtyList, List<String> totalList, List<String> unitPrice) {
         int i = 0;
         for (String str : itemList) {
             OrderDetail orderDetail = new OrderDetail();
+            float qty = Float.parseFloat(qtyList.get(i));
+
             orderDetail.setItemName(str);
             orderDetail.setQuantity(Integer.parseInt(qtyList.get(i)));
-            orderDetail.setTotal(Float.parseFloat(totalList.get(i)));
+            orderDetail.setTotal(Float.parseFloat(totalList.get(i)) * qty);
+            orderDetail.setUnitPrice(Float.parseFloat(unitPrice.get(i)));
             orderDetail.setHeaderId(header);
             detailsRepository.save(orderDetail);
 
             Product product = productRepo.findByName(str).get();
             product.setStock(product.getStock() - Integer.parseInt(qtyList.get(i)));
             product.setTotalQuantitySold(product.getTotalQuantitySold() + Integer.parseInt(qtyList.get(i)));
+            if(product.getStock() <= product.getReorderPoint()) {
+                product.setIsLowStock(true);
+            } else {
+                product.setIsLowStock(false);
+            }
             productRepo.save(product);
             i++;
         }

@@ -69,11 +69,43 @@
                                 <span style="font-size: 18px; font-weight: 300;" class="card-title">Low Stock Products</span>
                                 <span style="font-size: 30px;" class="material-icons-outlined card-numbers-icons ">inventory_2</span>
                                 <span class="card-numbers" th:text="${noOfLowStockProducts}"></span>
-
+                            </div>
+                            <a class="btn modal-trigger" href="#modal"
+                                    style="background-color: transparent; margin-left: 20px; border: 1px solid black; border-radius: 10px;">
+                                View Low Stock Items
+                            </a>
+                            <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                                <div class="modal-content">
+                                    <h4>Items with low stock:</h4>
+                                    <div class="row">
+                                        <table>
+                                            <thead>
+                                                <th>Item</th>
+                                                <th>Current Stock</th>
+                                            </thead>
+                                            <tr th:each="lowStockProduct : ${lowStockProducts}">
+                                                <td th:text="${lowStockProduct.name}">Item 1</td>
+                                                <td th:text="${lowStockProduct.stock}">25</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row modal-footer teal">
+<!--                                    <div style="text-align: center;" class="col l6">-->
+<!--                                        <a id="closeModal" href="" class="modal-close waves-effect waves-green btn-flat" >Confirm</a>-->
+<!--                                    </div>-->
+<!--                                    <div style="text-align: center;" class="col l6">-->
+<!--                                        <a id="restockBtn" href="" class="modal-close waves-effect waves-green btn-flat" >Close</a>-->
+<!--                                    </div>-->
+                                        <a id="restockBtn" th:href="@{/requestLowStock}" ref="" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Request for Restock</a>
+                                        <a id="closeModal" href="" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Close</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
 
                 <div class="row">
                     <div class="col l6">

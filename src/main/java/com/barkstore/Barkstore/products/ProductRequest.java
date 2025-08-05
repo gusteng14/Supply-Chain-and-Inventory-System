@@ -21,6 +21,9 @@ public class ProductRequest {
     private Integer stock;
     private String category;
     private String itemType;
+    private Integer reorderPoint;
+    private Integer defaultRestockQuantity;
+    private Boolean isLowStock;
 //    private String photo;
 
     private String imageData;

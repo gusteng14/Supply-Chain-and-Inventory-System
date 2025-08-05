@@ -599,6 +599,32 @@ table.highlight>tbody>.rejected:hover {
     background: #94e4ff;
     background: linear-gradient(90deg, rgba(148, 228, 255, 1) 0%, rgba(148, 228, 255, 1) 50%, rgba(252, 254, 255, 1) 100%);
 }
+
+#restockBtn {
+    color: white;
+}
+
+#restockBtn:hover {
+    color: #25d1d1;
+}
+
+#closeModal {
+    color: white;
+}
+
+#closeModal:hover {
+    color: #25d1d1;
+}
+
+#submitBtn {
+    color: white;
+}
+
+#submitBtn:hover {
+    color: #25d1d1;
+}
+
+
 /*---------- FONTS ----------*/
 
 

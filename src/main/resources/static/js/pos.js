@@ -48,8 +48,9 @@ $(document).ready(function() {
             + '<div class="col l5 nameprice">'
             + '<span name="itemName">' + productName + '</span><br><span style="color: gray;">P</span><span class="listPrice" style="color: gray;">' + productPrice + '</span></div>'
             + '<input hidden="hidden" name="item" value="' + productName + '">'
+            + '<input hidden="hidden"  name="unitPrice" value="' + productPrice + '">'
             + '<div class="col l4 listPriceTotalCol">'
-            + '<div class="rightSpan" style="float: right;"><span>&#8369;</span><span class="listPriceTotal" style="float: right;">' + productPrice + '</span></div><br>'
+            + '<div class="rightSpan" style="float: right;"><span>&#8369;</span><span name="listPriceTotal" class="listPriceTotal" style="float: right;">' + productPrice + '</span></div><br>'
             + '<input hidden="hidden" name="lptotal" value="' + productPrice + '">'
             + '<div style="float: right;">'
             + '<button type="button" class="reduce-order-button-list">-</button>'
@@ -58,12 +59,13 @@ $(document).ready(function() {
             + '<button type="button" class="add-order-button-list teal lighten-3">+</button>'
             + '</div></div></div>');
 
-            $('.listPriceTotal').each(function() {
+            $('span[name^="listPriceTotal"]').each(function() {
                 subtotal += parseFloat($(this).text());
+                console.log("Subtotal Amount: " + subtotal);
             })
             $('#subtotal').text(PHP.format(subtotal));
 
-            $('.listPriceTotal').each(function() {
+            $('span[name^="listPriceTotal"]').each(function() {
                 total += parseFloat($(this).text());
             })
             $('#total').text(PHP.format(total));
@@ -117,6 +119,7 @@ $(document).ready(function() {
 
             let totalPerProduct = listPrice * orderQty;
             $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
+            $(this).parent().siblings().children('input[name^="lptotal"]').text(totalPerProduct);
 
             $('.listPriceTotal').each(function() {
                 subtotal += parseFloat($(this).text());
