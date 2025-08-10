@@ -88,11 +88,11 @@ public class SecurityConfig {
                                 .permitAll()
                                 .defaultSuccessUrl("/", true)
                 )
-//                .rememberMe(rm -> rm
-//                    .key("superSecretKey123") // used to sign cookie hash
-//                    .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
-//                    .rememberMeParameter("remember-me") // matches checkbox name
-//                )
+                .rememberMe(
+                        rememberMe ->
+                                rememberMe.key("uniqueAndSecret")
+                                        .userDetailsService(userService)
+                )
                 .build();
     }
 
