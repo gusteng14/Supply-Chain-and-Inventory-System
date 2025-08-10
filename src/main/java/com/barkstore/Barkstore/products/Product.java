@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +22,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Audited
+@EntityListeners(AuditingEntityListener.class)
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,6 +35,7 @@ public class Product implements Serializable {
     private Boolean isLowStock;
     private Integer reorderPoint;
     private Integer defaultRestockQuantity;
+    private boolean deleted = false;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
@@ -37,35 +45,22 @@ public class Product implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date lastUpdatedOn;
 
-//    @CreationTimestamp
-//    private LocalDateTime createdOn;
-//
-//    @UpdateTimestamp
-//    private LocalDateTime lastUpdatedOn;
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
 
+    @LastModifiedBy
+    private String lastUpdatedBy;
 
-
-//    @AUDITING
-//    private MyUser createdBy;
-//    @AUDITING
-//    private MyUser lastUpdatedBy;
-//    private ItemType itemType;
-//    NEED TO IMPLEMENT SOFT DELETE FUNCTION
+//  TODO: NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
     @Column(scale = 2)
     private BigDecimal cost;
     private Integer stock;
 
+    @NotAudited
     @Lob
     private String imageData;
-//    private String imageName;
-//    private String imageType;
-
-//    private String photo;
-
-//    @Transient
-//    private String photosPath;
-
 
     @ManyToOne
     @JoinColumn(name="item_type_id" ,nullable = false)

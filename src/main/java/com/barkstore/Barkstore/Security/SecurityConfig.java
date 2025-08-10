@@ -1,10 +1,12 @@
 package com.barkstore.Barkstore.Security;
 
+import com.barkstore.Barkstore.ApplicationAuditAware;
 import com.barkstore.Barkstore.appuser.MyUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.authorization.AuthenticatedAuthorizationManager.rememberMe;
 
 
 @Configuration
@@ -63,27 +66,33 @@ public class SecurityConfig {
         return provider;
     }
 
-
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new ApplicationAuditAware();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**","/js/**","/images/**","/api/v*/registration/**").permitAll()
-                        .requestMatchers( "/css/images/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**", "/api/v*/registration/**").permitAll()
+                                .requestMatchers("/css/images/**").permitAll()
 //                        .requestMatchers("/employee/**").permitAll()
-                        .anyRequest()
-                        .authenticated()
+                                .anyRequest()
+                                .authenticated()
+
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                        .defaultSuccessUrl("/", true)
-
-//                        .failureForwardUrl("/login")
+                                .loginPage("/login")
+                                .permitAll()
+                                .defaultSuccessUrl("/", true)
                 )
-                //.httpBasic(Customizer.withDefaults())
+//                .rememberMe(rm -> rm
+//                    .key("superSecretKey123") // used to sign cookie hash
+//                    .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
+//                    .rememberMeParameter("remember-me") // matches checkbox name
+//                )
                 .build();
     }
 

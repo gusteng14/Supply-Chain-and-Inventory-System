@@ -111,11 +111,26 @@
                     <div class="col l6">
                         <div style="height: 420px;" class="card">
                             <div class="card-content">
-                                <span class="card-title">Top 5 Best Selling Products</span>
-                                <div id="bar-chart"></div>
+                                <div class="col l12">
+                                    <span style="display: inline-block;" class="card-title">Top 5 Best Selling Products</span>
+                                    <span class="right">
+                                        <select id="top5Date" class="btn browser-default">
+                                            <option value="TODAY">Today</option>
+                                            <option value="WEEK">This Week</option>
+                                            <option value="MONTH" selected>This Month</option>
+                                            <option value="YEAR">This Year</option>
+                                            <option value="">Custom</option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="col l12">
+                                    <div id="bar-chart" style=""></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
 
                     <div class="row">
 <!--                        <div style="height: 420px;" class="col l6">-->
@@ -151,9 +166,8 @@
                                 <div class="col l12">
                                     <span style="display: inline-block;" class="card-title">Sales Summary</span>
                                     <span class="right">
-                                        <select id="date" class="btn browser-default">
-                                            <option disabled selected>Time period</option>
-                                            <option value="TODAY">Today</option>
+                                        <select id="salesSummaryDate" class="btn browser-default">
+                                            <option value="TODAY" selected>Today</option>
                                             <option value="WEEK">This Week</option>
                                             <option value="MONTH">This Month</option>
                                             <option value="YEAR">This Year</option>

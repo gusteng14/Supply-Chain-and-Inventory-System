@@ -56,7 +56,97 @@
                                 <th class="dt-head-left th-csis">Address</th>
                                 <th class="dt-head-left th-csis">Agent</th>
                                 <th class="dt-head-left th-csis">Agent Contact No</th>
-                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable">
+                                    <a class="modal-trigger" href="#auditsModal">
+                                        <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">history</i>
+                                    </a>
+                                    <a class="modal-trigger" href="#softDeleteModal">
+                                        <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">delete</i>
+                                    </a>
+
+                                    <div style="border-radius: 10px; width: 1200px; height: auto;" id="softDeleteModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="row">
+                                                <div class="col l12">
+                                                    <span style="text-align: left; font-size: 28px;" class="left">Deleted Supplier Records</span>
+                                                    <span class="right">
+                                                        <a id="closeSoftDeleteModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table id="softDeletesTable" class="z-depth-1 display table-csis">
+                                                    <thead>
+                                                        <tr class="tr-csis">
+                                                            <th class="dt-body-left th-csis">Id</th>
+                                                            <th class="dt-body-left th-csis">Name</th>
+                                                            <th class="dt-head-left th-csis">Email</th>
+                                                            <th class="dt-head-left th-csis">Contact No</th>
+                                                            <th class="dt-head-left th-csis">Address</th>
+                                                            <th class="dt-head-left th-csis">Agent</th>
+                                                            <th class="dt-head-left th-csis">Agent Contact No</th>
+                                                            <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tr th:each="deletedFields : ${deletedFields}">
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.id}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.name}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.email}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.contactNo}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.getAddress()}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.agentName}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.agentContactNo}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis">
+                                                            <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/supplier/restore/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to restore this record??')">
+                                                                Restore
+                                                            </a>
+                                                            <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/supplier/delete/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this record?')">
+                                                                Delete
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="border-radius: 10px; width: 1200px; height: auto;" id="auditsModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="row">
+                                                <div class="col l12">
+                                                    <span style="text-align: left; font-size: 28px;" class="left">Logs</span>
+                                                    <span class="right">
+                                                        <a id="closeAuditsModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table id="auditsTable" class="z-depth-1 display table-csis">
+                                                    <thead>
+                                                        <th class="dt-head-left th-csis"></th>
+                                                        <th class="dt-head-left th-csis">Action</th>
+                                                        <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
+                                                        <th style="text-align: center;" class="dt-head-left th-csis">Supplier Id</th>
+                                                        <th style="text-align: center;" class="dt-head-left th-csis">Supplier Name</th>
+                                                        <th style="text-align: center;" class="dt-head-left th-csis">Performed by</th>
+                                                    </thead>
+                                                    <tr th:each="audit : ${audits}">
+                                                        <td style="font-weight: 100;" th:text="${audit.revId}"></td>
+                                                        <td style="font-weight: 100;" th:text="${audit.action}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.supplierId}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.supplierName}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.username}"></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,7 +166,7 @@
                                         <a sec:authorize="hasAuthority('UPDATE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/supplier/edit(id=${supplier.id})}">
                                             Update
                                         </a>
-                                        <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/supplier/delete/' + ${supplier.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                        <a sec:authorize="hasAuthority('DELETE_SUPPLIER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/supplier/softdelete/' + ${supplier.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                             Delete
                                         </a>
                                     </div>
@@ -173,6 +263,22 @@
             layout: {
                 topStart: {
                     buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
+        $('#softDeletesTable').DataTable({
+            columns: [{ width: '5%' }, null, null, null,null, null, null, null],
+            layout: {
+                topStart: {
+                    buttons: []
+                }
+            }
+        });
+        $('#auditsTable').DataTable({
+            columns: [{ width: '5%' },{ width: '5%' }, { width: '50%' }, { width: '10%' }, null, null],
+            layout: {
+                topStart: {
+                    buttons: []
                 }
             }
         });

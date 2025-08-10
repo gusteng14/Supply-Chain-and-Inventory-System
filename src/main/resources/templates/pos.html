@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="col l4">
                                         <div class="rightSpan" style="float: right;">
-                                            <span>₱</span><span class="listPriceTotal" style="float: right;" th:text="${order.total}">Total</span>
+                                            <span>₱</span><span class="totalPerItem" style="float: right;" th:text="${order.total}">Total</span>
                                         </div>
                                     </div>
                                 </div>
@@ -131,11 +131,51 @@
 
 
                         <div>
-                            <button class="btn submit-order">
+                            <button disabled="disabled" id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger submit-order">
                                 <span style="position: relative; top: 4px;"><i class="material-icons-round">shopping_cart</i></span>
                                 <span style="font-weight: 550">Submit Order</span>
-
                             </button>
+                            <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                                <div class="modal-content">
+                                    <h4>Confirm Items</h4>
+                                    <div class="row">
+                                        <div class="col l12">
+                                            <table class="receipt">
+                                                <thead>
+                                                    <th>Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Total (₱)</th>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class="col l5"></div>
+                                        <div class="col l6">
+                                            <table>
+                                                <tbody>
+                                                    <tr class="tr-csis-body" style="border-bottom: 1px solid white;">
+                                                        <td class="td-csis" style="border-style: none !important;">Subtotal</td>
+                                                        <td class="td-csis subtotal" style="text-align: right;" >999</td>
+                                                    </tr>
+                                                    <tr class="tr-csis-body" style="border-bottom: 1px solid black;">
+                                                        <td class="td-csis">Etc</td>
+                                                        <td class="td-csis" style="text-align: right;">0</td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid black; background-color: #00808038;">
+                                                        <td style="font-weight: bold;">Total (&#8369;)</td>
+                                                        <td class="total" style="text-align: right; font-weight: bold;" >999</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col l1"></div>
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row modal-footer teal">
+                                    <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Confirm</button>
+                                    <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

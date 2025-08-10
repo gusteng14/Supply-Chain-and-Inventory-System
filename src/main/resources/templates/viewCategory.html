@@ -32,29 +32,60 @@
 
     <div class="main-container">
         <div class="row">
-            <div class="form-block">
-                <div class="gray-background">
-                    <h3 style="color:black;">Category Details</h3>
-                    <form class="col s12" id="registerForm" action="#" th:action="@{/category/edit}" method="post" th:object="${category}">
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input readonly style="color: black;" th:value="${category.id}" id="id" type="text" name="id">
-                                <label for="id">ID</label>
+            <div class="col l12">
+                <div class="form-block">
+                    <div class="gray-background">
+                        <h3 style="color:black;">Category Details</h3>
+                        <form class="col s12" id="registerForm" action="#" th:action="@{/category/edit}" method="post" th:object="${category}">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input readonly style="color: black;" th:value="${category.id}" id="id" type="text" name="id">
+                                    <label for="id">ID</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input  readonly style="color: black;" th:field="*{name}" id="name" type="text" required>
-                                <label for="name">Category Name</label>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input  readonly style="color: black;" th:field="*{name}" id="name" type="text" required>
+                                    <label for="name">Category Name</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input  readonly style="color: black;" th:field="*{description}" id="description" type="text" required>
+                                    <label for="description">Category Description</label>
+                                </div>
                             </div>
-                            <div class="input-field col s6">
-                                <input  readonly style="color: black;" th:field="*{description}" id="description" type="text" required>
-                                <label for="description">Category Description</label>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col l1"></div>
+            <div class="col l10">
+                <h5>Logs</h5>
+                <table id="logs" class="z-depth-1 display table-csis">
+                    <thead style="background-color: rgba(234,233,233,0.5);">
+                    <tr class="tr-csis">
+                        <th class="dt-head-left th-csis">Version</th>
+                        <th class="dt-head-left th-csis">Name</th>
+                        <th class="dt-head-left th-csis">Description</th>
+                        <th class="dt-head-left th-csis">Updated By</th>
+                        <th class="dt-head-left th-csis">Operation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="logs, status : ${logs}">
+                        <tr class="tr-csis-body" th:each="rev : ${logs.getEntity()}">
+                            <td class="dt-body-left td-csis" th:text="${status.index + 1}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.name}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.description}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.lastUpdatedBy}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${logs.getMetadata().getRevisionType()}">z</td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col l1"></div>
         </div>
     </div>
 </div>

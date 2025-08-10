@@ -86,6 +86,39 @@
                             </tr>
                         </tbody>
                     </table>
+                    <br>
+                    <h5>Logs</h5>
+
+                    <table id="logs" class="z-depth-1 display table-csis">
+                        <thead style="background-color: rgba(234,233,233,0.5);">
+                        <tr class="tr-csis">
+                            <th class="dt-head-left th-csis">Version</th>
+                            <th class="dt-head-left th-csis">Name</th>
+                            <th class="dt-head-left th-csis">Email</th>
+                            <th class="dt-head-left th-csis">Contact No</th>
+                            <th class="dt-head-left th-csis">Address</th>
+                            <th class="dt-head-left th-csis">Agent</th>
+                            <th class="dt-head-left th-csis">Agent Contact No</th>
+                            <th class="dt-head-left th-csis">Updated By</th>
+                            <th class="dt-head-left th-csis">Operation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="logs, status : ${logs}">
+                            <tr class="tr-csis-body" th:each="rev : ${logs.getEntity()}">
+                                <td class="dt-body-left td-csis" th:text="${status.index + 1}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.name}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.email}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.contactNo}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.getAddress()}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.agentName}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.agentContactNo}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${rev.lastUpdatedBy}">z</td>
+                                <td class="dt-body-left td-csis" th:text="${logs.getMetadata().getRevisionType()}">z</td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

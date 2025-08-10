@@ -6,6 +6,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -18,6 +23,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
+@Audited
 public class RequestHeader {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -30,6 +37,7 @@ public class RequestHeader {
     private String status = "Pending";
     private Integer noOfApprovedItems;
     private Integer totalRequestedItems;
+    private boolean deleted = false;
 
     @CreationTimestamp
     private LocalDate createdOn;
@@ -37,6 +45,15 @@ public class RequestHeader {
     @UpdateTimestamp
     private LocalDate lastUpdatedOn;
 
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(insertable = false)
+    private String lastUpdatedBy;
+
+    @NotAudited
     @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RequestDetails> requestDetails;
 

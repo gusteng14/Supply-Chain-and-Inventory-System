@@ -107,6 +107,53 @@
             </div>
             <div class="col l1"></div>
         </div>
+        <div class="row">
+            <div class="col l1"></div>
+            <div class="col l10">
+                <h5>Logs</h5>
+                <table id="logs" class="z-depth-1 display table-csis">
+                    <thead style="background-color: rgba(234,233,233,0.5);">
+                    <tr class="tr-csis">
+                        <th class="dt-head-left th-csis">Version</th>
+                        <th class="dt-head-left th-csis">Name</th>
+                        <th class="dt-head-left th-csis">Description</th>
+                        <th class="dt-head-left th-csis">Category</th>
+                        <th class="dt-head-left th-csis">Item Type</th>
+                        <th class="dt-head-left th-csis">Stock</th>
+                        <th class="dt-head-left th-csis">Cost</th>
+                        <th class="dt-head-left th-csis">Updated By</th>
+                        <th class="dt-head-left th-csis">Operation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="logs, status : ${logs}">
+                        <tr class="tr-csis-body" th:each="rev : ${logs.getEntity()}">
+                            <td class="dt-body-left td-csis" th:text="${status.index + 1}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.name}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.description}">z</td>
+                            <td class="dt-body-left td-csis">
+                                <th:block th:each="category : ${rev.category}">
+                                    <th:block th:text="${category.name}">[category name]</th:block>
+                                    <br>
+                                </th:block>
+                            </td>
+                            <td class="dt-body-left td-csis">
+                                <th:block th:each="itemType : ${rev.itemType}">
+                                    <th:block th:text="${itemType.name}">[itemType name]</th:block>
+                                    <br>
+                                </th:block>
+                            </td>
+                            <td class="dt-body-left td-csis" th:text="${rev.stock}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.cost}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${rev.lastUpdatedBy}">z</td>
+                            <td class="dt-body-left td-csis" th:text="${logs.getMetadata().getRevisionType()}">z</td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col l1"></div>
+        </div>
     </main>
 </div>
 

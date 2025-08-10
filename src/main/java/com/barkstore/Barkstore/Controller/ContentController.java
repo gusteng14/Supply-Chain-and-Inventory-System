@@ -6,6 +6,10 @@ import com.barkstore.Barkstore.Supplier.SupplierRequest;
 import com.barkstore.Barkstore.Supplier.SupplierService;
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
+import com.barkstore.Barkstore.audit.CateogryAuditDTO;
+import com.barkstore.Barkstore.audit.ItemTypeAuditDTO;
+import com.barkstore.Barkstore.audit.ProductAuditDTO;
+import com.barkstore.Barkstore.audit.SupplierAuditDTO;
 import com.barkstore.Barkstore.pos.*;
 import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
@@ -16,9 +20,14 @@ import com.barkstore.Barkstore.requisition.*;
 import com.barkstore.Barkstore.requisition.RequestHeader;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.history.Revision;
+import org.springframework.data.history.Revisions;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -79,6 +88,8 @@ public class ContentController {
     @Autowired
     private POSService posService;
 
+
+
     @GetMapping("/login")
     public String login() {
         return "login2";
@@ -133,18 +144,26 @@ public class ContentController {
     @GetMapping("/product")
     public String viewProduct(Model model) {
         model.addAttribute("productRequest", new ProductRequest());
-        List<Product> product = productRepo.findAll();
-        List<Category> category = categoryRepo.findAll();
-        List<ItemType> itemType = itemTypeRepo.findAll();
+        List<Product> product = productRepo.findAllActive();
+        List<Category> category = categoryRepo.findAllActive();
+        List<ItemType> itemType = itemTypeRepo.findAllActive();
+        List<Product> deletedFields = productService.getSoftDeletesProduct();
+        List<ProductAuditDTO> audits = productService.getAllAuditsProduct();
+
         model.addAttribute("product", product);
         model.addAttribute("category", category);
         model.addAttribute("itemType", itemType);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
         return "product";
     }
 
     @GetMapping("/product/{id}")
     public String viewProduct(@PathVariable Long id, Model model) {
         Product product = productRepo.findById(id).get();
+        Revisions<Long, Product> logs = productRepo.findRevisions(id);
+
+        model.addAttribute("logs", logs);
         model.addAttribute("product", product);
 
         return "viewProduct";
@@ -231,6 +250,18 @@ public class ContentController {
         return "redirect:/product";
     }
 
+    @GetMapping("/product/softdelete/{id}")
+    public String softDeleteProductById(@PathVariable(name="id") Long id) {
+        productService.softDeleteProduct(id);
+        return "redirect:/product";
+    }
+
+    @GetMapping("/product/restore/{id}")
+    public String restoreProductById(@PathVariable(name="id") Long id) {
+        productService.restoreRecordProduct(id);
+        return "redirect:/product";
+    }
+
     @GetMapping("/product/delete/{id}")
     public String deleteProductById(@PathVariable(name="id") Long id) {
 
@@ -243,8 +274,16 @@ public class ContentController {
     @GetMapping("/category")
     public String viewCategory(Model model) {
         model.addAttribute("categoryRequest", new CategoryRequest());
-        List<Category> category = categoryRepo.findAll();
+        List<Category> category = categoryRepo.findAllActive();
+        List<Category> deletedFields = productService.getSoftDeletesCategory();
+        List<CateogryAuditDTO> audits = productService.getAllAuditsCategory();
+
+
         model.addAttribute("category", category);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
+
+
         return "category";
     }
 
@@ -266,7 +305,10 @@ public class ContentController {
     @GetMapping("/category/{id}")
     public String viewCategory(@PathVariable Long id, Model model) {
         Category category = categoryRepo.findById(id).get();
+        Revisions<Long, Category> logs = categoryRepo.findRevisions(id);
+
         model.addAttribute("category", category);
+        model.addAttribute("logs", logs);
 
         return "viewCategory";
     }
@@ -301,6 +343,18 @@ public class ContentController {
         categoryRepo.save(category);
 //        productService.lowInventoryNotif(product);
 
+        return "redirect:/category";
+    }
+
+    @GetMapping("/category/softdelete/{id}")
+    public String softDeleteCategoryById(@PathVariable(name="id") Long id) {
+        productService.softDeleteCategory(id);
+        return "redirect:/category";
+    }
+
+    @GetMapping("/category/restore/{id}")
+    public String restoreCategoryById(@PathVariable(name="id") Long id) {
+        productService.restoreRecordCategory(id);
         return "redirect:/category";
     }
 
@@ -347,8 +401,13 @@ public class ContentController {
     @GetMapping("/itemType")
     public String viewItemType(Model model) {
         model.addAttribute("itemTypeRequest", new ItemTypeRequest());
-        List<ItemType> itemType = itemTypeRepo.findAll();
+        List<ItemType> itemType = itemTypeRepo.findAllActive();
+        List<ItemType> deletedFields = productService.getSoftDeletesItemType();
+        List<ItemTypeAuditDTO> audits = productService.getAllAuditsItemType();
+
         model.addAttribute("itemType", itemType);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
         return "itemType";
     }
 
@@ -408,6 +467,18 @@ public class ContentController {
         return "redirect:/itemType";
     }
 
+    @GetMapping("/itemType/softdelete/{id}")
+    public String softDeleteItemTypeById(@PathVariable(name="id") Long id) {
+        productService.softDeleteItemType(id);
+        return "redirect:/itemType";
+    }
+
+    @GetMapping("/itemType/restore/{id}")
+    public String restoreItemTypeById(@PathVariable(name="id") Long id) {
+        productService.restoreRecordItemType(id);
+        return "redirect:/itemType";
+    }
+
     @GetMapping("/itemType/delete/{id}")
     public String deleteItemTypeById(@PathVariable(name="id") Long id) {
         System.out.println("C ID IS: " + id);
@@ -418,8 +489,14 @@ public class ContentController {
     @GetMapping("/supplier")
     public String getAllSuppliers(Model model) {
         model.addAttribute("supplierRequest", new SupplierRequest());
-        List<Supplier> supplier = supplierRepository.findAll();
+        List<Supplier> supplier = supplierRepository.findAllActive();
+        List<Supplier> deletedFields = supplierService.getSoftDeletes();
+
+        List<SupplierAuditDTO> audits = supplierService.getAllAudits();
+
         model.addAttribute("supplier", supplier);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
         return "supplier";
     }
 
@@ -434,7 +511,10 @@ public class ContentController {
     @GetMapping("/supplier/{id}")
     public String viewSupplier(@PathVariable Long id, Model model) {
         Supplier supplier = supplierRepository.findById(id).get();
+        Revisions<Long, Supplier> logs = supplierRepository.findRevisions(id);
+
         model.addAttribute("supplier", supplier);
+        model.addAttribute("logs", logs);
 
         return "viewSupplier";
     }
@@ -470,10 +550,29 @@ public class ContentController {
         return "redirect:/supplier";
     }
 
+    @GetMapping("/supplier/softdelete/{id}")
+    public String softDeleteSupplierById(@PathVariable(name="id") Long id) {
+        supplierService.softDelete(id);
+        return "redirect:/supplier";
+    }
+
+    @GetMapping("/supplier/restore/{id}")
+    public String restoreSupplierById(@PathVariable(name="id") Long id) {
+        supplierService.restoreRecord(id);
+        return "redirect:/supplier";
+    }
+
     @GetMapping("/supplier/delete/{id}")
     public String deleteSupplierById(@PathVariable(name="id") Long id) {
         supplierRepository.deleteById(id);
         return "redirect:/supplier";
+    }
+
+    @GetMapping("/supplier/logs")
+    public String getSupplierLogs(Model model) {
+        Revisions<Long, Supplier> supplier = supplierRepository.findRevisions(252L);
+        model.addAttribute("supplier", supplier);
+        return "supplierLogs";
     }
 
     @GetMapping("/request")

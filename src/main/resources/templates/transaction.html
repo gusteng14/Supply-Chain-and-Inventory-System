@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tr-csis-body" th:each="transaction : ${transactions}">
+                            <tr class="tr-csis-body transactionRow" th:each="transaction : ${transactions}">
                                 <td class="dt-body-left td-csis id" th:text="${transaction.id}">z</td>
                                 <td class="dt-body-left td-csis" th:text="${transaction.orderNo}">z</td>
                                 <td class="dt-body-left td-csis" th:text="${transaction.createdOn}">z</td>

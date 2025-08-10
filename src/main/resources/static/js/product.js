@@ -8,6 +8,24 @@ $(document).ready(function() {
             }
         }
     });
+    $('#softDeleteTable').DataTable({
+        columns: [{ width: '6%' },{ width: '15%' }, null, null, null, null, null, null],
+        order: [[7, 'desc']],
+        layout: {
+            topStart: {
+                buttons: ['csv', 'excel', 'pdf', 'print']
+            }
+        }
+    });
+    $('#auditTable').DataTable({
+        columns: [{ width: '6%' },{ width: '15%' }, null, null, null, null],
+        order: [[7, 'desc']],
+        layout: {
+            topStart: {
+                buttons: ['csv', 'excel', 'pdf', 'print']
+            }
+        }
+    });
 
     $('#image').on('change', function() {
 

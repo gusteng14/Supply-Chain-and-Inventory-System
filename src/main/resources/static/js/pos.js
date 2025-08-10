@@ -40,7 +40,7 @@ $(document).ready(function() {
         if(!$(this).hasClass('selected')) {
             selected++;
             $(this).addClass('selected');
-            $('#order-list').append('<div class="row p'+ productId + '" data-id="' + productId +'" >'
+            $('#order-list').append('<div class="row dtl p'+ productId + '" data-id="' + productId +'" >'
             + '<div style="margin: 0px; padding: 0px;" class=row><div style="float: right;" class=col l12>'
             + '<span><i class="material-icons-round delete-order">cancel</i><p class="hiddenId" hidden="hidden">' + productId + '</p></span></div></div>'
             + '<div class="col l3" style="width: fit-content; height: fit-content;">'
@@ -52,7 +52,7 @@ $(document).ready(function() {
             + '<div class="col l4 listPriceTotalCol">'
             + '<div class="rightSpan" style="float: right;"><span>&#8369;</span><span name="listPriceTotal" class="listPriceTotal" style="float: right;">' + productPrice + '</span></div><br>'
             + '<input hidden="hidden" name="lptotal" value="' + productPrice + '">'
-            + '<div style="float: right;">'
+            + '<div class="itemQty" style="float: right;">'
             + '<button type="button" class="reduce-order-button-list">-</button>'
             + '<span class="orderQty">1</span>'
             + '<input hidden="hidden" name="qty" value="1">'
@@ -96,11 +96,13 @@ $(document).ready(function() {
             $('.p' + productId).remove();
         }
 
+        console.log("Selected: " + selected);
         if(selected > 0) {
             $('.emptyorderimg').attr('hidden', true);
+            $('.submit-order').prop('disabled', false);
         } else {
             $('.emptyorderimg').attr('hidden', false);
-
+            $('.submit-order').prop('disabled', true);
         }
     });
 
@@ -116,13 +118,13 @@ $(document).ready(function() {
             $(this).siblings('.orderQty').text(orderQty);
             $(this).siblings('input[name^="qty"]').val(orderQty);
 
-
             let totalPerProduct = listPrice * orderQty;
             $(this).parent().siblings().children('.listPriceTotal').text(totalPerProduct);
             $(this).parent().siblings().children('input[name^="lptotal"]').text(totalPerProduct);
 
             $('.listPriceTotal').each(function() {
                 subtotal += parseFloat($(this).text());
+                console.log("xxxx: " + subtotal);
             })
             $('#subtotal').text(PHP.format(subtotal));
 
@@ -169,6 +171,11 @@ $(document).ready(function() {
         let val = parseFloat($(this).parent().parent().parent().siblings('.listPriceTotalCol').children('.rightSpan').children('.listPriceTotal').text());
         total -= val;
         subtotal -=val;
+        selected--;
+        if (selected <= 0) {
+            $('.emptyorderimg').attr('hidden', false);
+            $('.submit-order').prop('disabled', true);
+        }
         $('#total').text(PHP.format(total));
         $('#subtotal').text(PHP.format(subtotal));
     });
@@ -198,5 +205,28 @@ $(document).ready(function() {
         if (hasSelected <= 0) {
             $('.add-order').parent().show(100);
         }
+    });
+
+    $('#modalTrigger').on('click', function() {
+       $('.dtl').each(function() {
+           let itemName = $(this).children('.nameprice').children('span[name^="itemName"]').text();
+           let itemPrice = $(this).children('.nameprice').children('.listPrice').text();
+           let qty = $(this).children('.listPriceTotalCol').children('.itemQty').children('.orderQty').text();
+           let totalPerItem = $(this).children('.listPriceTotalCol').children('.rightSpan').children('.listPriceTotal').text();
+           console.log("Item: " + itemName);
+           console.log("Price: " + itemPrice);
+           console.log("Quantity: " + qty);
+           console.log("Total per item: " + totalPerItem);
+           $('.receipt').append("<tr>"
+               + "<td>" + itemName + "</td>"
+               + "<td>" + qty + "</td>"
+               + "<td>" + itemPrice + "</td>"
+               + "<td>" + totalPerItem + "</td>"
+               + "</tr>"
+           );
+       })
+        $('.subtotal').text($('#total').text());
+
+        $('.total').text($('#total').text());
     });
 });

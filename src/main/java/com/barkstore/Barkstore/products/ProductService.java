@@ -1,7 +1,16 @@
 package com.barkstore.Barkstore.products;
 
 import com.barkstore.Barkstore.Email.EmailSender;
+import com.barkstore.Barkstore.Supplier.Supplier;
+import com.barkstore.Barkstore.audit.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +39,8 @@ public class ProductService {
     private CategoryRepo categoryRepo;
     @Autowired
     private ItemTypeRepo itemTypeRepo;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public ProductService(ProductRepo repo, EmailSender emailSender) {
         this.repo = repo;
@@ -188,16 +199,157 @@ public class ProductService {
         return products;
     }
 
-//    public List<Product> newProductsForTheMonth() {
-//        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusMonths(1), LocalDateTime.now());
-//
-//        return products;
-//    }
-//
-//    public List<Product> newProductsForTheDay() {
-//        List<Product> products = repo.findByCreatedOnBetween(LocalDateTime.now().minusDays(1), LocalDateTime.now());
-//        return products;
-//    }
+    public void softDeleteCategory(Long id) {
+        Category category = categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        category.setDeleted(true);
+        categoryRepo.save(category);
+    }
+
+    public List<Category> findAllActiveCategory() {
+        List<Category> active = categoryRepo.findAllActive();
+        return active;
+    }
+
+    public List<Category> getSoftDeletesCategory() {
+        List<Category> deletedFields = categoryRepo.findSoftDeletes();
+        return deletedFields;
+    }
+
+    public void restoreRecordCategory(Long id) {
+        Category category = categoryRepo.findById(id).get();
+        category.setDeleted(false);
+        categoryRepo.save(category);
+    }
+
+    public List<CateogryAuditDTO> getAllAuditsCategory() {
+        AuditReader auditReader = AuditReaderFactory.get(entityManager);
+        AuditQuery query = auditReader.createQuery()
+                .forRevisionsOfEntity(Category.class, false, true);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = query.getResultList();
+        List<CateogryAuditDTO> resultsToString = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Category entity = (Category) row[0];
+            UserRevisionEntity revisionEntity = (UserRevisionEntity) row[1];
+            RevisionType revisionType = (RevisionType) row[2];
+
+            CateogryAuditDTO dto = new CateogryAuditDTO();
+            dto.setRevId(String.valueOf(revisionEntity.getRev()));
+            dto.setAction(String.valueOf(revisionType));
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(revisionEntity.getRevtstmp());
+            dto.setDate(String.valueOf(timestamp));
+            dto.setCategoryId(String.valueOf(entity.getId()));
+            dto.setCategoryName(entity.getName());
+            dto.setUsername(revisionEntity.getUsername());
+            resultsToString.add(dto);
+        }
+        return resultsToString;
+
+    }
+
+    public void softDeleteItemType(Long id) {
+        ItemType itemType = itemTypeRepo.findById(id).orElseThrow(() -> new RuntimeException("Item Type not found"));
+        itemType.setDeleted(true);
+        itemTypeRepo.save(itemType);
+    }
+
+    public List<ItemType> findAllActiveItemType() {
+        List<ItemType> active = itemTypeRepo.findAllActive();
+        return active;
+    }
+
+    public List<ItemType> getSoftDeletesItemType() {
+        List<ItemType> deletedFields = itemTypeRepo.findSoftDeletes();
+        return deletedFields;
+    }
+
+    public void restoreRecordItemType(Long id) {
+        ItemType itemType = itemTypeRepo.findById(id).get();
+        itemType.setDeleted(false);
+        itemTypeRepo.save(itemType);
+    }
+
+    public List<ItemTypeAuditDTO> getAllAuditsItemType() {
+        AuditReader auditReader = AuditReaderFactory.get(entityManager);
+        AuditQuery query = auditReader.createQuery()
+                .forRevisionsOfEntity(ItemType.class, false, true);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = query.getResultList();
+        List<ItemTypeAuditDTO> resultsToString = new ArrayList<>();
+
+        for (Object[] row : results) {
+            ItemType entity = (ItemType) row[0];
+            UserRevisionEntity revisionEntity = (UserRevisionEntity) row[1];
+            RevisionType revisionType = (RevisionType) row[2];
+
+            ItemTypeAuditDTO dto = new ItemTypeAuditDTO();
+            dto.setRevId(String.valueOf(revisionEntity.getRev()));
+            dto.setAction(String.valueOf(revisionType));
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(revisionEntity.getRevtstmp());
+            dto.setDate(String.valueOf(timestamp));
+            dto.setItemTypeId(String.valueOf(entity.getId()));
+            dto.setItemTypeName(entity.getName());
+            dto.setUsername(revisionEntity.getUsername());
+            resultsToString.add(dto);
+        }
+        return resultsToString;
+    }
+
+    public void softDeleteProduct(Long id) {
+        Product product = repo.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setDeleted(true);
+        repo.save(product);
+    }
+
+    public List<Product> findAllActiveProduct() {
+        List<Product> active = repo.findAllActive();
+        return active;
+    }
+
+    public List<Product> getSoftDeletesProduct() {
+        List<Product> deletedFields = repo.findSoftDeletes();
+        return deletedFields;
+    }
+
+    public void restoreRecordProduct(Long id) {
+        Product product = repo.findById(id).get();
+        product.setDeleted(false);
+        repo.save(product);
+    }
+
+    public List<ProductAuditDTO> getAllAuditsProduct() {
+        AuditReader auditReader = AuditReaderFactory.get(entityManager);
+        AuditQuery query = auditReader.createQuery()
+                .forRevisionsOfEntity(Product.class, false, true)
+                .addProjection(AuditEntity.revisionNumber())
+                .addProjection(AuditEntity.revisionType())
+                .addProjection(AuditEntity.revisionProperty("revtstmp"))
+                .addProjection(AuditEntity.property("id"))
+                .addProjection(AuditEntity.property("name"))
+                .addProjection(AuditEntity.revisionProperty("username"));
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = query.getResultList();
+        List<ProductAuditDTO> resultsToString = new ArrayList<>();
+
+        for (Object[] row : results) {
+            ProductAuditDTO dto = new ProductAuditDTO();
+            dto.setRevId(String.valueOf(row[0]));
+            dto.setAction(String.valueOf(row[1]));
+            long x = (long) row[2];
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(x);
+            dto.setDate(String.valueOf(timestamp));
+            dto.setProductId(String.valueOf(row[3]));
+            dto.setProductName(String.valueOf(row[4]));
+            dto.setUsername(String.valueOf(row[5]));
+            resultsToString.add(dto);
+        }
+
+        return resultsToString;
+    }
 
 }
 

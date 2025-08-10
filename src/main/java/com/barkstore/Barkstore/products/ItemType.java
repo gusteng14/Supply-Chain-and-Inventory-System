@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,31 +18,22 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+//@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Audited
+@EntityListeners(AuditingEntityListener.class)
 public class ItemType implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
+    private boolean deleted = false;
     //private String description;
-    //    @AUDITING
-//    private MyUser createdBy;
-//    @AUDITING
-//    private MyUser lastUpdatedBy;
-
-    // NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
     @OneToMany(mappedBy="itemType")
     private Set<Product> products;
-
-//    @CreationTimestamp
-//    private Instant createdOn;
-//
-//    @UpdateTimestamp
-//    private Instant lastUpdatedOn;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
@@ -47,4 +42,11 @@ public class ItemType implements Serializable {
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     private Date lastUpdatedOn;
+
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    private String lastUpdatedBy;
 }

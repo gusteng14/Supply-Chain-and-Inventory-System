@@ -1,14 +1,14 @@
 package com.barkstore.Barkstore.Controller;
 
 import com.barkstore.Barkstore.appuser.*;
+import com.barkstore.Barkstore.audit.ProductAuditDTO;
+import com.barkstore.Barkstore.audit.RequestHeaderAuditDTO;
 import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenRepository;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
-import com.barkstore.Barkstore.requisition.DetailsRepository;
-import com.barkstore.Barkstore.requisition.HeaderRepository;
-import com.barkstore.Barkstore.requisition.RequestDetails;
+import com.barkstore.Barkstore.requisition.*;
 import com.barkstore.Barkstore.requisition.RequestHeader;
 import jakarta.validation.Valid;
 import org.hibernate.sql.Update;
@@ -50,6 +50,8 @@ public class AdminController {
     private DetailsRepository detailsRepository;
     @Autowired
     private HeaderRepository headerRepository;
+    @Autowired
+    private SupplyChainService supplyChainService;
 
     @GetMapping("/verified")
     public String verifiedPage() {
@@ -253,9 +255,14 @@ public class AdminController {
     @GetMapping("/approve")
     public String getRequests(Model model) {
         List<RequestDetails> requestDetails = detailsRepository.findAll();
-        List<RequestHeader> requestHeaders = headerRepository.findAll();
+        List<RequestHeader> requestHeaders = headerRepository.findAllActive();
+        List<RequestHeader> deletedFields = supplyChainService.getSoftDeletesRequestHeader();
+        List<RequestHeaderAuditDTO> audits = supplyChainService.getAllAuditsRequestHeader();
+
         model.addAttribute("requestDetails", requestDetails);
         model.addAttribute("requestHeaders", requestHeaders);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
 
 
         return "requestList";
@@ -304,6 +311,20 @@ public class AdminController {
             i++;
         }
 
+        return "redirect:/approve";
+    }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @GetMapping("/approve/softdelete/{id}")
+    public String softDeleteRequestById(@PathVariable(name="id") Long id) {
+        supplyChainService.softDeleteRequestHeader(id);
+        return "redirect:/approve";
+    }
+
+    @PreAuthorize("hasAuthority('APPROVE_PERM')")
+    @GetMapping("/approve/restore/{id}")
+    public String restoreRequestById(@PathVariable(name="id") Long id) {
+        supplyChainService.restoreRecordRequestHeader(id);
         return "redirect:/approve";
     }
 

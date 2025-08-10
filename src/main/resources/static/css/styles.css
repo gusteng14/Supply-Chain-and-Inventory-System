@@ -624,6 +624,10 @@ table.highlight>tbody>.rejected:hover {
     color: #25d1d1;
 }
 
+.transactionRow {
+    cursor: pointer;
+}
+
 
 /*---------- FONTS ----------*/
 

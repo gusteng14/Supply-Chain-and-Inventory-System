@@ -51,6 +51,7 @@ public class POSService {
             orderDetail.setHeaderId(header);
             detailsRepository.save(orderDetail);
 
+            // TODO: Should be find by id not by name
             Product product = productRepo.findByName(str).get();
             product.setStock(product.getStock() - Integer.parseInt(qtyList.get(i)));
             product.setTotalQuantitySold(product.getTotalQuantitySold() + Integer.parseInt(qtyList.get(i)));
@@ -88,11 +89,17 @@ public class POSService {
 
     public int totalOrders(String date) throws ParseException {
         LocalDate localDate = LocalDate.parse(date);
-        System.out.println("Parsed: " + localDate);
         List<OrderHeader> orders = headerRepository.findByCreatedOn(localDate);
         int count = orders.size();
 
         return count;
+    }
+
+    public Integer getTop5ProductsMonth(String itemName, int year, int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate firstDayOfMonth = yearMonth.atDay(1);
+        LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
+        return detailsRepository.totalQuantitySold(itemName, firstDayOfMonth, lastDayOfMonth);
     }
 
     public List<OrderHeader> getOrdersByMonth(int year, int month) {
@@ -107,4 +114,6 @@ public class POSService {
         LocalDate lastDayOfYear = LocalDate.ofYearDay(year, 365);
         return headerRepository.findByCreatedOnBetween(firstDayOfYear, lastDayOfYear);
     }
+
+
 }

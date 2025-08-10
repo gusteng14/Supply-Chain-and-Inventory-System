@@ -4,10 +4,34 @@ $(document).ready(function() {
     var dtlCount = 0;
 
     $('.tblRow').each(function() {
+        let x = i+1;
+        var cost = parseFloat($('#itemList'+ x + ' option:selected').attr('data-cost'));
+        var qty = parseFloat($(this).children('.quantity').children().val());
+        var total = cost * qty;
+
+        $(this).children('.total').children().val(total);
+
+        var imgId = $('#itemList'+ x + ' option:selected').attr('data-id');
+        $('#product-image' + x).attr('src', '/' + imgId + '/' + 'product_image');
         i++;
     });
 
+    let PHP = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'PHP',
+    });
 
+    var grandTotal = 0;
+    $("input[name='total[]']").each(function(index) {
+        var value = parseInt($(this).val());
+        grandTotal += value;
+    });
+
+    if(!isNaN(grandTotal)) {
+        $('#grandTotal').html(PHP.format(grandTotal));
+    } else {
+        $('#grandTotal').html('- - - - -');
+    }
 
     $('button[name^="removeRow"]').each(function(index) {
         dtlCount++;

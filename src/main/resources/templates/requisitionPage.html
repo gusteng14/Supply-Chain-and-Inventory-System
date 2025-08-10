@@ -111,7 +111,22 @@
 
 <!--                                <span id="grandTotal" class="grand-total right-align"></span>-->
                             </div>
-                            <button id="submit" name="submit" class="btn">Submit</button>
+<!--                            <button id="submit" name="submit" class="btn">Submit</button>-->
+                            <button id="modalTrigger" name="submit" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
+                            <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
+                                <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                    <div class="col l3">
+                                        <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                    </div>
+                                    <div class="col l9 ">
+                                        <h6 >Do you want to send this request to the admin/s?</h6>
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row modal-footer teal">
+                                    <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                    <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

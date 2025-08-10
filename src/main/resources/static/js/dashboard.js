@@ -12,15 +12,84 @@ $(document).ready(function () {
         }
     });
 
+    var date = new Date();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    if (month.toString().length == 1) {
+        month = "0" + month;
+    }
     var products = [];
     var productsQtySold = [];
-    $('p[name="top5products"]').each(function(index) {
-        products.push($(this).text());
+    console.log("Month: " + month + " Year: " + year);
+
+    $.ajax({
+        type: "GET",
+        url: "/getTop5ProductsMonth",
+        data: {year: year, month: month},
+        success: function(response) {
+            console.log("Data received:", response);
+            $.each(response, function(key, value) {
+                console.log(key + ": " + value);
+                products.push(key);
+                productsQtySold.push(value)
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
     });
 
-    $('p[name="top5productsQtySold"]').each(function(index) {
-        productsQtySold.push($(this).text());
+    let day = date.getDate();
+    if (day.toString().length == 1) {
+        day = "0"+day;
+    }
+    if (month.toString().length == 1) {
+        month = "0"+month;
+    }
+    d = date.getFullYear() + "-" + month + "-" + day;
+    $.ajax({
+        type: "GET",
+        url: "/getOrdersToday",
+        data: {date: d},
+        success: function(response) {
+            console.log("Data received:", response);
+
+            radialChart1.updateSeries([response]);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
     });
+
+    $.ajax({
+        type: "GET",
+        url: "/getSalesToday",
+        data: {},
+        success: function(response) {
+            console.log("Data received (Sales Today):", response);
+
+            radialChart2.updateSeries([response]);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/getAverageSalesToday",
+        data: {},
+        success: function(response) {
+            console.log("Data received (Avg Sales Today):", response);
+
+            radialChart3.updateSeries([response]);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+
+
 
     var barChartOptions = {
         series: [{
@@ -29,7 +98,7 @@ $(document).ready(function () {
         }],
         chart: {
             type: 'bar',
-            height: 350
+            height: 350,
         },
         plotOptions: {
             bar: {
@@ -49,6 +118,39 @@ $(document).ready(function () {
     var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
     barChart.render();
 
+    $('#top5Date').on('change', function() {
+        var selectVal = $(this).val();
+        console.log("selectVal: " + selectVal);
+
+        var date = new Date();
+        var d;
+
+        if(selectVal == "MONTH") {
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+            if (month.toString().length == 1) {
+                month = "0" + month;
+            }
+            console.log("Month: " + month + " Year: " + year);
+
+            $.ajax({
+                type: "GET",
+                url: "/getTop5ProductsMonth",
+                data: {year: year, month: month},
+                success: function(response) {
+                    console.log("Data received:", response);
+                    $.each(response, function(key, value) {
+                        console.log(key + ": " + value);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        }
+    })
+
+
     //RADIAL CHART
     var x1 = $('#totalOrders').text();
     var x2 = $('#totalSales').text();
@@ -60,7 +162,7 @@ $(document).ready(function () {
             type: "radialBar"
         },
 
-        series: [x1],
+        series: [1],
 
         plotOptions: {
             radialBar: {
@@ -101,7 +203,7 @@ $(document).ready(function () {
             type: "radialBar"
         },
 
-        series: [x2],
+        series: [2],
 
         plotOptions: {
             radialBar: {
@@ -134,7 +236,7 @@ $(document).ready(function () {
         stroke: {
             lineCap: "round",
         },
-        labels: ["Net Sales"]
+        labels: ["Net Sales (₱)"]
     };
 
     var radialChartOptions3 = {
@@ -143,7 +245,7 @@ $(document).ready(function () {
             type: "radialBar"
         },
 
-        series: [x3],
+        series: [3],
 
         plotOptions: {
             radialBar: {
@@ -175,7 +277,7 @@ $(document).ready(function () {
         stroke: {
             lineCap: "round",
         },
-        labels: ["Average Sales"]
+        labels: ["Average Sales (₱)"]
     };
 
     var radialChart1 = new ApexCharts(document.querySelector("#radial-chart1"), radialChartOptions1);
@@ -187,15 +289,7 @@ $(document).ready(function () {
     var radialChart3 = new ApexCharts(document.querySelector("#radial-chart3"), radialChartOptions3);
     radialChart3.render();
 
-    $('#date').on('change', function() {
-        radialChart2.updateSeries([
-            ["₱" + totalSales]
-        ]);
-
-        radialChart3.updateSeries([
-            ["₱" + averageSales]
-        ])
-
+    $('#salesSummaryDate').on('change', function() {
         var selectVal = $(this).val();
         console.log("selectVal: " + selectVal);
 
@@ -204,28 +298,57 @@ $(document).ready(function () {
 
         if(selectVal == "TODAY") {
             let month = date.getMonth() + 1;
-            console.log("Month length: " + month.toString().length);
-            if (month.toString().length == 1) {
-                d = date.getFullYear() + "-" + "0" + month + "-" + date.getDate();
-            } else {
-                d = date.getFullYear() + "-" + month + "-" + date.getDate();
+            let day = date.getDate();
+            if (day.toString().length == 1) {
+                day = "0"+day;
             }
-            console.log(d);
+            if (month.toString().length == 1) {
+                month = "0"+month;
+            }
+            d = date.getFullYear() + "-" + month + "-" + day;
+
             $.ajax({
                 type: "GET",
                 url: "/getOrdersToday",
                 data: {date: d},
                 success: function(response) {
-                    console.log("Data received:", response);
+                    console.log("Data received (Orders Today):", response);
 
-                    radialChart1.updateSeries([
-                        [response]
-                    ]);
+                    radialChart1.updateSeries([response]);
                 },
                 error: function(xhr, status, error) {
                     console.error("Error:", error);
                 }
             });
+
+            $.ajax({
+                type: "GET",
+                url: "/getSalesToday",
+                data: {},
+                success: function(response) {
+                    console.log("Data received (Sales Today):", response);
+
+                    radialChart2.updateSeries([response]);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "/getAverageSalesToday",
+                data: {},
+                success: function(response) {
+                    console.log("Data received (Avg Sales Today):", response);
+
+                    radialChart3.updateSeries([response]);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+
         }
     })
 
