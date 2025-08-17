@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.Set;
 
@@ -46,9 +47,9 @@ public class Category implements Serializable {
     // TODO: NEED TO IMPLEMENT SOFT DELETE FUNCTION
 
     @CreationTimestamp
-    private Instant createdOn;
+    private Date createdOn;
 
     @UpdateTimestamp
-    private Instant lastUpdatedOn;
+    private Date lastUpdatedOn;
 
 }

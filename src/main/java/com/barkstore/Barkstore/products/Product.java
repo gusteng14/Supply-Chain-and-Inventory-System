@@ -52,8 +52,6 @@ public class Product implements Serializable {
     @LastModifiedBy
     private String lastUpdatedBy;
 
-//  TODO: NEED TO IMPLEMENT SOFT DELETE FUNCTION
-
     @Column(scale = 2)
     private BigDecimal cost;
     private Integer stock;

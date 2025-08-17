@@ -167,6 +167,30 @@
                                                 </div>
                                             </li>
                                         </ul>
+                                        <ul style="width: 300px;" class="collapsible expandable ">
+                                            <li class="active">
+                                                <div class="collapsible-header teal lighten-4">
+                                                    <span>Transaction Related Permissions</span>
+                                                    <i style="position: relative; left: 60px;" class="material-icons-round right">arrow_drop_down</i>
+                                                </div>
+                                                <div class="collapsible-body dropdown-auth">
+                                                    <p th:each="authority : ${authority}" th:if="${#strings.contains(authority.name, 'TRANSACTION')}">
+                                                        <label  th:each="auth : ${role.authorities}">
+                                                            <input  disabled type="checkbox" name="authority[]" class="filled-in"
+                                                                    th:checked="${#strings.equals(authority.name, auth.name)}"
+                                                                    th:value="${authority.name}"
+
+                                                            />
+                                                            <span style="color: black;"
+                                                                  th:id="${#ids.seq('auth')}"
+                                                                  th:if="${#strings.equals(authority.name, auth.name)}"
+                                                                  th:text="${authority.name}"
+                                                            >z</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                     <div class="col l4">

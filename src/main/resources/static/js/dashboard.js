@@ -3,9 +3,7 @@ $(document).ready(function () {
         type: "GET",
         url: "/getSalesToday",
         success: function(response) {
-            console.log("Data received:", response);
             $('#salesToday').text(response);
-
         },
         error: function(xhr, status, error) {
             console.error("Error:", error);
@@ -20,14 +18,12 @@ $(document).ready(function () {
     }
     var products = [];
     var productsQtySold = [];
-    console.log("Month: " + month + " Year: " + year);
 
     $.ajax({
         type: "GET",
         url: "/getTop5ProductsMonth",
         data: {year: year, month: month},
         success: function(response) {
-            console.log("Data received:", response);
             $.each(response, function(key, value) {
                 console.log(key + ": " + value);
                 products.push(key);
@@ -52,8 +48,6 @@ $(document).ready(function () {
         url: "/getOrdersToday",
         data: {date: d},
         success: function(response) {
-            console.log("Data received:", response);
-
             radialChart1.updateSeries([response]);
         },
         error: function(xhr, status, error) {
@@ -66,8 +60,6 @@ $(document).ready(function () {
         url: "/getSalesToday",
         data: {},
         success: function(response) {
-            console.log("Data received (Sales Today):", response);
-
             radialChart2.updateSeries([response]);
         },
         error: function(xhr, status, error) {
@@ -80,16 +72,12 @@ $(document).ready(function () {
         url: "/getAverageSalesToday",
         data: {},
         success: function(response) {
-            console.log("Data received (Avg Sales Today):", response);
-
             radialChart3.updateSeries([response]);
         },
         error: function(xhr, status, error) {
             console.error("Error:", error);
         }
     });
-
-
 
     var barChartOptions = {
         series: [{
@@ -117,6 +105,7 @@ $(document).ready(function () {
 
     var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
     barChart.render();
+    setTimeout(window.dispatchEvent(new Event("resize")), 2000);
 
     $('#top5Date').on('change', function() {
         var selectVal = $(this).val();

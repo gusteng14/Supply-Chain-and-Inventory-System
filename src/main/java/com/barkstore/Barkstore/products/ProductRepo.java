@@ -29,4 +29,7 @@ public interface ProductRepo extends RevisionRepository<Product, Long, Long>, Jp
     @Query("SELECT p FROM Product p where p.deleted = false")
     List<Product> findAllActive();
 
+    List<Product> findByItemType_Id(Long id);
+    List<Product> findByCategory_Id(Long id);
+
 }

@@ -148,7 +148,7 @@
                             </div>
                             <div th:if="${hdr.status == 'Pending'}">
 <!--                                <button id="submit" name="status" class="btn" value="1">Submit</button>-->
-                                <button id="modalTrigger" type="button" value="1" data-target="modal" class="btn modal-trigger">Submit</button>
+                                <button id="modalTrigger" type="button" data-target="modal" class="btn modal-trigger">Submit</button>
                                 <div style="border-radius: 10px; width: 500px;" id="modal" class="modal">
                                     <div class="row modal-content valign-wrapper" style="margin: 0px;">
                                         <div class="col l3">
@@ -159,7 +159,7 @@
                                         </div>
                                     </div>
                                     <div style="margin: 0px;" class="row modal-footer teal">
-                                        <button id="submitBtn" type="submit" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                        <button id="submitBtn" name="status" type="submit" value="1" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
                                         <a id="closeModal" style="text-align: center;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
                                     </div>
                                 </div>

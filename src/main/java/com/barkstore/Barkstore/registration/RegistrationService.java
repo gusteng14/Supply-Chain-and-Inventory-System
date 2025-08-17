@@ -4,12 +4,14 @@ package com.barkstore.Barkstore.registration;
 import com.barkstore.Barkstore.Email.EmailSender;
 import com.barkstore.Barkstore.appuser.MyUser;
 import com.barkstore.Barkstore.appuser.MyUserRepository;
-import com.barkstore.Barkstore.appuser.MyUserRole;
 import com.barkstore.Barkstore.appuser.MyUserService;
 import com.barkstore.Barkstore.registration.token.ConfirmationToken;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +31,19 @@ public class RegistrationService {
     public String register(RegistrationRequest request) throws IOException {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
-        if (userRepository.findByUsername(request.getUsername()) != null) {
-            throw new UsernameNotFoundException(String.format("User %s is invalid!", request.getUsername()));
+        if (userRepository.findByEmail(request.getEmail()).isPresent() && userRepository.findByUsername(request.getUsername()) != null) {
+            return "Username and email are already taken.";
         }
+
+        if (userRepository.findByUsername(request.getUsername()) != null) {
+            return "Username already taken.";
+        }
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return "Email already taken.";
+        }
+
+
 
         if (!isValidEmail) {
             throw new IllegalStateException("email not valid");
@@ -50,7 +62,7 @@ public class RegistrationService {
                 )
         );
 
-        return "";
+        return "Created";
     }
 
 

@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>Approval Page</title>
+    <title>Approve Requests</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -116,7 +116,7 @@
                                             <table id="auditTable" class="z-depth-1 display table-csis">
                                                 <thead>
                                                 <th class="dt-head-left th-csis"></th>
-                                                <th class="dt-head-left th-csis">Action</th>
+                                                <th class="dt-head-center th-csis">Action</th>
                                                 <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
                                                 <th style="text-align: center;" class="dt-head-left th-csis">Request Header Id</th>
                                                 <th style="text-align: center;" class="dt-head-left th-csis">Request Name</th>
@@ -124,7 +124,11 @@
                                                 </thead>
                                                 <tr th:each="audit : ${audits}">
                                                     <td style="font-weight: 100;" th:text="${audit.revId}"></td>
-                                                    <td style="font-weight: 100;" th:text="${audit.action}"></td>
+                                                    <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                        <span th:case="'ADD'" class="action-val-add">Create</span>
+                                                        <span th:case="'MOD'" class="action-val-mod">Update</span>
+                                                        <span th:case="'DEL'" class="action-val-del">Delete</span>
+                                                    </td>
                                                     <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
                                                     <td style="font-weight: 100; text-align: center;" th:text="${audit.hdrId}"></td>
                                                     <td style="font-weight: 100; text-align: center;" th:text="${audit.requestName}"></td>
@@ -218,6 +222,9 @@
         });
         $('.collapsible').collapsible();
         $('select').formSelect();
+
+        $('.dt-button').addClass("btn");
+
 
 
     });

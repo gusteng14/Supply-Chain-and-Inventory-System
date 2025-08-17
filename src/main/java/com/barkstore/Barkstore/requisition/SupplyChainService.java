@@ -95,7 +95,7 @@ public class SupplyChainService {
             dto.setRevId(String.valueOf(row[0]));
             dto.setAction(String.valueOf(row[1]));
             long x = (long) row[2];
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(x);
+            java.sql.Date timestamp = new java.sql.Date(x);
             dto.setDate(String.valueOf(timestamp));
             dto.setHdrId(String.valueOf(row[3]));
             dto.setRequestName(String.valueOf(row[4]));

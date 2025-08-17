@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,13 +89,21 @@ public class SupplierService {
             SupplierAuditDTO dto = new SupplierAuditDTO();
             dto.setRevId(String.valueOf(revisionEntity.getRev()));
             dto.setAction(String.valueOf(revisionType));
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(revisionEntity.getRevtstmp());
-            dto.setDate(String.valueOf(timestamp));
+            java.sql.Date date = new java.sql.Date(revisionEntity.getRevtstmp());
+            dto.setDate(String.valueOf(date));
             dto.setSupplierId(String.valueOf(entity.getId()));
             dto.setSupplierName(entity.getName());
             dto.setUsername(revisionEntity.getUsername());
             resultsToString.add(dto);
         }
         return resultsToString;
+    }
+
+    public int activeSupplierCount() {
+        List<Supplier> suppliers = supplierRepository.findAllActive();
+
+        int count = suppliers.size();
+
+        return count;
     }
 }

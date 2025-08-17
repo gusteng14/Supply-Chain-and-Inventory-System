@@ -37,8 +37,6 @@ public class SecurityConfig {
     @Autowired
     private LoginSuccessHandler successHandler;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
 
     @Autowired
@@ -46,8 +44,7 @@ public class SecurityConfig {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService userDetailsService, MyUserService userService, BCryptPasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(MyUserService userService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }

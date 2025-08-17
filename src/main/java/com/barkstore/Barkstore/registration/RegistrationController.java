@@ -38,32 +38,6 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    //    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public String register(Model model) {
-//        model.addAttribute("registrationRequest", new RegistrationRequest());
-//        return "register";
-//    }
-
-    // REGISTRATION THRU POSTMAN (TEST ONLY)
-//    @PostMapping
-//    public String register(@Valid @RequestBody RegistrationRequest request) {
-//        return registrationService.register(request);
-//    }
-
-    // REGISTRATION THRU FORMS
-//    @PostMapping(path = "test", value="test", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public @ResponseBody String test(@Valid @RequestBody RegistrationRequest registrationRequest) throws IOException {
-//       //return registrationService.register(registrationRequest);
-////        response.sendRedirect("/register");
-//        System.out.println(registrationRequest.getRoleRequest());
-//        System.out.println(registrationRequest.getFirstName());
-////        System.out.println("File: " + file.getOriginalFilename());
-//
-//        userService.signUpUser(registrationRequest);
-//        return null;
-//
-//    }
-
     @PostMapping(path = "test", value="test", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody String test(@RequestBody @Valid  RegistrationRequest registrationRequest, BindingResult bindingResult, Model model) throws IOException {
 
@@ -73,9 +47,7 @@ public class RegistrationController {
             return "employee";
         }
 
-        registrationService.register(registrationRequest);
-        return null;
-
+        return registrationService.register(registrationRequest);
     }
 
     @GetMapping(path = "confirm")

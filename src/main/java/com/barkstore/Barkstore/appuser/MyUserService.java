@@ -1,12 +1,22 @@
 package com.barkstore.Barkstore.appuser;
 
 import com.barkstore.Barkstore.Email.EmailSender;
+import com.barkstore.Barkstore.audit.ProductAuditDTO;
+import com.barkstore.Barkstore.audit.UserAuditDTO;
+import com.barkstore.Barkstore.products.Product;
 import com.barkstore.Barkstore.registration.EmailValidator;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.token.ConfirmationToken;
 import com.barkstore.Barkstore.registration.token.ConfirmationTokenService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -39,6 +49,8 @@ public class MyUserService implements UserDetailsService {
     private EmailSender emailSender;
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final static String USER_NOT_FOUND_MSG = "user with email s% not found";
 
@@ -70,13 +82,8 @@ public class MyUserService implements UserDetailsService {
         return new AuthenticatedUser(user, authorities);
     }
 
-    public MyUser signUpUser(MyUser user) throws IOException {
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-
-        if (userExists) {
-            throw new IllegalStateException("email already taken");
-        }
-
+//    @Async("asyncTaskExecutor") TODO: tol async pa rin kahit tanggalin yung @Async, siguro dahil sa AsyncConfig na class
+    public void signUpUser(MyUser user) throws IOException {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         Role roles = roleRepository.findByName(user.getRoleRequest()).get();
@@ -90,7 +97,6 @@ public class MyUserService implements UserDetailsService {
         String link = "http://websike.xyz:8080/api/v1/registration/confirm?token=" + token;
 
         emailSender.send(user.getEmail(), buildEmail(user.getFirstName(), link), "Confirm your email");
-        return null;
     }
 
     public boolean verifyUser (String verificationCode) {
@@ -128,6 +134,61 @@ public class MyUserService implements UserDetailsService {
             r.setName(roleRequest.getName());
             return roleRepository.save(r);
         });
+    }
+
+    public void softDeleteUser(Long id) {
+        MyUser user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+
+    public List<MyUser> findAllActiveUser() {
+        List<MyUser> active = userRepository.findAllActive();
+        return active;
+    }
+
+    public List<MyUser> getSoftDeletesUser() {
+        List<MyUser> deletedFields = userRepository.findSoftDeletes();
+        return deletedFields;
+    }
+
+    public void restoreRecordUser(Long id) {
+        MyUser user = userRepository.findById(id).get();
+        user.setDeleted(false);
+        userRepository.save(user);
+    }
+
+    public List<UserAuditDTO> getAllAuditsUser() {
+        AuditReader auditReader = AuditReaderFactory.get(entityManager);
+        AuditQuery query = auditReader.createQuery()
+                .forRevisionsOfEntity(MyUser.class, false, true)
+                .addProjection(AuditEntity.revisionNumber())
+                .addProjection(AuditEntity.revisionType())
+                .addProjection(AuditEntity.revisionProperty("revtstmp"))
+                .addProjection(AuditEntity.property("empNo"))
+                .addProjection(AuditEntity.property("firstName"))
+                .addProjection(AuditEntity.property("middleName"))
+                .addProjection(AuditEntity.property("lastName"))
+                .addProjection(AuditEntity.revisionProperty("username"));
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = query.getResultList();
+        List<UserAuditDTO> resultsToString = new ArrayList<>();
+
+        for (Object[] row : results) {
+            UserAuditDTO dto = new UserAuditDTO();
+            dto.setRevId(String.valueOf(row[0]));
+            dto.setAction(String.valueOf(row[1]));
+            long x = (long) row[2];
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(x);
+            dto.setDate(String.valueOf(timestamp));
+            dto.setEmpNo(String.valueOf(row[3]));
+            dto.setFullName(String.valueOf(row[4]) + " " + String.valueOf(row[5]) + " " + String.valueOf(row[6]));
+            dto.setUsername(String.valueOf(row[7]));
+            resultsToString.add(dto);
+        }
+
+        return resultsToString;
     }
 
     private String buildEmail(String name, String link) {

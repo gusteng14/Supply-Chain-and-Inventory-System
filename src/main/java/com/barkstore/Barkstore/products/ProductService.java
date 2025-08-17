@@ -12,6 +12,8 @@ import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,7 +92,7 @@ public class ProductService {
     }
 
     public List<Product> getLowStockProducts() {
-        List<Product> products = repo.findAll();
+        List<Product> products = repo.findAllActive();
         List<Product> lowStockProducts = new ArrayList<>();
 
         for (Product product : products) {
@@ -103,7 +105,7 @@ public class ProductService {
     }
 
     public long getCountOfLowStockProducts() {
-        List<Product> products = repo.findAll();
+        List<Product> products = repo.findAllActive();
         long count = 0;
 
         for (Product product : products) {
@@ -199,10 +201,17 @@ public class ProductService {
         return products;
     }
 
-    public void softDeleteCategory(Long id) {
+    public ResponseEntity<String> softDeleteCategory(Long id) {
         Category category = categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        List<Product> productWithCategory = repo.findByCategory_Id(id);
+
+        if (!productWithCategory.isEmpty()) {
+            return new ResponseEntity<>("This category is being referenced by a product.", HttpStatus.BAD_REQUEST);
+        }
+
         category.setDeleted(true);
         categoryRepo.save(category);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<Category> findAllActiveCategory() {
@@ -238,7 +247,7 @@ public class ProductService {
             CateogryAuditDTO dto = new CateogryAuditDTO();
             dto.setRevId(String.valueOf(revisionEntity.getRev()));
             dto.setAction(String.valueOf(revisionType));
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(revisionEntity.getRevtstmp());
+            java.sql.Date timestamp = new java.sql.Date(revisionEntity.getRevtstmp());
             dto.setDate(String.valueOf(timestamp));
             dto.setCategoryId(String.valueOf(entity.getId()));
             dto.setCategoryName(entity.getName());
@@ -249,10 +258,17 @@ public class ProductService {
 
     }
 
-    public void softDeleteItemType(Long id) {
+    public ResponseEntity<String> softDeleteItemType(Long id) {
         ItemType itemType = itemTypeRepo.findById(id).orElseThrow(() -> new RuntimeException("Item Type not found"));
+        List<Product> productWithItemType = repo.findByItemType_Id(id);
+
+        if (!productWithItemType.isEmpty()) {
+            return new ResponseEntity<>("This item type is being referenced by a product.", HttpStatus.BAD_REQUEST);
+        }
+
         itemType.setDeleted(true);
         itemTypeRepo.save(itemType);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<ItemType> findAllActiveItemType() {
@@ -288,7 +304,7 @@ public class ProductService {
             ItemTypeAuditDTO dto = new ItemTypeAuditDTO();
             dto.setRevId(String.valueOf(revisionEntity.getRev()));
             dto.setAction(String.valueOf(revisionType));
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(revisionEntity.getRevtstmp());
+            java.sql.Date timestamp = new java.sql.Date(revisionEntity.getRevtstmp());
             dto.setDate(String.valueOf(timestamp));
             dto.setItemTypeId(String.valueOf(entity.getId()));
             dto.setItemTypeName(entity.getName());
@@ -340,7 +356,7 @@ public class ProductService {
             dto.setRevId(String.valueOf(row[0]));
             dto.setAction(String.valueOf(row[1]));
             long x = (long) row[2];
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(x);
+            java.sql.Date timestamp = new java.sql.Date(x);
             dto.setDate(String.valueOf(timestamp));
             dto.setProductId(String.valueOf(row[3]));
             dto.setProductName(String.valueOf(row[4]));
@@ -349,6 +365,14 @@ public class ProductService {
         }
 
         return resultsToString;
+    }
+
+    public int activeProductsCount() {
+        List<Product> products = repo.findAllActive();
+
+        int count = products.size();
+
+        return count;
     }
 
 }

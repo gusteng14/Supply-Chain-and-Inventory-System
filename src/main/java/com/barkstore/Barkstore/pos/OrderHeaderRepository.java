@@ -14,6 +14,11 @@ import java.util.List;
 @Repository
 public interface OrderHeaderRepository extends JpaRepository<OrderHeader, Long> {
     List<OrderHeader> findByCreatedOn(LocalDate date);
-    List<OrderHeader> findByCreatedOn(Date date);
     List<OrderHeader> findByCreatedOnBetween(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT o FROM OrderHeader o WHERE o.createdOn = :date AND o.voided = false")
+    List<OrderHeader> findValidCreatedOn(LocalDate date);
+
+    @Query("SELECT o FROM OrderHeader o WHERE o.createdOn BETWEEN :startDate AND :endDate AND o.voided = false")
+    List<OrderHeader> findValidCreatedOnBetween(LocalDate startDate, LocalDate endDate);
 }

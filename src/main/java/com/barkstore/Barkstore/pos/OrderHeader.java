@@ -33,6 +33,8 @@ public class OrderHeader {
     private float subtotal;
     private float etc;
     private float total;
+    public boolean voided = false;
+
 
     @CreationTimestamp
     private LocalDate createdOn;
@@ -55,5 +57,10 @@ public class OrderHeader {
     @JsonIgnore
     @OneToMany(mappedBy = "headerId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails;
+
+    @PrePersist
+    public void generateOrderNo() {
+        this.orderNo = String.format("TRNSCTN-%05d", id);
+    }
 
 }

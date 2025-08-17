@@ -28,6 +28,7 @@ public class OrderDetail {
     private int quantity;
     private float unitPrice;
     private float total;
+    public boolean voided = false;
 
     @CreationTimestamp
     private LocalDate createdOn;

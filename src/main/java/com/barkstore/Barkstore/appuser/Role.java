@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
@@ -20,15 +23,19 @@ import java.util.Set;
 //@EqualsAndHashCode (nagpapa-error)
 @NoArgsConstructor
 @Entity
+@Audited
+@EntityListeners(AuditingEntityListener.class)
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
+    private boolean deleted = false;
 
     @ManyToMany(mappedBy = "roles")
     private Set<MyUser> myUser;
 
+    @NotAudited
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_authorities",

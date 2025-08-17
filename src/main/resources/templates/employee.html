@@ -40,7 +40,7 @@
                     <div class="col s12">
                         <h4 class="page-header">Users</h4>
                         <ul sec:authorize="hasAuthority('CREATE_USER_PERM')" class="tabs">
-                            <li class="tab col s3 l6"><a href="#view-staff-tab">View Users</a></li>
+                            <li class="tab col s3 l6"><a id="view-users" href="#view-staff-tab">View Users</a></li>
                             <li class="tab col s3 l6"><a href="#create-staff-tab">Create User Account</a></li>
                         </ul>
 
@@ -50,16 +50,118 @@
                             <table id="userTable" class="z-depth-1 display table-csis">
                                 <thead style="background-color: rgba(234,233,233,0.5);">
                                     <tr class="tr-csis">
+                                        <th class="dt-head-left th-csis">Employee No</th>
                                         <th class="dt-head-left th-csis">Full Name</th>
                                         <th class="dt-head-left th-csis">Contact No.</th>
                                         <th class="dt-head-left th-csis">Email</th>
                                         <th class="dt-head-left th-csis">Status</th>
                                         <th class="dt-head-left th-csis">Role</th>
-                                        <th class="dt-head-left th-csis" data-dt-order="disable"></th>
+                                        <th class="dt-head-right th-csis" data-dt-order="disable">
+                                            <a id="logs" class="modal-trigger" href="#auditsModal">
+                                                <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">history</i>
+                                            </a>
+                                            <a class="modal-trigger" href="#softDeleteModal">
+                                                <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">delete</i>
+                                            </a>
+
+                                            <div style="border-radius: 10px; width: 1200px; height: auto;" id="softDeleteModal" class="modal">
+                                                <div class="modal-content">
+                                                    <div class="row">
+                                                        <div class="col l12">
+                                                            <span style="text-align: left; font-size: 28px;" class="left">Deleted User Records</span>
+                                                            <span class="right">
+                                                        <a id="closeSoftDeleteModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <table id="softDeleteTable" class="z-depth-1 display table-csis">
+                                                            <thead>
+                                                            <tr class="tr-csis">
+                                                                <th class="dt-head-center th-csis">Employee No</th>
+                                                                <th class="dt-head-center th-csis">Full Name</th>
+                                                                <th class="dt-head-center th-csis">Contact No</th>
+                                                                <th class="dt-head-center th-csis">Email</th>
+                                                                <th class="dt-head-center th-csis">Status</th>
+                                                                <th class="dt-head-center th-csis">Role</th>
+                                                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tr th:each="deletedFields : ${deletedFields}">
+                                                                <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.empNo}">z</td>
+                                                                <td style="font-weight: 100;" class="dt-body-center td-csis" th:text="${deletedFields.getFullName()}">z</td>
+                                                                <td style="font-weight: 100;" class="dt-body-center td-csis" th:text="${deletedFields.contactNo}">z</td>
+                                                                <td style="font-weight: 100;" class="dt-body-center td-csis" th:text="${deletedFields.email}">z</td>
+                                                                <td style="font-weight: 100;" class="dt-body-center td-csis" >
+                                                                    <p th:if="${deletedFields.enabled == true}">Enabled</p>
+                                                                    <p th:unless="${deletedFields.enabled}">Disabled</p>
+                                                                </td>
+                                                                <td style="font-weight: 100;" class="dt-body-center td-csis">
+                                                                    <th:block th:each="role : ${deletedFields.roles}">
+                                                                        <th:block th:text="${role.getName()}"></th:block>
+                                                                        <br>
+                                                                    </th:block>
+                                                                </td>
+                                                                <td style="font-weight: 100;" class="dt-body-right td-csis">
+                                                                    <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/employee/restore/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to restore this record??')">
+                                                                        Restore
+                                                                    </a>
+                                                                    <a sec:authorize="hasAuthority('DELETE_PRODUCT_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/employee/delete/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this record?')">
+                                                                        Delete
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style="border-radius: 10px; width: 1200px; height: auto;" id="auditsModal" class="modal">
+                                                <div class="modal-content">
+                                                    <div class="row">
+                                                        <div class="col l12">
+                                                            <span style="text-align: left; font-size: 28px;" class="left">Logs</span>
+                                                            <span class="right">
+                                                        <a id="closeAuditsModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <table id="auditTable" class="z-depth-1 display table-csis">
+                                                            <thead>
+                                                            <th class="dt-head-left th-csis"></th>
+                                                            <th class="dt-head-center th-csis">Action</th>
+                                                            <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
+                                                            <th style="text-align: center;" class="dt-head-left th-csis">Employee No</th>
+                                                            <th style="text-align: center;" class="dt-head-left th-csis">Full Name</th>
+                                                            <th style="text-align: center;" class="dt-head-left th-csis">Performed by</th>
+                                                            </thead>
+                                                            <tr th:each="audit : ${audits}">
+                                                                <td style="font-weight: 100;" th:text="${audit.revId}"></td>
+                                                                <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                                        <span th:case="'ADD'" class="action-val-add" th:text="${audit.action}"></span>
+                                                                        <span th:case="'MOD'" class="action-val-mod" th:text="${audit.action}"></span>
+                                                                        <span th:case="'DEL'" class="action-val-del" th:text="${audit.action}"></span>
+                                                                </td>
+                                                                <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
+                                                                <td style="font-weight: 100; text-align: center;" th:text="${audit.empNo}"></td>
+                                                                <td style="font-weight: 100; text-align: center;" th:text="${audit.fullName}"></td>
+                                                                <td style="font-weight: 100; text-align: center;" th:text="${audit.username}"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="tr-csis-body" th:each="user : ${user}"> <!--th:if="${user.enabled}">-->
+                                        <td class="dt-body-left td-csis" th:text="${user.empNo}">z</td>
                                         <td class="dt-body-left td-csis" th:text="${user.getFullName()}">z</td>
                                         <td class="dt-body-left td-csis" th:text="${user.contactNo}">z</td>
                                         <td class="dt-body-left td-csis" th:text="${user.email}">z</td>
@@ -78,7 +180,7 @@
                                                 <a sec:authorize="hasAuthority('UPDATE_USER_PERM')" class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/employee/edit(id=${user.id})}">
                                                     Update
                                                 </a>
-                                                <a sec:authorize="hasAuthority('DELETE_USER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/employee/delete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                                <a sec:authorize="hasAuthority('DELETE_USER_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/employee/softdelete/' + ${user.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                                     Delete
                                                 </a>
                                             </div>
@@ -126,42 +228,35 @@
                                         <i class="material-icons-round prefix">account_circle</i>
                                         <input style="color: black;" th:field="*{username}" id="username" type="text" required>
                                         <label for="username">Username</label>
-                                        <p  th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
-                                            Invalid Username
-                                        </p>
+                                        <p id="usernameError">&nbsp;</p>
                                     </div>
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">alternate_email</i>
                                         <input style="color: black;" th:field="*{email}" id="email" type="email" required>
                                         <label for="email">Email</label>
+                                        <p id="emailError">&nbsp;</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="input-field col s6">
+                                    <div class="input-field col s6 password-container">
                                         <i class="material-icons-round prefix">lock</i>
                                         <input style="color: black;" th:field="*{password}" id="password" type="password" required>
                                         <label for="password">Password</label>
+                                        <span id="show-password"><i class="material-icons-round show-password-icon">visibility_off</i></span>
                                     </div>
-                                    <div class="input-field col s6">
+                                    <div class="input-field col s6 password-container">
                                         <i class="material-icons-round prefix">lock</i>
                                         <input style="color: black;"  id="confirm-password" type="password" required>
                                         <label for="confirm-password">Confirm Password</label>
-                                        <p id="password-message"></p>
-<!--                                        <p  th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
-<!--                                            Invalid Password-->
-<!--                                        </p>-->
+                                        <span id="show-confirm-password"><i class="material-icons-round show-confirm-password-icon">visibility_off</i></span>
+                                        <p id="password-message"> &nbsp;</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <i class="material-icons-round prefix">manage_accounts</i>
                                         <select th:field="*{roleRequest}" id="role" name="role" required>
-                                            <option value="" disabled selected>Choose your option</option>
-<!--                                            <option sec:authorize="hasRole('SUPERADMIN')" value="SUPERADMIN">Super Admin</option>-->
-<!--                                            <option sec:authorize="hasRole('SUPERADMIN')" value="ADMIN">Admin</option>-->
-<!--                                            <option value="USER">User</option>-->
-<!--                                            th:remove="(${role.name} == 'Super Admin'-->
-<!--                                            or ${role.name} == 'System Admin') and (${#authentication.principal.getRole()} != 'Super Admin' or ${#authentication.principal.getRole()} != 'System Admin' ) ? all : none"-->
+<!--                                            <option value="" disabled selected>Choose your option</option>-->
                                             <option th:each="role : ${role}" th:text="${role.name}" th:value="${role.name}"
                                                     th:if="${role.name} != 'System Admin'"
                                                     th:remove="${role.name} == 'Super Admin' and (${#authentication.principal.getRole()} != 'System Admin' and
@@ -174,6 +269,20 @@
 
                             </form>
                             <div class="col l2"></div>
+                        </div>
+                    </div>
+                    <button style="display: none;"  id="success-modal-trigger" type="button" data-target="success-modal" class="btn modal-trigger">Close</button>
+                    <div style="border-radius: 10px; width: 500px;" id="success-modal" class="modal">
+                        <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                            <div class="col l3">
+                                <img style="height:auto; width: 100px;" th:src="@{../images/success-check.png}">
+                            </div>
+                            <div class="col l9">
+                                <h6>User created successfully.</h6>
+                            </div>
+                        </div>
+                        <div style="margin: 0px;" class="row modal-footer teal">
+                            <button id="success-close" type="button" style="text-align: center; color: white;" class="modal-close waves-effect waves-green btn-flat center-align col l12" >Close</button>
                         </div>
                     </div>
                 </div>
@@ -204,6 +313,30 @@
                 $('.modal').modal();
                 $('select').formSelect();
                 $('.collapsible').collapsible();
+                $('.dt-button').addClass("btn");
+
+
+                $('#show-password').on('click', function() {
+                    var x = $('#password').attr('type');
+                    if(x == "password") {
+                        $('#password').attr('type', 'text');
+                        $('.show-password-icon').text("visibility");
+                    } else {
+                        $('#password').attr('type', 'password');
+                        $('.show-password-icon').text("visibility_off");
+                    }
+                })
+
+                $('#show-confirm-password').on('click', function() {
+                    var x = $('#confirm-password').attr('type');
+                    if(x == "password") {
+                        $('#confirm-password').attr('type', 'text');
+                        $('.show-confirm-password-icon').text("visibility");
+                    } else {
+                        $('#confirm-password').attr('type', 'password');
+                        $('.show-confirm-password-icon').text("visibility_off");
+                    }
+                })
             });
         </script>
 

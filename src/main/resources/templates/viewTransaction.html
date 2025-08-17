@@ -35,8 +35,11 @@
     <main class="main-container">
         <div class="row">
             <div class="col l1"></div>
-            <div class="col l10">
+            <div class="col l9">
                 <h2>SALES RECEIPT</h2>
+            </div>
+            <div class="col l1">
+                <h4 th:if="${orderHeader.voided == true}"><span style="text-align: center; width: 120px;" class="void-receipt">Voided</span></h4>
             </div>
             <div class="col l1"></div>
         </div>
@@ -83,7 +86,33 @@
             <div class="col l1"></div>
         </div>
         <div class="row">
-            <div class="col l7"></div>
+            <div class="col l1"></div>
+            <div class="col l6">
+                <div class="row">
+
+                </div>
+                <div class="row">
+
+                </div>
+                <div class="row">
+
+                </div>
+                <div class="row">
+
+                </div>
+                <a sec:authorize="hasAuthority('VOID_TRANSACTION_PERM')" th:if="${orderHeader.voided == false}" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/transaction/void/' + ${orderHeader.id}}" onclick="return confirm('gawin mong modal to tol')">
+                    Void Receipt
+                </a>
+                <a sec:authorize="hasAuthority('VOID_TRANSACTION_PERM')" th:unless="${orderHeader.voided == false}" disabled="disabled" class="waves-effect waves-light btn-small red lighten-1" th:href="@{'/transaction/void/' + ${orderHeader.id}}" onclick="return confirm('gawin mong modal to tol')">
+                    Void Receipt
+                </a>
+                <a sec:authorize="hasAuthority('VOID_TRANSACTION_PERM')" th:if="${orderHeader.voided == true}" class="waves-effect waves-light btn-small" th:href="@{'/transaction/validate/' + ${orderHeader.id}}" onclick="return confirm('gawin mong modal to tol')">
+                    Validate Receipt
+                </a>
+                <a sec:authorize="hasAuthority('VOID_TRANSACTION_PERM')" th:unless="${orderHeader.voided == true}" disabled="disabled" class="waves-effect waves-light btn-small" th:href="@{'/transaction/validate/' + ${orderHeader.id}}" onclick="return confirm('gawin mong modal to tol')">
+                    Validate Receipt
+                </a>
+            </div>
             <div class="col l4">
                 <table>
                     <tbody>

@@ -11,6 +11,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,15 +29,14 @@ import java.util.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-
+@Audited
+@EntityListeners(AuditingEntityListener.class)
 public class MyUser implements UserDetails {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    // NEED TO IMPLEMENT SOFT DELETE FUNCTION
-
-    //private String empNo;
+    private String empNo;
     private String firstName;
     private String lastName;
     private String middleName;
@@ -43,11 +45,14 @@ public class MyUser implements UserDetails {
     private String email;
     private String password;
     private Boolean enabled = false;
+    private boolean deleted = false;
 
     @Column(unique = true)
+    @NotAudited
     private String verificationCode;
 
     @Transient
+    @NotAudited
     private String roleRequest;
 
     @CreationTimestamp
@@ -55,9 +60,6 @@ public class MyUser implements UserDetails {
 
     @UpdateTimestamp
     private Instant lastUpdatedOn;
-
-//    @Lob
-//    private String imageData;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -98,6 +100,10 @@ public class MyUser implements UserDetails {
         this.roles = roles;
     }
 
+    @PrePersist
+    public void generateEmpNo() {
+        this.empNo = String.format("EMP-%03d", id);
+    }
 
     @Override
     public boolean isEnabled() {

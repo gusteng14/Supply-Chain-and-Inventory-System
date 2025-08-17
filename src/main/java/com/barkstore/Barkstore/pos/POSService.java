@@ -31,7 +31,7 @@ public class POSService {
 
     public OrderHeader saveHeader(String total) {
         OrderHeader header = new OrderHeader();
-        header.setOrderNo("O#" + UUID.randomUUID().toString().substring(0, 5));
+        header.setOrderNo("SALE-" + UUID.randomUUID().toString().substring(0, 5));
         header.setTotal(Float.parseFloat(total));
         headerRepository.save(header);
 
@@ -66,7 +66,8 @@ public class POSService {
     }
 
     public float dailySales() {
-        List<OrderHeader> ordersToday = headerRepository.findByCreatedOn(LocalDate.now());
+//        List<OrderHeader> ordersToday = headerRepository.findByCreatedOn(LocalDate.now());
+        List<OrderHeader> ordersToday = headerRepository.findValidCreatedOn(LocalDate.now());
         float sales = 0;
 
         for (OrderHeader ord : ordersToday) {
@@ -89,7 +90,8 @@ public class POSService {
 
     public int totalOrders(String date) throws ParseException {
         LocalDate localDate = LocalDate.parse(date);
-        List<OrderHeader> orders = headerRepository.findByCreatedOn(localDate);
+//        List<OrderHeader> orders = headerRepository.findByCreatedOn(localDate);
+        List<OrderHeader> orders = headerRepository.findValidCreatedOn(localDate);
         int count = orders.size();
 
         return count;
@@ -106,13 +108,33 @@ public class POSService {
         YearMonth yearMonth = YearMonth.of(year, month);
         LocalDate firstDayOfMonth = yearMonth.atDay(1);
         LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
-        return headerRepository.findByCreatedOnBetween(firstDayOfMonth, lastDayOfMonth);
+//        return headerRepository.findByCreatedOnBetween(firstDayOfMonth, lastDayOfMonth);
+        return headerRepository.findValidCreatedOnBetween(firstDayOfMonth, lastDayOfMonth);
     }
 
     public List<OrderHeader> getOrdersByYear(int year) {
         LocalDate firstDayOfYear = LocalDate.ofYearDay(year, 1);
         LocalDate lastDayOfYear = LocalDate.ofYearDay(year, 365);
-        return headerRepository.findByCreatedOnBetween(firstDayOfYear, lastDayOfYear);
+//        return headerRepository.findByCreatedOnBetween(firstDayOfYear, lastDayOfYear);
+        return headerRepository.findValidCreatedOnBetween(firstDayOfYear, lastDayOfYear);
+    }
+
+    public void voidReceipt(OrderHeader hdr, List<OrderDetail> dtls) {
+        hdr.setVoided(true);
+        headerRepository.save(hdr);
+        for(OrderDetail dtl : dtls) {
+            dtl.setVoided(true);
+            detailsRepository.save(dtl);
+        }
+    }
+
+    public void validateReceipt(OrderHeader hdr, List<OrderDetail> dtls) {
+        hdr.setVoided(false);
+        headerRepository.save(hdr);
+        for(OrderDetail dtl : dtls) {
+            dtl.setVoided(false);
+            detailsRepository.save(dtl);
+        }
     }
 
 

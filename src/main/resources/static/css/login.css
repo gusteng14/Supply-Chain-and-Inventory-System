@@ -91,17 +91,40 @@ body {
 
 #username {
     border-radius: 8px;
-/*    resize: both;*/
     width: 300px;
-/*    height: 30px;*/
 }
 
 #password {
     border-radius: 8px;
-/*    resize: both;*/
     width: 30+0px;
-/*    height: 30px;*/
+    width: 100%;
+    padding-right: 40px; /* Leave space for the clear button */
+    padding: 10px;
+    box-sizing: border-box;
 }
+
+.password-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+#show-password {
+    position: absolute;
+    top: 75%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #c5c5c5;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    z-index: 1;
+}
+
+#show-password:hover {
+    color: rgba(41, 185, 163, 0.5);
+}
+
 
 /*        .input-box {*/
 /*    margin-bottom: 1rem !important;*/

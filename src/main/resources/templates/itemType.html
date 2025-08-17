@@ -115,7 +115,7 @@
                                                 <table id="auditTable" class="z-depth-1 display table-csis">
                                                     <thead>
                                                     <th class="dt-head-left th-csis"></th>
-                                                    <th class="dt-head-left th-csis">Action</th>
+                                                    <th class="dt-head-center th-csis">Action</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Item Type Id</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Item Type Name</th>
@@ -123,7 +123,11 @@
                                                     </thead>
                                                     <tr th:each="audit : ${audits}">
                                                         <td style="font-weight: 100;" th:text="${audit.revId}"></td>
-                                                        <td style="font-weight: 100;" th:text="${audit.action}"></td>
+                                                        <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                            <span th:case="'ADD'" class="action-val-add">Create</span>
+                                                            <span th:case="'MOD'" class="action-val-mod">Update</span>
+                                                            <span th:case="'DEL'" class="action-val-del">Delete</span>
+                                                        </td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.itemTypeId}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.itemTypeName}"></td>
@@ -150,9 +154,25 @@
                                         <a sec:authorize="hasAuthority('READ_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/itemType/edit(id=${itemType.id})}">
                                             Update
                                         </a>
-                                        <a sec:authorize="hasAuthority('DELETE_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/itemType/softdelete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">
-                                            Delete
-                                        </a>
+<!--                                        <a sec:authorize="hasAuthority('DELETE_ITEMTYPE_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/itemType/softdelete/' + ${itemType.id}}" onclick="return confirm('Are you sure you want to delete?')">-->
+<!--                                            Delete-->
+<!--                                        </a>-->
+                                        <button type="button" data-target="deleteItemType" class="btn modal-trigger waves-effect waves-light btn-small red lighten-1 crud">Delete</button>
+                                        <div style="border-radius: 10px; width: 500px;" id="deleteItemType" class="modal">
+                                            <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                                                <div class="col l3">
+                                                    <img style="height:auto; width: 100px;" th:src="@{images/warning.jpg}">
+                                                </div>
+                                                <div class="col l9">
+                                                    <h6>Do you want to delete this item type from the system?</h6>
+                                                </div>
+                                            </div>
+                                            <div style="margin: 0px;" class="row modal-footer teal">
+                                                <button id="confirmDelete" type="submit" style="text-align: center; color: white;" th:attr="data-id=${itemType.id}"
+                                                        class="modal-close waves-effect waves-green btn-flat col l6" >Submit</button>
+                                                <a style="text-align: center; color: white;" class="modal-close waves-effect waves-green btn-flat col l6" >Cancel</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -190,10 +210,25 @@
                     </form>
                 </div>
             </div>
+            <button style="display: none;"  id="errorModalTrigger" type="button" data-target="errorModal" class="btn modal-trigger">Submit</button>
+            <div style="border-radius: 10px; width: 500px;" id="errorModal" class="modal">
+                <div class="row modal-content valign-wrapper" style="margin: 0px;">
+                    <div class="col l3">
+                        <img style="height:auto; width: 100px;" th:src="@{../images/error-icon.png}">
+                    </div>
+                    <div class="col l9">
+                        <h6><span style="font-weight: bold;">Unable to delete item type.</span><br>Reason: This item type is being referenced by a product.<br></h6>
+                    </div>
+                </div>
+                <div style="margin: 0px;" class="row modal-footer teal">
+                    <button type="button" style="text-align: center; color: white;" class="modal-close waves-effect waves-green btn-flat center-align col l12" >Close</button>
+                </div>
+            </div>
         </div>
     </main>
 </div>
 <script type="text/javascript" th:src="@{js/materialize.min.js}"></script>
+<script type="text/javascript" th:src="@{js/itemType.js}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
@@ -209,45 +244,9 @@
         $('.tabs').tabs();
         $('.modal').modal();
         $('.collapsible').collapsible();
-        $('#itemTypeTable').DataTable({
-            columns: [{ width: '5%' }, null, null, null, null],
-            order: [2, 'desc'],
-            layout: {
-                topStart: {
-                    buttons: ['csv', 'excel', 'pdf', 'print']
-                }
-            }
-        });
-        $('#softDeleteTable').DataTable({
-            columns: [{ width: '5%' }, null, null],
-            order: [2, 'desc'],
-            layout: {
-                topStart: {
-                    buttons: ['csv', 'excel', 'pdf', 'print']
-                }
-            }
-        });
-        $('#auditTable').DataTable({
-            columns: [{ width: '5%' }, null, null, null, null, null],
-            order: [2, 'desc'],
-            layout: {
-                topStart: {
-                    buttons: ['csv', 'excel', 'pdf', 'print']
-                }
-            }
-        });
         $('select').formSelect();
 
-        $('#registerForm').on('change', function() {
-            var field1 = $('#name').val().length;
-
-            if(field1 < 1) {
-                $('#modalTrigger').prop("disabled", true);
-            } else {
-                $('#modalTrigger').prop("disabled", false);
-            }
-        });
-
+        $('.dt-button').addClass("btn");
     });
 
 </script>

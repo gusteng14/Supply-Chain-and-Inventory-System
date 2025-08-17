@@ -107,35 +107,25 @@ public class ContentController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) throws FileNotFoundException {
-
         float totalSales = posService.totalSales();
         String formattedTotalSale = String.format("%.2f", totalSales);
 
-        long noOfSuppliers = supplierRepository.count();
-        long noOfProducts = productRepo.count();
+        long noOfSuppliers = supplierService.activeSupplierCount();
+        long noOfProducts = productService.activeProductsCount();
         long noOfLowStockProducts = productService.getCountOfLowStockProducts();
         long totalOrders = orderHeaderRepository.count();
         List<Product> lowStockProducts = productService.getLowStockProducts();
-
-
-
         List<Product> top5Products = productService.fiveBestSeller();
-//        List<Product> productsToday = productService.newProductsForTheDay();
-//        List<Product> productsOfMonth = productService.newProductsForTheMonth();
 
         model.addAttribute("totalSales", formattedTotalSale);
         model.addAttribute("noOfSuppliers", noOfSuppliers);
         model.addAttribute("noOfProducts", noOfProducts);
         model.addAttribute("noOfLowStockProducts", noOfLowStockProducts);
         model.addAttribute("top5Products", top5Products);
-//        model.addAttribute("productsToday", productsToday);
-//        model.addAttribute("productsOfMonth", productsOfMonth);
         model.addAttribute("totalOrders", totalOrders);
         model.addAttribute("lowStockProducts", lowStockProducts);
 
 
-        LocalDate test = LocalDate.now().minusMonths(1);
-        System.out.println(test);
         return "dashboard";
     }
 
@@ -346,11 +336,7 @@ public class ContentController {
         return "redirect:/category";
     }
 
-    @GetMapping("/category/softdelete/{id}")
-    public String softDeleteCategoryById(@PathVariable(name="id") Long id) {
-        productService.softDeleteCategory(id);
-        return "redirect:/category";
-    }
+
 
     @GetMapping("/category/restore/{id}")
     public String restoreCategoryById(@PathVariable(name="id") Long id) {
@@ -387,13 +373,27 @@ public class ContentController {
         return "viewTransaction";
     }
 
-//
-//    @GetMapping("/category/delete/{id}")
-//    public String deleteCategoryById(@PathVariable(name="id") Long id) {
-//        System.out.println("C ID IS: " + id);
-//        categoryRepo.deleteById(id);
-//        return "redirect:/category";
-//    }
+    @PreAuthorize("hasAuthority('VOID_TRANSACTION_PERM')")
+    @GetMapping("/transaction/void/{id}")
+    public String voidReceipt(@PathVariable Long id) {
+        OrderHeader orderHeader = orderHeaderRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        List<OrderDetail> orderDetails = orderDetailsRepository.findByHeaderId_Id(id);
+        posService.voidReceipt(orderHeader, orderDetails);
+
+        return "redirect:/transaction";
+    }
+
+    @PreAuthorize("hasAuthority('VOID_TRANSACTION_PERM')")
+    @GetMapping("/transaction/validate/{id}")
+    public String validateReceipt(@PathVariable Long id) {
+        OrderHeader orderHeader = orderHeaderRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        List<OrderDetail> orderDetails = orderDetailsRepository.findByHeaderId_Id(id);
+        posService.validateReceipt(orderHeader, orderDetails);
+
+        return "redirect:/transaction";
+    }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -467,11 +467,7 @@ public class ContentController {
         return "redirect:/itemType";
     }
 
-    @GetMapping("/itemType/softdelete/{id}")
-    public String softDeleteItemTypeById(@PathVariable(name="id") Long id) {
-        productService.softDeleteItemType(id);
-        return "redirect:/itemType";
-    }
+
 
     @GetMapping("/itemType/restore/{id}")
     public String restoreItemTypeById(@PathVariable(name="id") Long id) {

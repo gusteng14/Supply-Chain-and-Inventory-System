@@ -628,6 +628,99 @@ table.highlight>tbody>.rejected:hover {
     cursor: pointer;
 }
 
+.password-container {
+    position: relative;
+}
+
+#password {
+    padding-right: 40px; /* Leave space for the clear button */
+    box-sizing: border-box;
+}
+
+#confirm-password {
+    padding-right: 40px; /* Leave space for the clear button */
+    box-sizing: border-box;
+}
+
+#show-password {
+    position: absolute;
+    top: 60%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #c5c5c5;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    z-index: 1;
+}
+
+#show-password:hover {
+    color: rgba(41, 185, 163, 0.5);
+}
+
+#show-confirm-password {
+    position: absolute;
+    top: 30%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #c5c5c5;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    z-index: 1;
+}
+
+#show-confirm-password:hover {
+    color: rgba(41, 185, 163, 0.5);
+}
+
+.action-val-add {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    background-color: #68d6ab;
+    color: white;
+}
+
+.action-val-mod {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    background-color: #cccc3d;
+    color: white;
+}
+
+.action-val-del {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    background-color: #d83232;
+    color: white;
+}
+
+.void-receipt {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    background-color: #7100bb;
+    color: white;
+}
+
+.valid-receipt {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100px;
+    background-color: #26a69a;
+    color: white;
+}
+
+
+
 
 /*---------- FONTS ----------*/
 

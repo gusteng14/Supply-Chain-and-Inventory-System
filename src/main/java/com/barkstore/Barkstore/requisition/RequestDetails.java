@@ -29,6 +29,7 @@ public class RequestDetails {
     private Integer total;
     private String product;
     private String status = "Pending";
+    public boolean voided = false;
 
     @Transient
     private String imgUrl;

@@ -30,6 +30,23 @@ $(document).ready(function() {
             }
         }
     });
+    $('#softDeleteTable').DataTable({
+        order: [2, 'desc'],
+        layout: {
+            topStart: {
+                buttons: ['csv', 'excel', 'pdf', 'print']
+            }
+        }
+    });
+    $('#auditTable').DataTable({
+        columns: [{ width: '5%' }, null, null, null, null, null],
+        order: [2, 'desc'],
+        layout: {
+            topStart: {
+                buttons: ['csv', 'excel', 'pdf', 'print']
+            }
+        }
+    });
 
 
     $("#registerForm").submit(function(event) {
@@ -37,6 +54,22 @@ $(document).ready(function() {
         ajaxPost();
         refreshForm();
     });
+
+    $('#registerForm').on('change', function() {
+        $('#usernameError').text(" ");
+        $('#emailError').text(" ");
+    });
+
+    $('#success-close').on('click', function() {
+        $('#usernameError').text(" ");
+        $('#emailError').text(" ");
+        $('#password-message').text(" ");
+    })
+
+    $('#view-users').on('click', function() {
+        window.location.reload();
+    })
+
 
     function refreshForm() {
         $("#first_name").val("");
@@ -47,7 +80,7 @@ $(document).ready(function() {
         $("#email").val("");
         $("#password").val("");
         $("#confirm-password").val("");
-        $("#role").val("");
+//        $("#role").val("");
         $("#image").val("");
     }
 
@@ -69,15 +102,20 @@ $(document).ready(function() {
             url: "api/v1/registration/test",
             data: JSON.stringify(formData),
             dataType: 'text',
-            success : function(data, textStatus, xhr) {
-                if (xhr.status == 500) {
-                    M.toast({html: ' Something went wrong.'});
-                }
-                if (xhr.status == 200) {
-                    M.toast({html: 'Employee Added!!'});
-                } else {
-                    M.toast({html: ' Something went wrong.'});
-                }
+            success : function(response) {
+               if(response == "Username already taken.") {
+                   $('#usernameError').html('Username already taken.').css('color', 'red');
+                   $('#password-message').text(" ");
+               } else if (response == "Email already taken.") {
+                   $('#emailError').html('Email already taken.').css('color', 'red');
+                   $('#password-message').text(" ");
+               } else if (response == "Username and email are already taken.") {
+                   $('#usernameError').html('Username already taken.').css('color', 'red');
+                   $('#emailError').html('Email already taken.').css('color', 'red');
+                   $('#password-message').text(" ");
+               } else if (response == "Created"){
+                   $('#success-modal-trigger').trigger('click');
+               }
             },
             error: function(e) {
                 console.log(e)

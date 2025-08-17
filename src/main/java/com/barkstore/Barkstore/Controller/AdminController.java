@@ -3,6 +3,8 @@ package com.barkstore.Barkstore.Controller;
 import com.barkstore.Barkstore.appuser.*;
 import com.barkstore.Barkstore.audit.ProductAuditDTO;
 import com.barkstore.Barkstore.audit.RequestHeaderAuditDTO;
+import com.barkstore.Barkstore.audit.RoleAuditDTO;
+import com.barkstore.Barkstore.audit.UserAuditDTO;
 import com.barkstore.Barkstore.products.*;
 import com.barkstore.Barkstore.registration.RegistrationRequest;
 import com.barkstore.Barkstore.registration.RegistrationService;
@@ -52,6 +54,8 @@ public class AdminController {
     private HeaderRepository headerRepository;
     @Autowired
     private SupplyChainService supplyChainService;
+    @Autowired
+    private MyUserService userService;
 
     @GetMapping("/verified")
     public String verifiedPage() {
@@ -68,9 +72,16 @@ public class AdminController {
     public String roles(Model model) {
         model.addAttribute("roleRequest", new RoleRequest());
         model.addAttribute("authorityRequest", new AuthorityRequest());
-        List<Role> role = roleRepository.findAll();
-        List<Authority> authority = authorityRepository.findAll();
+
+        List<Role> role = roleRepository.findAllActive();
+        List<Role> deletedFields = roleService.getSoftDeletes();
+        List<RoleAuditDTO> audits = roleService.getAllAudits();
         model.addAttribute("role", role);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
+
+
+        List<Authority> authority = authorityRepository.findAll();
         model.addAttribute("authority", authority);
         return "role";
     }
@@ -157,6 +168,21 @@ public class AdminController {
     }
 
     @PreAuthorize("hasAuthority('DELETE_ROLE_PERM')")
+    @GetMapping("/role/softdelete/{id}")
+    public String softDeleteRoleById(@PathVariable(name="id") Long id) {
+        roleService.softDelete(id);
+        return "redirect:/roles";
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_ROLE_PERM')")
+    @GetMapping("/role/restore/{id}")
+    public String restoreRoleById(@PathVariable(name="id") Long id) {
+        roleService.restoreRecord(id);
+        return "redirect:/roles";
+    }
+
+
+    @PreAuthorize("hasAuthority('DELETE_ROLE_PERM')")
     @GetMapping("/role/delete/{id}")
     public String deleteRoleById(@PathVariable(name="id") Long id) {
         roleRepository.deleteById(id);
@@ -168,9 +194,13 @@ public class AdminController {
     public String register(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest());
         List<Role> role = roleRepository.findAll();
-        List<MyUser> user = repository.findAll();
+        List<MyUser> user = repository.findAllActive();
+        List<MyUser> deletedFields = userService.getSoftDeletesUser();
+        List<UserAuditDTO> audits = userService.getAllAuditsUser();
         model.addAttribute("user", user);
         model.addAttribute("role", role);
+        model.addAttribute("deletedFields", deletedFields);
+        model.addAttribute("audits", audits);
         return "employee";
     }
 
@@ -194,20 +224,6 @@ public class AdminController {
 
         return "viewEmployee";
     }
-
-//    @GetMapping(value = "/{employeeId}/emp_image")
-//    public ResponseEntity<byte[]> getEmployeeImage(@PathVariable Long employeeId) {
-//        Optional<MyUser> userOptional = repository.findById(employeeId);
-//        if (userOptional.isPresent()) {
-//            MyUser user = userOptional.get();
-//            byte[] imageBytes = java.util.Base64.getDecoder().decode(user.getImageData());
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.IMAGE_JPEG);
-//            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @PreAuthorize("hasAuthority('UPDATE_USER_PERM')")
     @GetMapping("/employee/edit")
@@ -243,9 +259,22 @@ public class AdminController {
     }
 
     @PreAuthorize("hasAuthority('DELETE_USER_PERM')")
+    @GetMapping("/employee/softdelete/{id}")
+    public String softDeleteProductById(@PathVariable(name="id") Long id) {
+        userService.softDeleteUser(id);
+        return "redirect:/employee";
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_USER_PERM')")
+    @GetMapping("/employee/restore/{id}")
+    public String restoreProductById(@PathVariable(name="id") Long id) {
+        userService.restoreRecordUser(id);
+        return "redirect:/employee";
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_USER_PERM')")
     @GetMapping("/employee/delete/{id}")
     public String deleteUserById(@PathVariable(name="id") Long id) {
-        System.out.println("C ID IS: " + id);
         repository.deleteById(id);
 
         return "redirect:/employee";
@@ -280,31 +309,31 @@ public class AdminController {
         String[] stringArray2 = reqStatus.split(",");
         List<String> list2 = Arrays.asList(stringArray2);
 
-        System.out.println(list2);
-
         int parsedCount = Integer.parseInt(list.getLast());
+        int noOfApprovedItems = 0;
+        for (String str : list2) {
+            if (Objects.equals(str, "1")) {
+                noOfApprovedItems++;
+            }
+        }
 
         if (status == 0) {
             hdr.setStatus("Rejected");
             hdr.setTotalRequestedItems(parsedCount);
-            hdr.setNoOfApprovedItems(status);
+            hdr.setNoOfApprovedItems(noOfApprovedItems);
             headerRepository.save(hdr);
         } else {
             hdr.setStatus("Approved");
             hdr.setTotalRequestedItems(parsedCount);
-            hdr.setNoOfApprovedItems(status);
+            hdr.setNoOfApprovedItems(noOfApprovedItems);
             headerRepository.save(hdr);
         }
 
         int i = 0;
         for(RequestDetails dtl1 : dtl) {
-            System.out.println("Status: " + list2.get(i));
-            System.out.println("DTL Id: " + dtl1.getId());
             if (Objects.equals(list2.get(i), "1")) {
-                System.out.println("Approve mo to pre");
                 dtl1.setStatus("Approved");
             } else if (Objects.equals(list2.get(i), "0")){
-                System.out.println("Reject mo to pre");
                 dtl1.setStatus("Rejected");
             }
             detailsRepository.save(dtl1);
@@ -354,7 +383,6 @@ public class AdminController {
             Long productId = product.get().getId();
             dtl1.setImgUrl("/" + productId + "/" + "product_image");
         }
-
 
         model.addAttribute("hdr", hdr);
         model.addAttribute("dtl", dtl);

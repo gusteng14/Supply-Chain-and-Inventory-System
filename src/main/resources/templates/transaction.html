@@ -46,6 +46,7 @@
                                 <th class="dt-head-left th-csis">Id</th>
                                 <th class="dt-head-left th-csis">Order No</th>
                                 <th class="dt-head-left th-csis">Transaction Date</th>
+                                <th class="dt-head-center th-csis">Status</th>
                                 <th class="dt-head-left th-csis">Amount</th>
 <!--                                <th class="dt-head-left th-csis" data-dt-order="disable"></th>-->
                             </tr>
@@ -55,20 +56,11 @@
                                 <td class="dt-body-left td-csis id" th:text="${transaction.id}">z</td>
                                 <td class="dt-body-left td-csis" th:text="${transaction.orderNo}">z</td>
                                 <td class="dt-body-left td-csis" th:text="${transaction.createdOn}">z</td>
+                                <td class="dt-body-center td-csis">
+                                    <span th:if="${transaction.voided == true}" class="void-receipt">Void</span>
+                                    <span th:unless="${transaction.voided == true}" class="valid-receipt">Valid</span>
+                                </td>
                                 <td name="total" class="dt-body-left td-csis" th:text="${transaction.total}">z</td>
-<!--                                <td class="dt-body-left td-csis" th:value="${transaction.id}">-->
-<!--                                    <div class="right">-->
-<!--                                        <a sec:authorize="hasAuthority('READ_TRANSACTION_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/transaction/' + ${transaction.id}}">-->
-<!--                                            View-->
-<!--                                        </a>-->
-<!--                                        <a sec:authorize="hasAuthority('UPDATE_TRANSACTION_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{/transaction/edit(id=${transaction.id})}">-->
-<!--                                            Update-->
-<!--                                        </a>-->
-<!--                                        <a sec:authorize="hasAuthority('DELETE_TRANSACTION_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/transaction/delete/' + ${transaction.id}}" onclick="return confirm('Are you sure you want to delete?')">-->
-<!--                                            Delete-->
-<!--                                        </a>-->
-<!--                                    </div>-->
-<!--                                </td>-->
                             </tr>
                         </tbody>
                     </table>
@@ -96,7 +88,7 @@
     $(document).ready(function() {
         $('.tabs').tabs();
         $('#transactionTable').DataTable({
-            columns: [{ width: '5%' }, null, null, null],
+            columns: [{ width: '10%' }, null, null, null, null],
             order: [2, 'desc'],
             layout: {
                 topStart: {
@@ -106,6 +98,7 @@
         });
         $('select').formSelect();
         $('.collapsible').collapsible();
+        $('.dt-button').addClass("btn");
 
         let PHP = new Intl.NumberFormat('en-US', {
             style: 'currency',

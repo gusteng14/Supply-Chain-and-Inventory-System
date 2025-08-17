@@ -12,4 +12,5 @@ public interface SupplierRepository extends RevisionRepository<Supplier, Long, L
 
     @Query("SELECT e FROM Supplier e where e.deleted =false")
     List<Supplier> findAllActive();
+
 }

@@ -1,11 +1,13 @@
 package com.barkstore.Barkstore.appuser;
 
+import com.barkstore.Barkstore.products.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +24,12 @@ public interface MyUserRepository extends JpaRepository<MyUser, Long> {
 
     @Query("SELECT u FROM MyUser u WHERE u.verificationCode = ?1")
     MyUser findByVerificationCode (String code);
+
+    @Query("SELECT u FROM MyUser u where u.deleted = true")
+    List<MyUser> findSoftDeletes();
+
+    @Query("SELECT u FROM MyUser u where u.deleted = false")
+    List<MyUser> findAllActive();
 
 
 //    @Transactional

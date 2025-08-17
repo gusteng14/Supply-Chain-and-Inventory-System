@@ -141,7 +141,7 @@
                                                 <table id="auditTable" class="z-depth-1 display table-csis">
                                                     <thead>
                                                     <th class="dt-head-left th-csis"></th>
-                                                    <th class="dt-head-left th-csis">Action</th>
+                                                    <th class="dt-head-center th-csis">Action</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Item Type Id</th>
                                                     <th style="text-align: center;" class="dt-head-left th-csis">Item Type Name</th>
@@ -149,7 +149,12 @@
                                                     </thead>
                                                     <tr th:each="audit : ${audits}">
                                                         <td style="font-weight: 100;" th:text="${audit.revId}"></td>
-                                                        <td style="font-weight: 100;" th:text="${audit.action}"></td>
+                                                        <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                            <span th:case="'ADD'" class="action-val-add">Create</span>
+                                                            <span th:case="'MOD'" class="action-val-mod">Update</span>
+                                                            <span th:case="'DEL'" class="action-val-del">Delete</span>
+                                                        </td>
+                                                        </td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.productId}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.productName}"></td>
@@ -351,6 +356,8 @@
         $('select').formSelect();
         $('.modal').modal();
         $('.collapsible').collapsible();
+
+        $('.dt-button').addClass("btn");
 
         $('#registerForm').on('change', function() {
             var field1 = $('#name').val().length;

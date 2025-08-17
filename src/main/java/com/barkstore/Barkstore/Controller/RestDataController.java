@@ -3,14 +3,12 @@ package com.barkstore.Barkstore.Controller;
 
 import com.barkstore.Barkstore.pos.*;
 import com.barkstore.Barkstore.products.Product;
+import com.barkstore.Barkstore.products.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -25,6 +23,8 @@ public class RestDataController {
     private POSService posService;
     @Autowired
     private OrderDetailsRepository orderDetailRepository;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/getSalesToday")
     public float getSalesToday() {
@@ -44,7 +44,7 @@ public class RestDataController {
                 top5.put(dtl.getItemName(), qty);
             }
             catch (Exception e) {
-                System.out.println(e);
+
             }
         }
 
@@ -89,5 +89,15 @@ public class RestDataController {
         float avgSales = sales / 10;
 
         return avgSales;
+    }
+
+    @PostMapping("/itemType/softdelete")
+    public ResponseEntity<String> softDeleteItemTypeById(@RequestParam(name="id") Long id) {
+        return productService.softDeleteItemType(id);
+    }
+
+    @PostMapping("/category/softdelete")
+    public ResponseEntity<String> softDeleteCategoryById(@RequestParam(name="id") Long id) {
+        return productService.softDeleteCategory(id);
     }
 }

@@ -128,7 +128,7 @@
                                                 <table id="auditsTable" class="z-depth-1 display table-csis">
                                                     <thead>
                                                         <th class="dt-head-left th-csis"></th>
-                                                        <th class="dt-head-left th-csis">Action</th>
+                                                        <th class="dt-head-center th-csis">Action</th>
                                                         <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
                                                         <th style="text-align: center;" class="dt-head-left th-csis">Supplier Id</th>
                                                         <th style="text-align: center;" class="dt-head-left th-csis">Supplier Name</th>
@@ -136,7 +136,11 @@
                                                     </thead>
                                                     <tr th:each="audit : ${audits}">
                                                         <td style="font-weight: 100;" th:text="${audit.revId}"></td>
-                                                        <td style="font-weight: 100;" th:text="${audit.action}"></td>
+                                                        <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                            <span th:case="'ADD'" class="action-val-add">Create</span>
+                                                            <span th:case="'MOD'" class="action-val-mod">Update</span>
+                                                            <span th:case="'DEL'" class="action-val-del">Delete</span>
+                                                        </td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.supplierId}"></td>
                                                         <td style="font-weight: 100; text-align: center;" th:text="${audit.supplierName}"></td>
@@ -275,7 +279,7 @@
             }
         });
         $('#auditsTable').DataTable({
-            columns: [{ width: '5%' },{ width: '5%' }, { width: '50%' }, { width: '10%' }, null, null],
+            columns: [{ width: '5%' },{ width: '5%' }, { width: '25%' }, { width: '10%' }, null, null],
             layout: {
                 topStart: {
                     buttons: []
@@ -283,6 +287,8 @@
             }
         });
         $('select').formSelect();
+
+        $('.dt-button').addClass("btn");
 
         $('#contactNo').on('keyup', function() {
             if ($('#contactNo').val().length == 0 || $('#contactNo').val().length == null) {

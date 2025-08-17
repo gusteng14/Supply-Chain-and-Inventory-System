@@ -57,7 +57,91 @@
                             <tr class="tr-csis">
                                 <th class="dt-head-left th-csis">Role Id</th>
                                 <th class="dt-head-left th-csis">Role Name</th>
-                                <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                                <th class="dt-head-right th-csis" data-dt-order="disable">
+                                    <a class="modal-trigger" href="#auditsModal">
+                                        <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">history</i>
+                                    </a>
+                                    <a class="modal-trigger" href="#softDeleteModal">
+                                        <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">delete</i>
+                                    </a>
+
+                                    <div style="border-radius: 10px; width: 1200px; height: auto;" id="softDeleteModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="row">
+                                                <div class="col l12">
+                                                    <span style="text-align: left; font-size: 28px;" class="left">Deleted Role Records</span>
+                                                    <span class="right">
+                                                        <a id="closeSoftDeleteModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table id="softDeleteTable" class="z-depth-1 display table-csis">
+                                                    <thead>
+                                                    <tr class="tr-csis">
+                                                        <th class="dt-body-left th-csis">Id</th>
+                                                        <th style="text-align: center;" class="dt-body-left th-csis">Role Name</th>
+                                                        <th class="dt-head-right th-csis" data-dt-order="disable"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tr th:each="deletedFields : ${deletedFields}">
+                                                        <td style="font-weight: 100;" class="dt-body-left td-csis" th:text="${deletedFields.id}">z</td>
+                                                        <td style="font-weight: 100; text-align: center" class="dt-body-left td-csis" th:text="${deletedFields.name}">z</td>
+                                                        <td style="font-weight: 100;" class="dt-body-right td-csis">
+                                                            <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small crud" th:href="@{'/role/restore/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to restore this record??')">
+                                                                Restore
+                                                            </a>
+                                                            <a sec:authorize="hasAuthority('DELETE_CATEGORY_PERM')" class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/role/delete/' + ${deletedFields.id}}" onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this record?')">
+                                                                Delete
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="border-radius: 10px; width: 1200px; height: auto;" id="auditsModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="row">
+                                                <div class="col l12">
+                                                    <span style="text-align: left; font-size: 28px;" class="left">Logs</span>
+                                                    <span class="right">
+                                                        <a id="closeAuditsModal" class="modal-close btn-flat" >
+                                                          <i style="color: #9d9d9d; cursor: pointer;" class="material-icons-round prefix soft-delete">close</i>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table id="auditTable" class="z-depth-1 display table-csis">
+                                                    <thead>
+                                                    <th class="dt-head-left th-csis"></th>
+                                                    <th class="dt-head-center th-csis">Action</th>
+                                                    <th style="text-align: center;" class="dt-head-left th-csis">Date</th>
+                                                    <th style="text-align: center;" class="dt-head-left th-csis">Role Id</th>
+                                                    <th style="text-align: center;" class="dt-head-left th-csis">Role Name</th>
+                                                    <th style="text-align: center;" class="dt-head-left th-csis">Performed by</th>
+                                                    </thead>
+                                                    <tr th:each="audit : ${audits}">
+                                                        <td style="font-weight: 100;" th:text="${audit.revId}"></td>
+                                                        <td class="action-col" style="font-weight: 100; text-align: center;" th:switch="${audit.action}">
+                                                            <span th:case="'ADD'" class="action-val-add">Create</span>
+                                                            <span th:case="'MOD'" class="action-val-mod">Update</span>
+                                                            <span th:case="'DEL'" class="action-val-del">Delete</span>
+                                                        </td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.date}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.roleId}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.roleName}"></td>
+                                                        <td style="font-weight: 100; text-align: center;" th:text="${audit.username}"></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,7 +156,7 @@
                                         <a class="waves-effect waves-light btn-small blue darken-1 crud" th:href="@{/role/edit(id=${role.id})}">
                                             Update
                                         </a>
-                                        <a class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/role/delete/' + ${role.id}}" onclick="return confirm('Are you sure you want to delete?')">
+                                        <a class="waves-effect waves-light btn-small red lighten-1 crud" th:href="@{'/role/softdelete/' + ${role.id}}" onclick="return confirm('Are you sure you want to delete?')">
                                             Delete
                                         </a>
                                     </div>
@@ -173,6 +257,17 @@
                                           th:value="${authority.name}" th:text="${authority.name}">z</span>
                                 </label>
                             </p>
+
+                            <h6>Transaction Related Permissions</h6>
+                            <p th:each="authority : ${authority}">
+                                <label>
+                                    <input type="checkbox" name="authority[]" class="filled-in"
+                                           th:if="${#strings.contains(authority.name, 'TRANSACTION')}"
+                                           th:value="${authority.name}"/>
+                                    <span th:if="${#strings.contains(authority.name, 'TRANSACTION')}"
+                                          th:value="${authority.name}" th:text="${authority.name}">z</span>
+                                </label>
+                            </p>
                         </div>
 
                         <div class="col l4">
@@ -253,8 +348,31 @@
                 }
             }
         });
+        $('#softDeleteTable').DataTable({
+            autoWidth: false,
+            columns: [{ width: '5%' }, null, null],
+            order: [3, 'desc'],
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
+        $('#auditTable').DataTable({
+            autoWidth: false,
+            columns: [{ width: '5%' }, null, null, null, null, null],
+            order: [3, 'desc'],
+            layout: {
+                topStart: {
+                    buttons: ['csv', 'excel', 'pdf', 'print']
+                }
+            }
+        });
         $('select').formSelect();
         $('.collapsible').collapsible();
+        $('.modal').modal();
+        $('.dt-button').addClass("btn");
+
     });
 </script>
 
